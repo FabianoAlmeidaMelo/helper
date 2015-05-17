@@ -1,10 +1,9 @@
-from django.conf.urls import include, url
-from django.contrib import admin
+from django.conf.urls import include
+from django.conf.urls import patterns
+from django.conf.urls import url
 
-urlpatterns = [
-    # Examples:
-    # url(r'^$', 'helper.views.home', name='home'),
-    # url(r'^blog/', include('blog.urls')),
-
-    url(r'^admin/', include(admin.site.urls)),
-]
+urlpatterns = patterns(
+    '',
+    url(r'^$', 'helper.core.views.index', name='index'),
+    url(r'^core/', include('helper.core.urls')),
+)
