@@ -1,4 +1,5 @@
 -r base.txt
 
 gunicorn
+dj-static
 dj_database_url
