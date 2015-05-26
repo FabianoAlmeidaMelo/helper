@@ -1,1 +1,7 @@
 -r base.txt
+
+gunicorn
+dj-static
+dj_database_url
+static==0.4
+wsgiref==0.1.2
