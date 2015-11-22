@@ -51,8 +51,10 @@ class User(AbstractBaseUser):
         'data de cadastro', default=timezone.now
         )
     nascimento = models.DateField(u'Data Nascimento', null=True, blank=True)
-    profissao = models.CharField(u'Profissão', null=True, blank=True)
-    sexo = models.ChoiceField(u'Sexo', choices=SEXO, null=True, blank=True)
+    profissao = models.CharField(
+        u'Profissão', max_length=100, null=True, blank=True
+        )
+    sexo = models.IntegerField(u'Sexo', choices=SEXO, null=True, blank=True)
 
     objects = UserManager()
 
