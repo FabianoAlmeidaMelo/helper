@@ -12,14 +12,24 @@ from bootstrap_toolkit.widgets import BootstrapDateInput
 class TarefaForm(forms.ModelForm):
     class Meta:
         model = Tarefa
-        # fields = ('name', )
+        fields = (
+                    'titular',
+                    'titulo',
+                    'descricao',
+                    'data_ini',
+                    'data_fim',
+                    'hora_ini',
+                    'hora_fim',
+                    'confirmado',
+                    'valor',
+                    )
 
 
 class TarefaSearchForm(forms.Form):
     '''
     #12
     '''
-    titullar = forms.CharField(label=u'Titular', required=False)
+    titular = forms.CharField(label=u'Titular', required=False)
     titulo = forms.CharField(label=u'Título', required=False)
     descricao = forms.CharField(label=u'Descrição', required=False)
     data_ini = forms.DateField(
@@ -35,7 +45,7 @@ class TarefaSearchForm(forms.Form):
     confirmado = forms.BooleanField(label='confirmado', required=False)
     pago = forms.BooleanField(label='confirmada', required=False)
 
-    def get_result_queryset(self):
+    def get_queryset(self):
         q = Q()
         if self.is_valid():
             titular = self.cleaned_data['titular']
@@ -55,5 +65,5 @@ class TarefaSearchForm(forms.Form):
             if data_fim:
                 q = q & Q(data__lte=data_fim)
 
-            return Tarefa.objects.filter(q)
+            return Tarefa
         return []

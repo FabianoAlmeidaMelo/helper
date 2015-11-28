@@ -6,4 +6,5 @@ urlpatterns = patterns(
     '',
     url(r'^$', 'helper.core.views.index', name='index'),
     url(r'^core/', include('helper.core.urls')),
+    url(r'^agenda/', include('helper.agenda.urls')),
 )
