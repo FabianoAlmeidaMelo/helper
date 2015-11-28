@@ -28,6 +28,7 @@ class Tarefa(models.Model):
     class Meta:
         verbose_name = u'Tarefa'
         verbose_name_plural = u'Tarefas'
+        ordering = ['data_ini', 'hora_ini']
 
     def __unicode__(self):
         return self.titulo

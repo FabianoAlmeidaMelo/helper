@@ -10,6 +10,9 @@
               <tr>
                 <th>Tarefa</th>
                 <th>Data</th>
+                <th>Hora</th>
+                <th>Confirmado</th>
+                <th>Pago</th>
               </tr>
             </thead>
             {% for object in object_list %}
@@ -19,7 +22,10 @@
                             {{ object.titulo }}
                         </a>
                     </td>
-                    <td>{{ object.data }}</td>
+                    <td>{{ object.data_ini|date:"d/m/Y" }}</td>
+                    <td>{{ object.hora_ini }}</td>
+                    <td>{{ object.confirmado|yesno:"Sim,Não" }}</td>
+                    <td>{{ object.pago|yesno:"Sim,Não" }}</td>
                 </tr>
             {% empty %}
                 <tr><td colspan="100%">Nenhum item disponível</td></tr>
