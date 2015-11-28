@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'bootstrap_toolkit',
 
     'helper.core',
+    'helper.agenda'
 )
 
 MIDDLEWARE_CLASSES = (
