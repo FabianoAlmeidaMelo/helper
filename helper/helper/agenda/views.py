@@ -44,19 +44,21 @@ def tarefa_form(request, pk=None):
 
 
 # tarefa_list = (
-
 #     SearchFormListView.as_view(
 #                                 model=Tarefa,
 #                                 form_class=TarefaSearchForm,
 #                                 paginate_by=15
 #                                 )
-#             )
+#                             )
+
 
 def tarefa_list(request):
     object_list = Tarefa.objects.all()
+    form = TarefaSearchForm(request.POST or None)
 
     return render(
         request, 'agenda/tarefa_list.html', {
                                             'object_list': object_list,
+                                            'form': form,
                                             }
     )
