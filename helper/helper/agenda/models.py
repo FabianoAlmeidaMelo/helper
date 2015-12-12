@@ -3,6 +3,32 @@ from django.db import models
 
 from helper.core.models import User
 
+TIPO = (
+    (1, u'Bronze'),
+    (2, u'Prata'),
+    (3, u'Ouro'),
+    )
+
+
+class Conta(models.Model):
+    dono = models.ForeignKey(User)
+    tipo = models.SmallIntegerField(u'tipo', choices=TIPO)
+    valor = models.DecimalField(
+                                u'Valor',
+                                max_digits=7,
+                                decimal_places=2,
+                                blank=True,
+                                null=True
+                                )
+    validade = models.DateTimeField(u'Data')
+
+    class Meta:
+        verbose_name = u'Conta'
+        verbose_name_plural = u'Contas'
+
+    def __unicode__(self):
+        return self.titulo
+
 
 class Tarefa(models.Model):
     """
@@ -32,3 +58,8 @@ class Tarefa(models.Model):
 
     def __unicode__(self):
         return self.titulo
+
+
+# class Categoria(models.Model):
+#     agenda = models.ForeignKey(Agenda)
+#     nome = models.CharField(u'Nome', max_length=200)
