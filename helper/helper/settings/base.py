@@ -1,3 +1,4 @@
+# coding: utf-8
 """
 Django settings for helper project.
 
@@ -13,7 +14,13 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 
-PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+PROJECT_DIR = os.path.dirname(
+                              os.path.dirname(
+                                              os.path.dirname(
+                                                os.path.abspath(__file__)
+                                                )
+                                              )
+                              )
 
 
 # Quick-start development settings - unsuitable for production

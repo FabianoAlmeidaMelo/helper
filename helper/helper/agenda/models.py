@@ -10,7 +10,21 @@ TIPO = (
     )
 
 
+# AGENDA_PERMISSAO = (
+#     (1, u'Create'),
+#     (2, u'Read'),
+#     (3, u'Edit'),
+#     (4, u'Delete'),
+#     )
+
+
 class Conta(models.Model):
+    """
+    Uma pessoa física ou jurídica pode ter N Contas
+    cada Conta pode ter N agendas
+    as contas devem ter mais ou menos benefícios, de
+    acordo com o Tipo.
+    """
     dono = models.ForeignKey(User)
     tipo = models.SmallIntegerField(u'tipo', choices=TIPO)
     valor = models.DecimalField(
@@ -27,7 +41,40 @@ class Conta(models.Model):
         verbose_name_plural = u'Contas'
 
     def __unicode__(self):
-        return self.titulo
+        return self.dono
+
+
+class Agenda(models.Model):
+    '''
+    agenda:
+      Fzda Vera Cruz
+      ZNC
+      Helper
+    '''
+    conta = models.ForeignKey(Conta)
+    nome = models.CharField(u'Nome', max_length=200)
+    observacao = models.TextField(null=True, blank=True)
+    # servico = models.ForeignKey(u'Serviço', null=True, blank=True)
+    # agenda_usuario = models.ManyToManyField(User, through='AgendaUsuario')
+
+    class Meta:
+        verbose_name = u'Agenda'
+        verbose_name_plural = u'Agendas'
+
+    def __unicode__(self):
+        return self.nome
+
+
+class Servico(models.Model):
+    '''
+    servico:
+        locacacao_fazda
+        tirolesa
+        quartos_externos
+        salao_festa
+    '''
+    agenda = models.ForeignKey(Agenda)
+    nome = models.CharField(u'Nome', max_length=200)
 
 
 class Tarefa(models.Model):
