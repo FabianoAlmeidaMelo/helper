@@ -41,7 +41,7 @@ class Conta(models.Model):
         verbose_name_plural = u'Contas'
 
     def __unicode__(self):
-        return self.dono
+        return self.dono.nome
 
 
 class Agenda(models.Model):
@@ -54,7 +54,6 @@ class Agenda(models.Model):
     conta = models.ForeignKey(Conta)
     nome = models.CharField(u'Nome', max_length=200)
     observacao = models.TextField(null=True, blank=True)
-    # servico = models.ForeignKey(u'Serviço', null=True, blank=True)
     # agenda_usuario = models.ManyToManyField(User, through='AgendaUsuario')
 
     class Meta:
@@ -81,7 +80,8 @@ class Tarefa(models.Model):
     """
     #12
     """
-    titular = models.ForeignKey(User)
+    servico = models.ForeignKey(Servico, null=True, blank=True)
+    titular = models.ForeignKey(User, null=True, blank=True)
     titulo = models.CharField(verbose_name=u'Título', max_length=255)
     descricao = models.TextField(verbose_name=u'Descrição')
     data_ini = models.DateField(u'Data')

@@ -3,17 +3,27 @@
 from django import forms
 from django.db.models import Q
 from .models import (
+    Agenda,
     Tarefa,
 )
 
 from bootstrap_toolkit.widgets import BootstrapDateInput
 
 
+class AgendaForm(forms.ModelForm):
+    class Meta:
+        model = Agenda
+        fields = (
+                    'nome',
+                    'observacao',
+                    )
+
+
 class TarefaForm(forms.ModelForm):
     class Meta:
         model = Tarefa
         fields = (
-                    'titular',
+                    'servico',
                     'titulo',
                     'descricao',
                     'data_ini',

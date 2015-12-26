@@ -7,9 +7,59 @@ from django.contrib import messages
 # from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import get_object_or_404, redirect, render
 
-from .models import Tarefa
+from .models import (
+    Agenda,
+    Tarefa,
+    )
 from helper.core.views import SearchFormListView
-from .forms import TarefaForm, TarefaSearchForm
+from .forms import (
+    AgendaForm,
+    TarefaForm,
+    TarefaSearchForm,
+    )
+
+
+def agenda_form(request, pk=None):
+    '''
+        #12
+    '''
+    if pk:
+        agenda = get_object_or_404(Agenda, pk=pk)
+        msg = u'agenda alterada com sucesso.'
+    else:
+        agenda = None
+        msg = u'agenda criada.'
+
+    form = AgendaForm(request.POST or None, instance=agenda)
+
+    if request.method == 'POST':
+        if form.is_valid():
+            agenda = form.save()
+            messages.success(request, msg)
+
+            return redirect(reverse('agenda_list'))
+        else:
+            messages.warning(request, u'Falha no cadastro de agenda')
+
+    return render(
+        request,
+        'agenda/agenda_form.html',
+        {
+            'form': form,
+        }
+    )
+
+
+def agenda_list(request):
+    object_list = Agenda.objects.all()
+    # form = AgendaSearchForm(request.POST or None)
+
+    return render(
+        request, 'agenda/agenda_list.html', {
+                                            'object_list': object_list,
+                                            # 'form': form,
+                                            }
+    )
 
 
 def tarefa_form(request, pk=None):
