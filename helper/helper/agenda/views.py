@@ -9,14 +9,18 @@ from django.shortcuts import get_object_or_404, redirect, render
 
 from .models import (
     Agenda,
+    Servico,
     Tarefa,
     )
-from helper.core.views import SearchFormListView
+
 from .forms import (
     AgendaForm,
+    ServicoForm,
     TarefaForm,
     TarefaSearchForm,
     )
+
+# from helper.core.views import SearchFormListView
 
 
 def agenda_form(request, pk=None):
@@ -30,7 +34,7 @@ def agenda_form(request, pk=None):
         agenda = None
         msg = u'agenda criada.'
 
-    form = AgendaForm(request.POST or None, instance=agenda)
+    form = AgendaForm(request.POST or None, instance=agenda, user=request.user)
 
     if request.method == 'POST':
         if form.is_valid():
@@ -56,6 +60,49 @@ def agenda_list(request):
 
     return render(
         request, 'agenda/agenda_list.html', {
+                                            'object_list': object_list,
+                                            # 'form': form,
+                                            }
+    )
+
+
+def servico_form(request, pk=None):
+    '''
+        #12
+    '''
+    if pk:
+        servico = get_object_or_404(Servico, pk=pk)
+        msg = u'servico alterado com sucesso.'
+    else:
+        servico = None
+        msg = u'servico criado.'
+
+    form = ServicoForm(request.POST or None, instance=servico)
+
+    if request.method == 'POST':
+        if form.is_valid():
+            servico = form.save()
+            messages.success(request, msg)
+
+            return redirect(reverse('servico_list'))
+        else:
+            messages.warning(request, u'Falha no cadastro de serviço')
+
+    return render(
+        request,
+        'agenda/servico_form.html',
+        {
+            'form': form,
+        }
+    )
+
+
+def servico_list(request):
+    object_list = Servico.objects.all()
+    # form = ServicoSearchForm(request.POST or None)
+
+    return render(
+        request, 'agenda/servico_list.html', {
                                             'object_list': object_list,
                                             # 'form': form,
                                             }
