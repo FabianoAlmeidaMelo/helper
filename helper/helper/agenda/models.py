@@ -75,6 +75,9 @@ class Servico(models.Model):
     agenda = models.ForeignKey(Agenda)
     nome = models.CharField(u'Nome', max_length=200)
 
+    def __unicode__(self):
+        return self.nome
+
 
 class Tarefa(models.Model):
     """

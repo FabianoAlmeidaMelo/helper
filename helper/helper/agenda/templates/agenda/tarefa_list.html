@@ -40,6 +40,8 @@
             <thead>
               <tr>
                 <th>Tarefa</th>
+                <th>Agenda</th>
+                <th>Serviço</th>
                 <th>Data</th>
                 <th>Hora</th>
                 <th>Confirmado</th>
@@ -53,6 +55,8 @@
                             {{ object.titulo }}
                         </a>
                     </td>
+                    <td>{{ object.servico.agenda|default:"--" }}</td>
+                    <td>{{ object.servico|default:'--' }}</td>
                     <td>{{ object.data_ini|date:"d/m/Y" }}</td>
                     <td>{{ object.hora_ini }}</td>
                     <td>{{ object.confirmado|yesno:"Sim,Não" }}</td>
