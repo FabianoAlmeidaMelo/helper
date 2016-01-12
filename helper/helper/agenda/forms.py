@@ -71,8 +71,8 @@ class TarefaSearchForm(forms.Form):
                                 widget=BootstrapDateInput,
                                 required=False
                                 )
-    confirmado = forms.BooleanField(label='confirmado', required=False)
-    pago = forms.BooleanField(label='confirmada', required=False)
+    confirmado = forms.BooleanField(label='Confirmado', required=False)
+    pago = forms.BooleanField(label='Pago', required=False)
 
     def get_queryset(self):
         q = Q()
@@ -93,6 +93,14 @@ class TarefaSearchForm(forms.Form):
             data_fim = self.cleaned_data['data_fim']
             if data_fim:
                 q = q & Q(data__lte=data_fim)
+            confirmado = self.cleaned_data['confirmado']
+            if confirmado:
+                q = q & Q(confirmado=True)
+            pago = self.cleaned_data['pago']
+            if pago:
+                q = q & Q(pago=True)
 
-            return Tarefa
-        return []
+            return Tarefa.objects.filter(q)
+
+        return Tarefa.objects.filter(q)
+        # return Tarefa.objects.all()

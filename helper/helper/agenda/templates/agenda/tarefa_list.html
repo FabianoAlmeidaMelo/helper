@@ -8,7 +8,7 @@
 
 <h5>Filtro</h5>
 <form class="form-inline well" method="GET" action="#">
-
+{{ form.erros }}
     <div class="row-fluid">
         {{ form.titular|as_bootstrap:"inline" }}
         {{ form.titulo|as_bootstrap:"inline" }}
@@ -22,11 +22,7 @@
         {{ form.confirmado|as_bootstrap:"inline" }}
         {{ form.pago|as_bootstrap:"inline" }}
     </div>
-    <label>Busca por Meses de coleta:</label>
-    <div class="row-fluid">
 
-        {{ form.mes|as_bootstrap:"inline" }}
-    </div>
         <button type="submit" class="btn btn-small btn-success" title="Filtrar"><i class="icon-search"></i></button>
         <a class="btn btn-small btn-info" href="." title="Apaga o filtro e listar todos"><i class="icon-remove-circle"></i></a>
     </div>
@@ -44,6 +40,7 @@
                 <th>Serviço</th>
                 <th>Data</th>
                 <th>Hora</th>
+                <th>Valor</th>
                 <th>Confirmado</th>
                 <th>Pago</th>
               </tr>
@@ -59,6 +56,7 @@
                     <td>{{ object.servico|default:'--' }}</td>
                     <td>{{ object.data_ini|date:"d/m/Y" }}</td>
                     <td>{{ object.hora_ini }}</td>
+                    <td>$ {{ object.valor|default:'--'  }}</td>
                     <td>{{ object.confirmado|yesno:"Sim,Não" }}</td>
                     <td>{{ object.pago|yesno:"Sim,Não" }}</td>
                 </tr>
