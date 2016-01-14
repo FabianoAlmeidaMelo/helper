@@ -7,10 +7,10 @@
 {% block content %}
 
 <h5>Filtro</h5>
-<form class="form-inline well" method="GET" action="#">
-{{ form.erros }}
+<form class="form-inline well" method="GET">
+
     <div class="row-fluid">
-        {{ form.titular|as_bootstrap:"inline" }}
+        {{ form.servico|as_bootstrap:"inline" }}
         {{ form.titulo|as_bootstrap:"inline" }}
         {{ form.descricao|as_bootstrap:"inline" }}
     </div>
@@ -53,7 +53,7 @@
                         </a>
                     </td>
                     <td>{{ object.servico.agenda|default:"--" }}</td>
-                    <td>{{ object.servico|default:'--' }}</td>
+                    <td>{{ object.servico.nome|default:'--' }}</td>
                     <td>{{ object.data_ini|date:"d/m/Y" }}</td>
                     <td>{{ object.hora_ini }}</td>
                     <td>$ {{ object.valor|default:'--'  }}</td>

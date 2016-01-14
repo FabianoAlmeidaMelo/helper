@@ -76,7 +76,10 @@ class Servico(models.Model):
     nome = models.CharField(u'Nome', max_length=200)
 
     def __unicode__(self):
-        return self.nome
+        return u"%s - %s" % (self.agenda, self.nome)
+
+    class Meta:
+        ordering = ('agenda__nome', 'nome',)
 
 
 class Tarefa(models.Model):

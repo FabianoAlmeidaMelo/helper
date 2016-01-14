@@ -58,7 +58,7 @@ class TarefaSearchForm(forms.Form):
     '''
     #12
     '''
-    titular = forms.CharField(label=u'Titular', required=False)
+    servico = forms.CharField(label=u'Servico', required=False)
     titulo = forms.CharField(label=u'Título', required=False)
     descricao = forms.CharField(label=u'Descrição', required=False)
     data_ini = forms.DateField(
@@ -77,9 +77,9 @@ class TarefaSearchForm(forms.Form):
     def get_queryset(self):
         q = Q()
         if self.is_valid():
-            titular = self.cleaned_data['titular']
-            if titular:
-                q = q & Q(titular__nome__icontains=titular)
+            servico = self.cleaned_data['servico']
+            if servico:
+                q = q & Q(servico__nome__icontains=servico)
             titulo = self.cleaned_data['titulo']
             if titulo:
                 q = q & Q(titulo__icontains=titulo)
