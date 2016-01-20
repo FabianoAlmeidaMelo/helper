@@ -8,7 +8,7 @@ from .models import (
     Tarefa,
 )
 
-from bootstrap_toolkit.widgets import BootstrapDateInput
+# from bootstrap_toolkit.widgets import BootstrapDateInput
 
 
 class AgendaForm(forms.ModelForm):
@@ -51,6 +51,7 @@ class TarefaForm(forms.ModelForm):
                     'hora_fim',
                     'confirmado',
                     'valor',
+                    'pago',
                     )
 
 
@@ -63,18 +64,19 @@ class TarefaSearchForm(forms.Form):
     descricao = forms.CharField(label=u'Descrição', required=False)
     data_ini = forms.DateField(
                                 label='Data Inicial',
-                                widget=BootstrapDateInput,
+                                # widget=BootstrapDateInput,
                                 required=False
                                 )
     data_fim = forms.DateField(
                                 label='Data Final',
-                                widget=BootstrapDateInput,
+                                # widget=BootstrapDateInput,
                                 required=False
                                 )
     confirmado = forms.BooleanField(label='Confirmado', required=False)
     pago = forms.BooleanField(label='Pago', required=False)
 
     def get_queryset(self):
+        # import pdb; pdb.set_trace()
         q = Q()
         if self.is_valid():
             servico = self.cleaned_data['servico']
@@ -99,8 +101,6 @@ class TarefaSearchForm(forms.Form):
             pago = self.cleaned_data['pago']
             if pago:
                 q = q & Q(pago=True)
-
-            return Tarefa.objects.filter(q)
 
         return Tarefa.objects.filter(q)
         # return Tarefa.objects.all()

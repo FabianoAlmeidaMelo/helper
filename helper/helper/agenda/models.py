@@ -1,5 +1,6 @@
 # coding: utf-8
 from django.db import models
+from django.core.exceptions import ValidationError
 
 from helper.core.models import User
 
@@ -9,6 +10,12 @@ TIPO = (
     (3, u'Ouro'),
     )
 
+CARTAO_CHOICES = (
+    (1, 'Visa'),
+    (2, 'Master Card'),
+    (3, 'Amex'),
+    (4, 'Outros'),
+    )
 
 # AGENDA_PERMISSAO = (
 #     (1, u'Create'),
@@ -18,12 +25,24 @@ TIPO = (
 #     )
 
 
+def validate_vencimento(value):
+    if value not in range(1, 29):
+        raise ValidationError(u'%s Não está entre 1 e 28' % value)
+
+
+def validate_fechamento(value):
+    if value not in range(1, 29):
+        raise ValidationError(u'%s Não está entre 1 e 31' % value)
+
+
 class Conta(models.Model):
     """
     Uma pessoa física ou jurídica pode ter N Contas
     cada Conta pode ter N agendas
     as contas devem ter mais ou menos benefícios, de
     acordo com o Tipo.
+    TODO:
+        Levar para app core ?
     """
     dono = models.ForeignKey(User)
     tipo = models.SmallIntegerField(u'tipo', choices=TIPO)
@@ -42,6 +61,43 @@ class Conta(models.Model):
 
     def __unicode__(self):
         return self.dono.nome
+
+
+class CartaoCredito(models.Model):
+    '''
+    ref #14
+    TODO
+        levar par uma app:
+            'acessorio'?
+            'meios'?
+        de Pagamentos $ -->
+        pode ter de Recebimentos <-- $
+            é um atributo tipo?
+            acho que não, varia de acordo com contrato das Operadoras E
+            Banco Intermediário
+    '''
+    conta = models.ForeignKey(Conta)
+    bandeira = models.SmallIntegerField(u"Bandeira", choices=CARTAO_CHOICES)
+    vencimento = models.IntegerField(
+                                     u'Dia de Pagar',
+                                     validators=[validate_vencimento],
+                                )
+    fechamento = models.IntegerField(
+                                     u'Dia do Fechamento',
+                                     validators=[validate_fechamento],
+                                     null=True,
+                                     blank=True
+                                )
+    limite = models.DecimalField(
+                                u'Limite $',
+                                max_digits=7,
+                                decimal_places=2,
+                                blank=True,
+                                null=True
+                            )
+
+    def __unicode__(self):
+        return self.get_bandeira_display()
 
 
 class Agenda(models.Model):
@@ -85,6 +141,8 @@ class Servico(models.Model):
 class Tarefa(models.Model):
     """
     #12
+    TODO
+        se serviço é None, de qual agenda e conta é essa tarefa???
     """
     servico = models.ForeignKey(Servico, null=True, blank=True)
     titular = models.ForeignKey(User, null=True, blank=True)
