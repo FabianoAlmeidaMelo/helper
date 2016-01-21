@@ -4,6 +4,7 @@ from django import forms
 from django.db.models import Q
 from .models import (
     Agenda,
+    CartaoCredito,
     Servico,
     Tarefa,
 )
@@ -39,6 +40,15 @@ class ServicoForm(forms.ModelForm):
 
 
 class TarefaForm(forms.ModelForm):
+    cartao = forms.ModelChoiceField(label=u'Cartão de Crédito', queryset=CartaoCredito.objects.all(), required=False)
+
+    def __init__(self, *args, **kargs):
+        self.user = kargs.pop('user', None)
+        self.agenda = kargs.pop('agenda', None)
+        super(TarefaForm, self).__init__(*args, **kargs)
+
+        self.fields['servico'].required = True
+
     class Meta:
         model = Tarefa
         fields = (
