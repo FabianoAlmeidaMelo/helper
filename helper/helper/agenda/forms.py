@@ -7,6 +7,7 @@ from .models import (
     CartaoCredito,
     Servico,
     Tarefa,
+    TIPO_CHOICES,
 )
 
 # from bootstrap_toolkit.widgets import BootstrapDateInput
@@ -40,7 +41,7 @@ class ServicoForm(forms.ModelForm):
 
 
 class TarefaForm(forms.ModelForm):
-    cartao = forms.ModelChoiceField(label=u'Cartão de Crédito', queryset=CartaoCredito.objects.all(), required=False)
+    # tipo = forms.ChoiceField(choices=TIPO_CHOICES)
 
     def __init__(self, *args, **kargs):
         self.user = kargs.pop('user', None)
@@ -48,6 +49,7 @@ class TarefaForm(forms.ModelForm):
         super(TarefaForm, self).__init__(*args, **kargs)
 
         self.fields['servico'].required = True
+        self.fields['cartao'].queryset = CartaoCredito.objects.filter()
 
     class Meta:
         model = Tarefa
@@ -62,6 +64,8 @@ class TarefaForm(forms.ModelForm):
                     'confirmado',
                     'valor',
                     'pago',
+                    'tipo',
+                    'cartao',
                     )
 
 

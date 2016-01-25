@@ -120,7 +120,7 @@ def tarefa_form(request, pk=None):
         tarefa = None
         msg = u'Tarefa criada.'
 
-    form = TarefaForm(request.POST or None, instance=tarefa)
+    form = TarefaForm(request.POST or None, instance=tarefa, )
 
     if request.method == 'POST':
         if form.is_valid():

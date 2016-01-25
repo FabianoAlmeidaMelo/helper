@@ -17,6 +17,12 @@ CARTAO_CHOICES = (
     (4, 'Outros'),
     )
 
+TIPO_CHOICES = (
+    (0, '---'),
+    (1, u'(+)'),
+    (2, u'(-)'),
+    )
+
 # AGENDA_PERMISSAO = (
 #     (1, u'Create'),
 #     (2, u'Read'),
@@ -76,7 +82,7 @@ class CartaoCredito(models.Model):
             acho que não, varia de acordo com contrato das Operadoras E
             Banco Intermediário
     '''
-    conta = models.ForeignKey(Conta)
+    usuario = models.ForeignKey(User)
     bandeira = models.SmallIntegerField(u"Bandeira", choices=CARTAO_CHOICES)
     vencimento = models.IntegerField(
                                      u'Dia de Pagar',
@@ -161,6 +167,13 @@ class Tarefa(models.Model):
                                 null=True
                                 )
     pago = models.NullBooleanField(u'Pago')
+    cartao = models.ForeignKey(CartaoCredito, null=True, blank=True)
+    tipo = models.SmallIntegerField(
+                                    u"Tipo",
+                                    choices=TIPO_CHOICES,
+                                    null=True,
+                                    blank=True
+                                )
 
     class Meta:
         verbose_name = u'Tarefa'
