@@ -152,10 +152,10 @@ def tarefa_form(request, pk=None):
 def tarefa_list(request):
     form = TarefaSearchForm(request.POST or None)
     object_list = form.get_queryset()
-    print 80 * "-"
-    print object_list, len(object_list)
+    # print 80 * "-"
+    # print object_list, len(object_list)
 
-    print 80 * "*"
+    # print 80 * "*"
 
     return render(
         request, 'agenda/tarefa_list.html', {

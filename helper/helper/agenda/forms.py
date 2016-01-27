@@ -1,5 +1,4 @@
 # coding: utf-8
-
 from django import forms
 from django.db.models import Q
 from .models import (
@@ -7,10 +6,9 @@ from .models import (
     CartaoCredito,
     Servico,
     Tarefa,
-    TIPO_CHOICES,
 )
 
-# from bootstrap_toolkit.widgets import BootstrapDateInput
+from bootstrap_toolkit.widgets import BootstrapDateInput
 
 
 class AgendaForm(forms.ModelForm):
@@ -41,7 +39,6 @@ class ServicoForm(forms.ModelForm):
 
 
 class TarefaForm(forms.ModelForm):
-    # tipo = forms.ChoiceField(choices=TIPO_CHOICES)
 
     def __init__(self, *args, **kargs):
         self.user = kargs.pop('user', None)
@@ -78,12 +75,12 @@ class TarefaSearchForm(forms.Form):
     descricao = forms.CharField(label=u'Descrição', required=False)
     data_ini = forms.DateField(
                                 label='Data Inicial',
-                                # widget=BootstrapDateInput,
+                                widget=BootstrapDateInput,
                                 required=False
                                 )
     data_fim = forms.DateField(
                                 label='Data Final',
-                                # widget=BootstrapDateInput,
+                                widget=BootstrapDateInput,
                                 required=False
                                 )
     confirmado = forms.BooleanField(label='Confirmado', required=False)

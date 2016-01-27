@@ -1,7 +1,7 @@
 # coding: utf-8
 from django.db import models
 from django.core.exceptions import ValidationError
-
+from datetime import date, datetime
 from helper.core.models import User
 
 TIPO = (
@@ -22,13 +22,6 @@ TIPO_CHOICES = (
     (1, u'(+)'),
     (2, u'(-)'),
     )
-
-# AGENDA_PERMISSAO = (
-#     (1, u'Create'),
-#     (2, u'Read'),
-#     (3, u'Edit'),
-#     (4, u'Delete'),
-#     )
 
 
 def validate_vencimento(value):
@@ -104,6 +97,25 @@ class CartaoCredito(models.Model):
 
     def __unicode__(self):
         return self.get_bandeira_display()
+
+    @property
+    def get_data_vevencimento(self):
+        '''
+        retorna a data de pagar o cartão
+        no mês corrente
+        '''
+        hoje = date.today()
+        return datetime(hoje.year, hoje.month, self.vencimento)
+
+    @property
+    def get_data_fechamento(self):
+        '''
+        retorna a data de fechamento da fatura
+        no mês corrente
+        '''
+
+        hoje = date.today()
+        return datetime(hoje.year, hoje.month, self.fechamento)
 
 
 class Agenda(models.Model):
@@ -182,8 +194,3 @@ class Tarefa(models.Model):
 
     def __unicode__(self):
         return self.titulo
-
-
-# class Categoria(models.Model):
-#     agenda = models.ForeignKey(Agenda)
-#     nome = models.CharField(u'Nome', max_length=200)
