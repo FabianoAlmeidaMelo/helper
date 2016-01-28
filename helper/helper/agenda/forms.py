@@ -45,8 +45,15 @@ class TarefaForm(forms.ModelForm):
         self.agenda = kargs.pop('agenda', None)
         super(TarefaForm, self).__init__(*args, **kargs)
 
-        self.fields['servico'].required = True
         self.fields['cartao'].queryset = CartaoCredito.objects.filter()
+
+        self.fields['servico'].required = True
+        if any([
+                self.instance.cartao,
+                self.instance.valor,
+                self.instance.tipo]):
+            self.fields['tipo'].required = True
+            self.fields['valor'].required = True
 
     class Meta:
         model = Tarefa

@@ -99,7 +99,7 @@ class CartaoCredito(models.Model):
         return self.get_bandeira_display()
 
     @property
-    def get_data_vevencimento(self):
+    def get_data_vencimento(self):
         '''
         retorna a data de pagar o cartão
         no mês corrente
@@ -194,3 +194,24 @@ class Tarefa(models.Model):
 
     def __unicode__(self):
         return self.titulo
+
+    def set_tarefa_cartao(self):
+        '''
+        ref #16
+        Se mão estiver como Pago,
+        salva a tarefa na data de vencimento do cartão
+        '''
+        cartao = self.cartao
+        data_ini = self.data_ini
+        hoje = date.today()
+        h = datetime(hoje.year, hoje.month, hoje.day)
+        if cartao and self.pago is not True:
+            if cartao.get_data_fechamento <= h:
+                self.data_ini = datetime(
+                                         cartao.get_data_vencimento.year,
+                                         cartao.get_data_vencimento.month + 1,
+                                         cartao.get_data_vencimento.day)
+            else:
+                self.data_ini = cartao.get_data_vencimento
+            self.descricao += '\n\n **Data da compra %s:' % data_ini
+            self.save()

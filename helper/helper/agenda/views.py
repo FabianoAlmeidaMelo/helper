@@ -125,6 +125,8 @@ def tarefa_form(request, pk=None):
     if request.method == 'POST':
         if form.is_valid():
             tarefa = form.save()
+            if tarefa.cartao:
+                tarefa.set_tarefa_cartao()
             messages.success(request, msg)
 
             return redirect(reverse('tarefa_list'))
