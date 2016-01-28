@@ -199,7 +199,8 @@ class Tarefa(models.Model):
         '''
         ref #16
         Se mão estiver como Pago,
-        salva a tarefa na data de vencimento do cartão
+
+            calcula a data de vencimento do cartão
         '''
         cartao = self.cartao
         data_ini = self.data_ini
