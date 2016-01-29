@@ -22,6 +22,12 @@ que possibilita a interação de vários usuáios com múltiplas agendas, em um 
 
 * agendar
 
+* calcular data de vencimento de cartão;
+
+    - fracionar um pagamento com cartão em parcelas, dentro das datas corretas das faturas
+
+    - programar envio de email com alerta sobre a fatura (ex: fatura do cartão xxx atingiu $$$,00) 
+
 * atender
 
 * efetuar transações financeiras
