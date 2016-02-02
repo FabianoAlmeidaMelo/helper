@@ -186,6 +186,11 @@ class Tarefa(models.Model):
                                     null=True,
                                     blank=True
                                 )
+    parcela = models.ForeignKey(
+                                'Tarefa',
+                                null=True,
+                                blank=True
+                            )
 
     class Meta:
         verbose_name = u'Tarefa'
@@ -195,24 +200,50 @@ class Tarefa(models.Model):
     def __unicode__(self):
         return self.titulo
 
-    def set_tarefa_cartao(self):
-        '''
-        ref #16
-        Se mão estiver como Pago,
+    # def set_tarefa_cartao(self):
+    #     '''
+    #     ref #16
+    #     Se mão estiver como Pago,
 
-            calcula a data de vencimento do cartão
+    #         calcula a data de vencimento do cartão
+    #     '''
+    #     cartao = self.cartao
+    #     data_ini = self.data_ini
+    #     hoje = date.today()
+    #     h = datetime(hoje.year, hoje.month, hoje.day)
+    #     if cartao and self.pago is not True:
+    #         if cartao.get_data_fechamento <= h:
+    #             self.data_ini = datetime(
+    #                                      cartao.get_data_vencimento.year,
+    #                                      cartao.get_data_vencimento.month + 1,
+    #                                      cartao.get_data_vencimento.day)
+    #         else:
+    #             self.data_ini = cartao.get_data_vencimento
+    #         self.descricao += '\n\n **Data da compra %s:' % data_ini
+    #         self.save()
+
+    def set_tarefas(self):
         '''
-        cartao = self.cartao
-        data_ini = self.data_ini
-        hoje = date.today()
-        h = datetime(hoje.year, hoje.month, hoje.day)
-        if cartao and self.pago is not True:
-            if cartao.get_data_fechamento <= h:
-                self.data_ini = datetime(
-                                         cartao.get_data_vencimento.year,
-                                         cartao.get_data_vencimento.month + 1,
-                                         cartao.get_data_vencimento.day)
-            else:
-                self.data_ini = cartao.get_data_vencimento
-            self.descricao += '\n\n **Data da compra %s:' % data_ini
-            self.save()
+        ref #17
+        '''
+        pass
+
+    def set_parcela(self, parcelas):
+        '''
+        chamar no form,
+        arrumar o form, parcela choices ...
+        '''
+        parcelas = range(1, self.parcelas)
+        valor = self.valor/self.parcelas
+        for parcela in parcelas:
+            t = Tarefa()
+            t.valor = valor
+            t.servico = self.servico
+            t.titular = self.titular
+            t.cartao - self.cartao
+            t.titulo = self.titulo
+            t.parcela = self
+            t.data_ini = self.data_ini
+            t.save()
+        self.valor = valor
+        self.save()

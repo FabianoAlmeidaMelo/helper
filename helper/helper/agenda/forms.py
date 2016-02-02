@@ -55,6 +55,13 @@ class TarefaForm(forms.ModelForm):
         #     self.fields['tipo'].required = True
         #     self.fields['valor'].required = True
 
+    def clean_parcela(self):
+        parcela = self.cleaned_data['parcela']
+        if parcela:
+            return parcela
+        else:
+            return 1
+
     class Meta:
         model = Tarefa
         fields = (
@@ -70,6 +77,7 @@ class TarefaForm(forms.ModelForm):
                     'pago',
                     'tipo',
                     'cartao',
+                    'parcela',
                     )
 
 

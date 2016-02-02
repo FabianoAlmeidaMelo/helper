@@ -124,8 +124,10 @@ def tarefa_form(request, pk=None):
 
     if request.method == 'POST':
         if form.is_valid():
+            print "\n\n ------\n", request.POST, "\n\n------"
             tarefa = form.save()
             if tarefa.cartao:
+                # tarefa.set_parcela(tarefa.cartao, tarefa.valor, 1)
                 tarefa.set_tarefa_cartao()
             messages.success(request, msg)
 
