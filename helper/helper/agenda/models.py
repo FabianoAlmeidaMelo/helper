@@ -200,50 +200,65 @@ class Tarefa(models.Model):
     def __unicode__(self):
         return self.titulo
 
-    # def set_tarefa_cartao(self):
-    #     '''
-    #     ref #16
-    #     Se mão estiver como Pago,
-
-    #         calcula a data de vencimento do cartão
-    #     '''
-    #     cartao = self.cartao
-    #     data_ini = self.data_ini
-    #     hoje = date.today()
-    #     h = datetime(hoje.year, hoje.month, hoje.day)
-    #     if cartao and self.pago is not True:
-    #         if cartao.get_data_fechamento <= h:
-    #             self.data_ini = datetime(
-    #                                      cartao.get_data_vencimento.year,
-    #                                      cartao.get_data_vencimento.month + 1,
-    #                                      cartao.get_data_vencimento.day)
-    #         else:
-    #             self.data_ini = cartao.get_data_vencimento
-    #         self.descricao += '\n\n **Data da compra %s:' % data_ini
-    #         self.save()
-
-    def set_tarefas(self):
+    def set_data_parcela_mae(self):
         '''
         ref #17
+        deve setar a data inicial de Tarefa
         '''
-        pass
+        cartao = self.cartao
+        data_ini = self.data_ini
+        hoje = date.today()
+        h = datetime(hoje.year, hoje.month, hoje.day)
+        if cartao and self.pago is not True and self.parcela is None:
+            if cartao.get_data_fechamento <= h:
+                self.data_ini = datetime(
+                                         cartao.get_data_vencimento.year,
+                                         cartao.get_data_vencimento.month + 1,
+                                         cartao.get_data_vencimento.day)
+            else:
+                self.data_ini = cartao.get_data_vencimento
+            self.descricao += '\n\n **Data da compra %s:' % data_ini
+        return self
 
-    def set_parcela(self, parcelas):
+    def set_data_parcela_filha(self):
+        '''
+        basear na data da parcela mãe;
+        no em um count no 'for', para saber que parcela é.
+        '''
+        last_sum = self.tarefa_set.all().last()
+        last_sum_data_ini = last_sum.data_ini if last_sum else self.data_ini
+        ano = last_sum_data_ini.year
+        mes = last_sum_data_ini.month
+        return datetime(ano, mes, self.cartao.vencimento)
+
+    def set_parcela_filha(self, nr_parcelas=1):
         '''
         chamar no form,
-        arrumar o form, parcela choices ...
+        arrumar o form, ...
+
+        risco, na edição criar infinitas parcelas ...
         '''
-        parcelas = range(1, self.parcelas)
-        valor = self.valor/self.parcelas
+        parcelas = range(1, nr_parcelas)
+        valor = self.valor/nr_parcelas
         for parcela in parcelas:
-            t = Tarefa()
-            t.valor = valor
+            t = Tarefa()  # melhor get_or_create pela data_ini!!
             t.servico = self.servico
             t.titular = self.titular
-            t.cartao - self.cartao
             t.titulo = self.titulo
+            t.descricao = self.descricao
+            t.descricao += u'\n\nParcela nr: %s de %s' % ((parcela + 1), nr_parcelas)
+            t.data_ini = self.set_data_parcela_filha()
+            t.hora_ini = self.hora_ini
+            t.data_fim = self.data_fim
+            t.hora_fim = self.hora_fim
+            t.confirmado = self.confirmado
+            t.valor = self.valor
             t.parcela = self
-            t.data_ini = self.data_ini
-            t.save()
+            t.valor = valor  # dividido ...
+            t.pago = None
+            t.cartao = self.cartao
+            t.parcela = self
+            print '\n\n', t
+            # t.save()
         self.valor = valor
         self.save()

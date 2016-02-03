@@ -124,11 +124,10 @@ def tarefa_form(request, pk=None):
 
     if request.method == 'POST':
         if form.is_valid():
-            print "\n\n ------\n", request.POST, "\n\n------"
             tarefa = form.save()
-            if tarefa.cartao:
+            # if tarefa.cartao:
                 # tarefa.set_parcela(tarefa.cartao, tarefa.valor, 1)
-                tarefa.set_tarefa_cartao()
+                # tarefa.set_parcela_mae()
             messages.success(request, msg)
 
             return redirect(reverse('tarefa_list'))

@@ -39,12 +39,13 @@ class ServicoForm(forms.ModelForm):
 
 
 class TarefaForm(forms.ModelForm):
+    nr_parcela = forms.IntegerField(label='Nr de Parcelas', required=False)
 
     def __init__(self, *args, **kargs):
         self.user = kargs.pop('user', None)
         self.agenda = kargs.pop('agenda', None)
         super(TarefaForm, self).__init__(*args, **kargs)
-
+        self.fields['parcela'].widget = forms.HiddenInput()
         self.fields['cartao'].queryset = CartaoCredito.objects.filter()
 
         self.fields['servico'].required = True
@@ -55,12 +56,25 @@ class TarefaForm(forms.ModelForm):
         #     self.fields['tipo'].required = True
         #     self.fields['valor'].required = True
 
-    def clean_parcela(self):
-        parcela = self.cleaned_data['parcela']
-        if parcela:
-            return parcela
-        else:
-            return 1
+    def save(self, *args, **kargs):
+        is_new = self.instance.pk is None
+        # kargs.update({'commit': False})
+        instance = super(TarefaForm, self).save(*args, **kargs)
+        if is_new:
+            if instance.cartao:
+                instance.set_data_parcela_mae()
+        instance.save()
+        nr_parcela = self.cleaned_data['nr_parcela'] or 1
+        if instance.cartao and nr_parcela > 1:
+            instance.set_parcela_filha(nr_parcela)
+        return instance
+
+    # def clean_nr_parcela(self):
+    #     nr_parcela = self.cleaned_data['nr_parcela']
+    #     if nr_parcela:
+    #         return nr_parcela
+    #     else:
+    #         return 1
 
     class Meta:
         model = Tarefa
