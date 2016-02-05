@@ -127,7 +127,7 @@ def tarefa_form(request, pk=None):
             tarefa = form.save()
             # if tarefa.cartao:
                 # tarefa.set_parcela(tarefa.cartao, tarefa.valor, 1)
-                # tarefa.set_parcela_mae()
+                # tarefa.set_data_parcela_mae()
             messages.success(request, msg)
 
             return redirect(reverse('tarefa_list'))

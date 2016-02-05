@@ -117,6 +117,26 @@ class CartaoCredito(models.Model):
         hoje = date.today()
         return datetime(hoje.year, hoje.month, self.fechamento)
 
+    def get_data_fechamento_mes(self, data):
+        '''
+        retorna a data de fechamento da fatura
+        a partir de uma data
+        '''
+        return date(data.year, data.month, self.fechamento)
+
+    def get_data_pagamento_mes(self, data):
+        '''
+        retorna a data de fechamento da fatura
+        a partir de uma data
+        '''
+        data_fechamento = self.get_data_fechamento_mes(data)
+        if data <= data_fechamento:
+            return date(data.year, data.month, self.vencimento)
+        elif data.month == 12:
+            return date(data.year + 1, 1, self.vencimento)
+        else:
+            return date(data.year, data.month + 1, self.vencimento)
+
 
 class Agenda(models.Model):
     '''
@@ -207,16 +227,9 @@ class Tarefa(models.Model):
         '''
         cartao = self.cartao
         data_ini = self.data_ini
-        hoje = date.today()
-        h = datetime(hoje.year, hoje.month, hoje.day)
+
         if cartao and self.pago is not True and self.parcela is None:
-            if cartao.get_data_fechamento <= h:
-                self.data_ini = datetime(
-                                         cartao.get_data_vencimento.year,
-                                         cartao.get_data_vencimento.month + 1,
-                                         cartao.get_data_vencimento.day)
-            else:
-                self.data_ini = cartao.get_data_vencimento
+            self.data_ini = cartao.get_data_pagamento_mes(data_ini)
             self.descricao += '\n\n **Data da compra %s:' % data_ini
         return self
 
