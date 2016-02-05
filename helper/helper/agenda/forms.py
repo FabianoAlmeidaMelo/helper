@@ -60,9 +60,9 @@ class TarefaForm(forms.ModelForm):
         is_new = self.instance.pk is None
         # kargs.update({'commit': False})
         instance = super(TarefaForm, self).save(*args, **kargs)
-        if is_new:
-            if instance.cartao and instance.pago is False:
-                instance.set_data_parcela_mae()
+        # if is_new:
+        if instance.cartao and instance.pago is not True:
+            instance.set_data_parcela_mae()
         instance.save()
         nr_parcela = self.cleaned_data['nr_parcela'] or 1
         if instance.cartao and nr_parcela > 1:
