@@ -28,6 +28,8 @@ que possibilita a interação de vários usuáios com múltiplas agendas, em um 
 
     - programar envio de email com alerta sobre a fatura (ex: fatura do cartão xxx atingiu $$$,00) 
 
+    - programar alerta: "se a conta entrar no nvermelho" em um período x, ex: daqui 30 dias, ou daqui 3 meses, sistema envia um email de alerta (somente para contas pagas, free não)
+
 * atender
 
 * efetuar transações financeiras
