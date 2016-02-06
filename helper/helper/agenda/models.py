@@ -130,7 +130,7 @@ class CartaoCredito(models.Model):
         a partir de uma data
         '''
         data_fechamento = self.get_data_fechamento_mes(data)
-        if data <= data_fechamento:
+        if data < data_fechamento:
             return date(data.year, data.month, self.vencimento)
         elif data.month == 12:
             return date(data.year + 1, 1, self.vencimento)
@@ -240,15 +240,11 @@ class Tarefa(models.Model):
         '''
         last_sum = self.tarefa_set.all().last()
         last_sum_data_ini = last_sum.data_ini if last_sum else self.data_ini
-        ano = last_sum_data_ini.year
-        mes = last_sum_data_ini.month
-        return datetime(ano, mes, self.cartao.vencimento)
+
+        return self.cartao.get_data_pagamento_mes(last_sum_data_ini)
 
     def set_parcela_filha(self, nr_parcelas=1):
         '''
-        chamar no form,
-        arrumar o form, ...
-
         risco, na edição criar infinitas parcelas ...
         '''
         parcelas = range(1, nr_parcelas)
@@ -257,9 +253,10 @@ class Tarefa(models.Model):
             t = Tarefa()  # melhor get_or_create pela data_ini!!
             t.servico = self.servico
             t.titular = self.titular
-            t.titulo = self.titulo
+            t.titulo = self.titulo + u': ' + str(parcela + 1)
             t.descricao = self.descricao
-            t.descricao += u'\n\nParcela nr: %s de %s' % ((parcela + 1), nr_parcelas)
+            t.tipo = self.tipo
+            t.descricao += u'\n\n%s - Parcela nr: %s de %s' % (valor, (parcela + 1), nr_parcelas)
             t.data_ini = self.set_data_parcela_filha()
             t.hora_ini = self.hora_ini
             t.data_fim = self.data_fim
@@ -271,7 +268,8 @@ class Tarefa(models.Model):
             t.pago = None
             t.cartao = self.cartao
             t.parcela = self
-            print '\n\n', t
-            # t.save()
+            t.save()
+            print t.data_ini
+        self.titulo + u': 1ª de %s' % nr_parcelas
         self.valor = valor
         self.save()

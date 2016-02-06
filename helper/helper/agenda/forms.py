@@ -58,23 +58,21 @@ class TarefaForm(forms.ModelForm):
 
     def save(self, *args, **kargs):
         is_new = self.instance.pk is None
-        # kargs.update({'commit': False})
+        data_ini = None
+
+        if is_new is False:  # data_ini No BD
+            data_ini = Tarefa.objects.get(id=self.instance.pk).data_ini
+        data_ini_form = self.cleaned_data['data_ini']
         instance = super(TarefaForm, self).save(*args, **kargs)
-        # if is_new:
-        if instance.cartao and instance.pago is not True:
-            instance.set_data_parcela_mae()
+
+        if data_ini != data_ini_form:
+            if instance.cartao and instance.pago is not True:
+                instance.set_data_parcela_mae()
         instance.save()
         nr_parcela = self.cleaned_data['nr_parcela'] or 1
         if instance.cartao and nr_parcela > 1:
             instance.set_parcela_filha(nr_parcela)
         return instance
-
-    # def clean_nr_parcela(self):
-    #     nr_parcela = self.cleaned_data['nr_parcela']
-    #     if nr_parcela:
-    #         return nr_parcela
-    #     else:
-    #         return 1
 
     class Meta:
         model = Tarefa
