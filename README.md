@@ -30,7 +30,7 @@ que possibilita a interação de vários usuáios com múltiplas agendas, em um 
 
     - programar alerta: "se a conta entrar no nvermelho" em um período x, ex: daqui 30 dias, ou daqui 3 meses, sistema envia um email de alerta (somente para contas pagas, free não)
 
-    - Listar atrefas, a partir da data.today(), + aquelas que tenham VALOR E não estejam marcadas como PAGO.
+    - Listar tarefas, a partir da data.today(), + aquelas que tenham VALOR E não estejam marcadas como PAGO.
 
 * atender
 
