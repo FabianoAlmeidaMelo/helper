@@ -71,7 +71,7 @@ class TarefaForm(forms.ModelForm):
         instance.save()
         nr_parcela = self.cleaned_data['nr_parcela'] or 1
         if instance.cartao and nr_parcela > 1:
-            instance.set_parcela_filha(nr_parcela)
+            instance.set_parcela_filha()
         return instance
 
     class Meta:
@@ -90,6 +90,7 @@ class TarefaForm(forms.ModelForm):
                     'tipo',
                     'cartao',
                     'parcela',
+                    'nr_parcela',
                     )
 
 

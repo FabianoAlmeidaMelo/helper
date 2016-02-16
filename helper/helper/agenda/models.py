@@ -211,6 +211,11 @@ class Tarefa(models.Model):
                                 null=True,
                                 blank=True
                             )
+    nr_parcela = models.PositiveSmallIntegerField(
+                                           u'Nr de Parcelas',
+                                           null=True,
+                                           blank=True
+                                    )
 
     class Meta:
         verbose_name = u'Tarefa'
@@ -243,20 +248,32 @@ class Tarefa(models.Model):
 
         return self.cartao.get_data_pagamento_mes(last_sum_data_ini)
 
-    def set_parcela_filha(self, nr_parcelas=1):
+    def list_parcelas(self):
+        '''
+        talvez esse metodo escolha,
+            Se chama metodo que cria OU
+            Se chama metodo que edita
+        '''
+        if self.tarefa_set.all().count() != self.nr_parcela:
+            self.tarefa_set.all().delete()
+        return range(1, self.nr_parcela)
+
+    def set_parcela_filha(self):
         '''
         risco, na edição criar infinitas parcelas ...
+        comparar com o nr de parcelas
+        se tiver menos, apaga o excesso
         '''
-        parcelas = range(1, nr_parcelas)
-        valor = self.valor/nr_parcelas
+        parcelas = self.list_parcelas()
+        valor = self.valor/self.nr_parcela
         for parcela in parcelas:
             t = Tarefa()  # melhor get_or_create pela data_ini!!
             t.servico = self.servico
             t.titular = self.titular
-            t.titulo = self.titulo + u': ' + str(parcela + 1)
+            t.titulo = self.titulo + u': ' + str(parcela + 1) + u' / ' + str(len(parcelas))
             t.descricao = self.descricao
             t.tipo = self.tipo
-            t.descricao += u'\n\n%s - Parcela nr: %s de %s' % (valor, (parcela + 1), nr_parcelas)
+            t.descricao += u'\n\n%s - Parcela nr: %s de %s' % (valor, (parcela + 1), str(self.nr_parcela))
             t.data_ini = self.set_data_parcela_filha()
             t.hora_ini = self.hora_ini
             t.data_fim = self.data_fim
@@ -270,6 +287,38 @@ class Tarefa(models.Model):
             t.parcela = self
             t.save()
             print t.data_ini
-        self.titulo + u': 1ª de %s' % nr_parcelas
+        self.titulo + u': 1ª de %s' % self.nr_parcela
         self.valor = valor
         self.save()
+
+
+    # def set_parcela_filha(self, nr_parcelas=1):
+    #     '''
+    #     risco, na edição criar infinitas parcelas ...
+    #     '''
+    #     parcelas = range(1, nr_parcelas)
+    #     valor = self.valor/nr_parcelas
+    #     for parcela in parcelas:
+    #         t = Tarefa()  # melhor get_or_create pela data_ini!!
+    #         t.servico = self.servico
+    #         t.titular = self.titular
+    #         t.titulo = self.titulo + u': ' + str(parcela + 1)
+    #         t.descricao = self.descricao
+    #         t.tipo = self.tipo
+    #         t.descricao += u'\n\n%s - Parcela nr: %s de %s' % (valor, (parcela + 1), nr_parcelas)
+    #         t.data_ini = self.set_data_parcela_filha()
+    #         t.hora_ini = self.hora_ini
+    #         t.data_fim = self.data_fim
+    #         t.hora_fim = self.hora_fim
+    #         t.confirmado = self.confirmado
+    #         t.valor = self.valor
+    #         t.parcela = self
+    #         t.valor = valor  # dividido ...
+    #         t.pago = None
+    #         t.cartao = self.cartao
+    #         t.parcela = self
+    #         t.save()
+    #         print t.data_ini
+    #     self.titulo + u': 1ª de %s' % nr_parcelas
+    #     self.valor = valor
+    #     self.save()
