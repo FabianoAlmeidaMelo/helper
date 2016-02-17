@@ -71,5 +71,28 @@ que possibilita a interação de vários usuáios com múltiplas agendas, em um 
 
 * contas free tem propagandas (); contas pagas podem optar em não ver as propagandas
 
+#Concorrência:
+
+- http://www.infomoney.com.br/conteudo-patrocinado/noticia/4554710/startup-ajuda-empreendedor-gerir-empresa-forma-eficiente
+
+- Conta Azul
+
+```
+Ao comprar algo, você registra a compra no sistema e automaticamente ele atualiza o estoque,
+atualiza o contas a pagar e por consequência o fluxo de caixa.
+Quando você vende é a mesma coisa, o sistema emite a nota fiscal, baixa o estoque,
+alimenta o contas a receber e o fluxo de caixa, automaticamente.
+O fluxo para prestação de serviços também é muito bem atendido pelo 
+
+O sistema chama atenção pela excelente relação custo-benefício:
+a assinatura começa por R$ 29. Além disso, 
+utiliza o mesmo sistema de segurança que os bancos,
+garantindo o tráfego e armazenamento seguro de todos dados.
+Constantes atualizações são feitas para que o sistema esteja sempre
+atendendo bem tanto aos requisitos de mercado quanto a aspectos legais e tributários.
+
+
+```
+
 
 Fabiano Almeida / José Thomazini
