@@ -5,6 +5,7 @@ from django.core.urlresolvers import reverse
 from django.contrib import messages
 # from django.contrib.auth.decorators import login_required, user_passes_test
 # from django.contrib.contenttypes.models import ContentType
+
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .models import (
@@ -143,8 +144,33 @@ def tarefa_form(request, pk=None):
     )
 
 
+class TarefaFormListView(SearchFormListView):
+    '''
+    ref #19
+    datas anteriores a data corrente,
+        devem encabeçar a listagem, quando:
+        Tiverem valor e não estiverem marcadas como PAGO
+    '''
+
+    def get(self, request, *args, **kwargs):
+
+        self.form = self.get_form(self.get_form_class())
+        if self.form.is_valid():
+            self.object_list = self.form.get_result_queryset()
+            # self.object_list = Tarefa.objects.all()
+        else:
+            self.object_list = []
+
+        context = self.get_context_data(
+            object_list=self.object_list,
+            form=self.form,
+            url_params=request.GET.urlencode()
+        )
+
+        return self.render_to_response(context)
+
 tarefa_list = (
-    SearchFormListView.as_view(
+    TarefaFormListView.as_view(
                                 model=Tarefa,
                                 form_class=TarefaSearchForm,
                                 paginate_by=30
