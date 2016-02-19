@@ -20,7 +20,7 @@ from .forms import (
     TarefaSearchForm,
     )
 
-# from helper.core.views import SearchFormListView
+from helper.core.views import SearchFormListView
 
 
 def agenda_form(request, pk=None):
@@ -143,26 +143,26 @@ def tarefa_form(request, pk=None):
     )
 
 
-# tarefa_list = (
-#     SearchFormListView.as_view(
-#                                 model=Tarefa,
-#                                 form_class=TarefaSearchForm,
-#                                 paginate_by=15
-#                                 )
-#                             )
+tarefa_list = (
+    SearchFormListView.as_view(
+                                model=Tarefa,
+                                form_class=TarefaSearchForm,
+                                paginate_by=30
+                                )
+                            )
 
 
-def tarefa_list(request):
-    form = TarefaSearchForm(request.POST or None)
-    object_list = form.get_queryset()
-    # print 80 * "-"
-    # print object_list, len(object_list)
+# def tarefa_list(request):
+#     form = TarefaSearchForm(request.POST or None)
+#     object_list = form.get_result_queryset()
+#     # print 80 * "-"
+#     # print object_list, len(object_list)
 
-    # print 80 * "*"
+#     # print 80 * "*"
 
-    return render(
-        request, 'agenda/tarefa_list.html', {
-                                            'object_list': object_list,
-                                            'form': form,
-                                            }
-    )
+#     return render(
+#         request, 'agenda/tarefa_list.html', {
+#                                             'object_list': object_list,
+#                                             'form': form,
+#                                             }
+#     )

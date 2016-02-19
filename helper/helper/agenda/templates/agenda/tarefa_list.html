@@ -6,25 +6,40 @@
 {% block content %}
 
 <h5>Filtro</h5>
-<form class="form-inline well" method="GET">
+<form class="form-inline well" method="GET" action="#">
 
-    <div class="row-fluid">
-        {{ form.servico|as_bootstrap }}
-        {{ form.titulo|as_bootstrap }}
-        {{ form.descricao|as_bootstrap }}
-    </div>
-    <div class="row-fluid">
-        {{ form.data_ini|as_bootstrap }}
-        {{ form.data_fim|as_bootstrap }}
-    </div>
-    <div class="row-fluid">
-        {{ form.confirmado|as_bootstrap }}
-        {{ form.pago|as_bootstrap }}
-    </div>
-
+      <div class="row-fluid">
+          {{ form.q|as_bootstrap:"inline" }}
+        
+        <div class="row-fluid">
+            {{ form.comprador|as_bootstrap:"inline" }}
+            {{ form.data_ini|as_bootstrap:"inline" }}
+            {{ form.data_fim|as_bootstrap:"inline" }}
+            <button type="submit" class="btn btn-small btn-success" title="Filtrar">
+                <i class="icon-search"></i>
+            </button>
+            <a class="btn btn-small btn-info" href="." title="Apaga o filtro e listar todos">
+                <i class="icon-remove-circle"></i>
+            </a>
+        </div>
+        <fieldset style="margin:0; padding-bottom:0;">
+            <legend style="font-size:12px;">
+                <a href="#" class="panel-showhide"><i class="icon-plus-sign"></i>Filtro Detalhado</a>
+            </legend>
+            <div class="panel-showhide">
+                <div class="row-fluid">
+                    {{ form.email|as_bootstrap:"inline" }}
+                    {{ form.cpf|as_bootstrap:"inline" }}
+                    {{ form.semente|as_bootstrap:"inline" }}
+                </div>
+                <div class="row-fluid">
+                    {{ form.estagio|as_bootstrap:"inline" }}
+                </div>
+            </div>
+        </fieldset>
         <button type="submit" class="btn btn-small btn-success" title="Filtrar"><i class="icon-search"></i></button>
         <a class="btn btn-small btn-info" href="." title="Apaga o filtro e listar todos"><i class="icon-remove-circle"></i></a>
-    </div>
+      </div>
 
 </form>
 
@@ -64,7 +79,7 @@
             {% endfor %}
         </table>
     </div>
-
+{% bootstrap_pagination page_obj extra=request.GET.urlencode %}
 {% endblock content %}
 {% block extra_js %}
     {{ form.media.js}}

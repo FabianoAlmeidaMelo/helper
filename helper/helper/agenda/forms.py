@@ -1,4 +1,5 @@
 # coding: utf-8
+from datetime import date
 from django import forms
 from django.db.models import Q
 from .models import (
@@ -7,7 +8,7 @@ from .models import (
     Servico,
     Tarefa,
 )
-
+from helper.core.forms import BaseSearchForm
 from bootstrap_toolkit.widgets import BootstrapDateInput
 
 
@@ -94,7 +95,7 @@ class TarefaForm(forms.ModelForm):
                     )
 
 
-class TarefaSearchForm(forms.Form):
+class TarefaSearchForm(BaseSearchForm):
     '''
     #12
     '''
@@ -104,7 +105,7 @@ class TarefaSearchForm(forms.Form):
     data_ini = forms.DateField(
                                 label='Data Inicial',
                                 widget=BootstrapDateInput,
-                                required=False
+                                required=False,
                                 )
     data_fim = forms.DateField(
                                 label='Data Final',
@@ -114,8 +115,8 @@ class TarefaSearchForm(forms.Form):
     confirmado = forms.BooleanField(label='Confirmado', required=False)
     pago = forms.BooleanField(label='Pago', required=False)
 
-    def get_queryset(self):
-        # import pdb; pdb.set_trace()
+    def get_result_queryset(self):
+
         q = Q()
         if self.is_valid():
             servico = self.cleaned_data['servico']
@@ -130,10 +131,10 @@ class TarefaSearchForm(forms.Form):
 
             data_ini = self.cleaned_data['data_ini']
             if data_ini:
-                q = q & Q(data__gte=data_ini)
+                q = q & Q(data_ini__gte=data_ini)
             data_fim = self.cleaned_data['data_fim']
             if data_fim:
-                q = q & Q(data__lte=data_fim)
+                q = q & Q(data_ini__lte=data_fim)
             confirmado = self.cleaned_data['confirmado']
             if confirmado:
                 q = q & Q(confirmado=True)
@@ -141,5 +142,61 @@ class TarefaSearchForm(forms.Form):
             if pago:
                 q = q & Q(pago=True)
 
-        return Tarefa.objects.filter(q)
-        # return Tarefa.objects.all()
+            return Tarefa.objects.filter(q)
+        return Tarefa.objects.filter(data_ini__gte=date.today())
+
+    class Meta:
+        base_qs = Tarefa.objects
+        search_fields = ('servico__nome', 'titulo', 'descricao')
+
+
+
+# class TarefaSearchForm(forms.Form):
+#     '''
+#     #12
+#     '''
+#     servico = forms.CharField(label=u'Servico', required=False)
+#     titulo = forms.CharField(label=u'Título', required=False)
+#     descricao = forms.CharField(label=u'Descrição', required=False)
+#     data_ini = forms.DateField(
+#                                 label='Data Inicial',
+#                                 widget=BootstrapDateInput,
+#                                 required=False
+#                                 )
+#     data_fim = forms.DateField(
+#                                 label='Data Final',
+#                                 widget=BootstrapDateInput,
+#                                 required=False
+#                                 )
+#     confirmado = forms.BooleanField(label='Confirmado', required=False)
+#     pago = forms.BooleanField(label='Pago', required=False)
+
+#     def get_result_queryset(self):
+#         # import pdb; pdb.set_trace()
+#         q = Q()
+#         if self.is_valid():
+#             servico = self.cleaned_data['servico']
+#             if servico:
+#                 q = q & Q(servico__nome__icontains=servico)
+#             titulo = self.cleaned_data['titulo']
+#             if titulo:
+#                 q = q & Q(titulo__icontains=titulo)
+#             descricao = self.cleaned_data['descricao']
+#             if descricao:
+#                 q = q & Q(descricao__icontains=descricao)
+
+#             data_ini = self.cleaned_data['data_ini']
+#             if data_ini:
+#                 q = q & Q(data__gte=data_ini)
+#             data_fim = self.cleaned_data['data_fim']
+#             if data_fim:
+#                 q = q & Q(data__lte=data_fim)
+#             confirmado = self.cleaned_data['confirmado']
+#             if confirmado:
+#                 q = q & Q(confirmado=True)
+#             pago = self.cleaned_data['pago']
+#             if pago:
+#                 q = q & Q(pago=True)
+
+#         return Tarefa.objects.filter(q)
+#         return Tarefa.objects.all()

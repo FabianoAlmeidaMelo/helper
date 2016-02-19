@@ -37,7 +37,7 @@ class SearchFormListView(FormMixin, ListView):
 
     def get(self, request, *args, **kwargs):
         self.form = self.get_form(self.get_form_class())
-        self.object_list = self.form.get_queryset()
+        self.object_list = self.form.get_result_queryset()
         context = self.get_context_data(
             object_list=self.object_list, form=self.form)
         return self.render_to_response(context)
