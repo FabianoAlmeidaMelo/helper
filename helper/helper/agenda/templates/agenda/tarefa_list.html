@@ -6,8 +6,8 @@
 {% block content %}
 
 <h5>Filtro</h5>
-<form class="form-inline well" method="GET" action="#">
-
+<form class="form-inline well" method="POST" action="#">
+  {% csrf_token %}
 <fieldset style="margin:0; padding-bottom:0;">
     <div class="row-fluid">
         {{ form.confirmado|as_bootstrap:"inline" }}

@@ -117,7 +117,7 @@ class TarefaSearchForm(BaseSearchForm):
 
     def get_result_queryset(self):
 
-        q = Q(data_ini__gte=date.today()) | Q(pago=False)
+        q = Q()
         if self.is_valid():
             servico = self.cleaned_data['servico']
             if servico:
@@ -131,7 +131,6 @@ class TarefaSearchForm(BaseSearchForm):
 
             data_ini = self.cleaned_data['data_ini']
             if data_ini:
-                print 'IF'
                 q = q & Q(data_ini__gte=data_ini)
             data_fim = self.cleaned_data['data_fim']
             if data_fim:
@@ -142,8 +141,6 @@ class TarefaSearchForm(BaseSearchForm):
             pago = self.cleaned_data['pago']
             if pago:
                 q = q & Q(pago=True)
-
-            # return Tarefa.objects.filter(q)
         return Tarefa.objects.filter(q)
 
     class Meta:

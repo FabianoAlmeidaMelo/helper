@@ -1,5 +1,6 @@
 # coding: utf-8
-
+from django.db.models import Q
+from datetime import date
 # from datetime import datetime
 from django.core.urlresolvers import reverse
 from django.contrib import messages
@@ -154,12 +155,16 @@ class TarefaFormListView(SearchFormListView):
 
     def get(self, request, *args, **kwargs):
 
-        self.form = self.get_form(self.get_form_class())
-        if self.form.is_valid():
-            self.object_list = self.form.get_result_queryset()
-            # self.object_list = Tarefa.objects.all()
+        if request.method == 'POST':
+            self.form = self.get_form(self.get_form_class())
+            if self.form.is_valid():
+                self.object_list = self.form.get_result_queryset()
+            else:
+                self.object_list = []
         else:
-            self.object_list = []
+            self.form = self.get_form(self.get_form_class())
+            q = Q(data_ini__gte=date.today()) | Q(pago=False)
+            self.object_list = Tarefa.objects.filter(q)
 
         context = self.get_context_data(
             object_list=self.object_list,
