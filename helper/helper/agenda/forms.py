@@ -134,7 +134,7 @@ class TarefaSearchForm(BaseSearchForm):
                 q = q & Q(data_ini__gte=data_ini)
             data_fim = self.cleaned_data['data_fim']
             if data_fim:
-                q = q & Q(data_ini__lte=data_fim)
+                q = q & Q(data_ini__lte=data_ini)
             confirmado = self.cleaned_data['confirmado']
             if confirmado:
                 q = q & Q(confirmado=True)
