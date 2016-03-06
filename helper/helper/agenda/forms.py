@@ -157,56 +157,34 @@ class TarefaSearchForm(BaseSearchForm):
             return Q(pago=pago)
         return
 
+    def get_result_queryset(self):
+        # import pdb; pdb.set_trace()
+        # q = Q(data_ini__gte=date.today()) | Q(pago=False) | Q(pago=None)
+        q = Q()
+        if self.is_valid():
+            servico = self.cleaned_data['servico']
+            if servico:
+                q = q & Q(servico__nome__icontains=servico)
+            titulo = self.cleaned_data['titulo']
+            if titulo:
+                q = q & Q(titulo__icontains=titulo)
+            descricao = self.cleaned_data['descricao']
+            if descricao:
+                q = q & Q(descricao__icontains=descricao)
+            data_ini = self.cleaned_data['data_ini']
+            if data_ini:
+                q = q & Q(data_ini__gte=data_ini)
+            data_fim = self.cleaned_data['data_fim']
+            if data_fim:
+                q = q & Q(data_ini__lte=data_ini)
+            confirmado = self.cleaned_data['confirmado']
+            if confirmado:
+                q = q & Q(confirmado=True)
+            pago = self.cleaned_data['pago']
+            if pago:
+                q = q & Q(pago=True)
+
+        return Tarefa.objects.filter(q)
+
     class Meta:
         base_qs = Tarefa.objects
-
-
-# class TarefaSearchForm(forms.Form):
-#     '''
-#     #12
-#     '''
-#     servico = forms.CharField(label=u'Servico', required=False)
-#     titulo = forms.CharField(label=u'Título', required=False)
-#     descricao = forms.CharField(label=u'Descrição', required=False)
-#     data_ini = forms.DateField(
-#                                 label='Data Inicial',
-#                                 widget=BootstrapDateInput,
-#                                 required=False
-#                                 )
-#     data_fim = forms.DateField(
-#                                 label='Data Final',
-#                                 widget=BootstrapDateInput,
-#                                 required=False
-#                                 )
-#     confirmado = forms.BooleanField(label='Confirmado', required=False)
-#     pago = forms.BooleanField(label='Pago', required=False)
-
-#     def get_result_queryset(self):
-#         # import pdb; pdb.set_trace()
-#         q = Q()
-#         if self.is_valid():
-#             servico = self.cleaned_data['servico']
-#             if servico:
-#                 q = q & Q(servico__nome__icontains=servico)
-#             titulo = self.cleaned_data['titulo']
-#             if titulo:
-#                 q = q & Q(titulo__icontains=titulo)
-#             descricao = self.cleaned_data['descricao']
-#             if descricao:
-#                 q = q & Q(descricao__icontains=descricao)
-
-#             data_ini = self.cleaned_data['data_ini']
-#             if data_ini:
-#                 q = q & Q(data__gte=data_ini)
-#             data_fim = self.cleaned_data['data_fim']
-#             if data_fim:
-#                 q = q & Q(data__lte=data_ini)
-#             confirmado = self.cleaned_data['confirmado']
-#             if confirmado:
-#                 q = q & Q(confirmado=True)
-#             pago = self.cleaned_data['pago']
-#             if pago:
-#                 q = q & Q(pago=True)
-
-#         return Tarefa.objects.filter(q)
-#         return Tarefa.objects.all()
