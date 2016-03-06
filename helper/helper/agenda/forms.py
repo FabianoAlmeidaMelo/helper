@@ -115,38 +115,50 @@ class TarefaSearchForm(BaseSearchForm):
     confirmado = forms.BooleanField(label='Confirmado', required=False)
     pago = forms.BooleanField(label='Pago', required=False)
 
-    def get_result_queryset(self):
+    def prepare_servico(self):
+        servico = self.cleaned_data['servico']
+        if servico:
+            return Q(servico__nome__icontains=servico)
+        return
 
-        q = Q()
-        if self.is_valid():
-            servico = self.cleaned_data['servico']
-            if servico:
-                q = q & Q(servico__nome__icontains=servico)
-            titulo = self.cleaned_data['titulo']
-            if titulo:
-                q = q & Q(titulo__icontains=titulo)
-            descricao = self.cleaned_data['descricao']
-            if descricao:
-                q = q & Q(descricao__icontains=descricao)
+    def prepare_titulo(self):
+        titulo = self.cleaned_data['titulo']
+        if titulo:
+            return Q(titulo__icontains=titulo)
+        return
 
-            data_ini = self.cleaned_data['data_ini']
-            if data_ini:
-                q = q & Q(data_ini__gte=data_ini)
-            data_fim = self.cleaned_data['data_fim']
-            if data_fim:
-                q = q & Q(data_ini__lte=data_ini)
-            confirmado = self.cleaned_data['confirmado']
-            if confirmado:
-                q = q & Q(confirmado=True)
-            pago = self.cleaned_data['pago']
-            if pago:
-                q = q & Q(pago=True)
-        return Tarefa.objects.filter(q)
+    def prepare_descricao(self):
+        descricao = self.cleaned_data['descricao']
+        if descricao:
+            return Q(descricao__icontains=descricao)
+        return
+
+    def prepare_data_ini(self):
+        data_ini = self.cleaned_data['data_ini']
+        if data_ini:
+            return Q(data_ini__gte=data_ini)
+        return
+
+    def prepare_data_fim(self):
+        data_ini = self.cleaned_data['data_fim']
+        if data_ini:
+            return Q(data_ini__lte=data_ini)
+        return
+
+    def prepare_confirmado(self):
+        confirmado = self.cleaned_data['confirmado']
+        if confirmado:
+            return Q(confirmado=confirmado)
+        return
+
+    def prepare_pago(self):
+        pago = self.cleaned_data['pago']
+        if pago:
+            return Q(pago=pago)
+        return
 
     class Meta:
         base_qs = Tarefa.objects
-        search_fields = ('servico__nome', 'titulo', 'descricao')
-
 
 
 # class TarefaSearchForm(forms.Form):
@@ -188,7 +200,7 @@ class TarefaSearchForm(BaseSearchForm):
 #                 q = q & Q(data__gte=data_ini)
 #             data_fim = self.cleaned_data['data_fim']
 #             if data_fim:
-#                 q = q & Q(data__lte=data_fim)
+#                 q = q & Q(data__lte=data_ini)
 #             confirmado = self.cleaned_data['confirmado']
 #             if confirmado:
 #                 q = q & Q(confirmado=True)
