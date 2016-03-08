@@ -127,9 +127,6 @@ def tarefa_form(request, pk=None):
     if request.method == 'POST':
         if form.is_valid():
             tarefa = form.save()
-            # if tarefa.cartao:
-                # tarefa.set_parcela(tarefa.cartao, tarefa.valor, 1)
-                # tarefa.set_data_parcela_mae()
             messages.success(request, msg)
 
             return redirect(reverse('tarefa_list'))
@@ -152,11 +149,12 @@ class TarefaFormListView(SearchFormListView):
         devem encabeçar a listagem, quando:
         Tiverem valor e não estiverem marcadas como PAGO
     '''
-
     def get(self, request, *args, **kwargs):
         self.form = self.get_form(self.get_form_class())
         if self.form.is_valid():
             self.object_list = self.form.get_result_queryset()
+            # q = Q(data_ini__gte=date.today()) | Q(pago=False) | Q(pago=None)
+            # self.object_list = Tarefa.objects.filter(q)
         else:
             self.object_list = []
 

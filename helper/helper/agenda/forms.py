@@ -159,9 +159,9 @@ class TarefaSearchForm(BaseSearchForm):
 
     def get_result_queryset(self):
         # import pdb; pdb.set_trace()
-        # q = Q(data_ini__gte=date.today()) | Q(pago=False) | Q(pago=None)
-        q = Q()
-        if self.is_valid():
+        q = Q(data_ini__gte=date.today()) | Q(pago=False) | Q(pago=None)
+        if self.is_valid():  # SE POST, is valid == True
+            q = Q()
             servico = self.cleaned_data['servico']
             if servico:
                 q = q & Q(servico__nome__icontains=servico)
@@ -184,6 +184,7 @@ class TarefaSearchForm(BaseSearchForm):
             if pago:
                 q = q & Q(pago=True)
 
+            return Tarefa.objects.filter(q)
         return Tarefa.objects.filter(q)
 
     class Meta:
