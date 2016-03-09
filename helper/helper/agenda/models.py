@@ -235,7 +235,7 @@ class Tarefa(models.Model):
 
         if cartao and self.pago is not True and self.parcela is None:
             self.data_ini = cartao.get_data_pagamento_mes(data_ini)
-            self.descricao += '\n\n **Data da compra %s:' % data_ini
+            self.descricao += '\n\n **Data da compra %s: \n%s %s' % (data_ini, '1/', str(self.nr_parcela))
         return self
 
     def set_data_parcela_filha(self):
@@ -265,15 +265,16 @@ class Tarefa(models.Model):
         se tiver menos, apaga o excesso
         '''
         parcelas = self.list_parcelas()
+        nr_parcelas = self.nr_parcela
         valor = self.valor/self.nr_parcela
         for parcela in parcelas:
             t = Tarefa()  # melhor get_or_create pela data_ini!!
             t.servico = self.servico
             t.titular = self.titular
-            t.titulo = self.titulo + u': ' + str(parcela + 1) + u' / ' + str(len(parcelas))
+            t.titulo = self.titulo + u': ' + str(parcela + 1) + u' / ' + str(nr_parcelas)
             t.descricao = self.descricao
             t.tipo = self.tipo
-            t.descricao += u'\n\n%s - Parcela nr: %s de %s' % (valor, (parcela + 1), str(self.nr_parcela))
+            t.descricao += u'\n\n%s - Parcela nr: %s de %s' % (valor, (parcela + 1), str(nr_parcelas))
             t.data_ini = self.set_data_parcela_filha()
             t.hora_ini = self.hora_ini
             t.data_fim = self.data_fim
@@ -286,8 +287,7 @@ class Tarefa(models.Model):
             t.cartao = self.cartao
             t.parcela = self
             t.save()
-            print t.data_ini
-        self.titulo + u': 1ª de %s' % self.nr_parcela
+        self.titulo += u': 1/ ' + str(self.nr_parcela)
         self.valor = valor
         self.save()
 
