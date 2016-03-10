@@ -1,7 +1,9 @@
 # coding: utf-8
+from decimal import Decimal
 from datetime import date
 from django import forms
 from django.db.models import Q
+
 from .models import (
     Agenda,
     CartaoCredito,
@@ -50,12 +52,15 @@ class TarefaForm(forms.ModelForm):
         self.fields['cartao'].queryset = CartaoCredito.objects.filter()
 
         self.fields['servico'].required = True
-        # if any([
-        #         self.instance.cartao,
-        #         self.instance.valor,
-        #         self.instance.tipo]):
-        #     self.fields['tipo'].required = True
-        #     self.fields['valor'].required = True
+
+    def clean_valor(self):
+        '''
+        se tiver nr+nr_parcela
+        e não tiver valor, vai dividir Zero por nr_parcela
+        e não por None
+        '''
+        valor = self.cleaned_data['valor'] or Decimal('0')
+        return valor
 
     def save(self, *args, **kargs):
         is_new = self.instance.pk is None
@@ -160,7 +165,7 @@ class TarefaSearchForm(BaseSearchForm):
     def get_result_queryset(self):
         # import pdb; pdb.set_trace()
         q = Q(data_ini__gte=date.today()) | Q(pago=False) | Q(pago=None)
-        if self.is_valid():  # SE POST, is valid == True
+        if self.is_valid():
             q = Q()
             servico = self.cleaned_data['servico']
             if servico:

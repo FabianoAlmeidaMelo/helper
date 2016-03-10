@@ -268,7 +268,7 @@ class Tarefa(models.Model):
         nr_parcelas = self.nr_parcela
         valor = self.valor/self.nr_parcela
         for parcela in parcelas:
-            t = Tarefa()  # melhor get_or_create pela data_ini!!
+            t = Tarefa()  # melhor get_or_create pela data_ini, titulo!!
             t.servico = self.servico
             t.titular = self.titular
             t.titulo = self.titulo + u': ' + str(parcela + 1) + u' / ' + str(nr_parcelas)

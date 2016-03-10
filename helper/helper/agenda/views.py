@@ -175,18 +175,3 @@ tarefa_list = (
                                 )
                             )
 
-
-# def tarefa_list(request):
-#     form = TarefaSearchForm(request.POST or None)
-#     object_list = form.get_result_queryset()
-#     # print 80 * "-"
-#     # print object_list, len(object_list)
-
-#     # print 80 * "*"
-
-#     return render(
-#         request, 'agenda/tarefa_list.html', {
-#                                             'object_list': object_list,
-#                                             'form': form,
-#                                             }
-#     )
