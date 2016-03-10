@@ -152,7 +152,6 @@ class TarefaFormListView(SearchFormListView):
     def get(self, request, *args, **kwargs):
         self.form = self.get_form(self.get_form_class())
         if self.form.is_valid():
-            self.form.is_valid()
             self.object_list = self.form.get_result_queryset()
             # q = Q(data_ini__gte=date.today()) | Q(pago=False) | Q(pago=None)
             # self.object_list = Tarefa.objects.filter(q)

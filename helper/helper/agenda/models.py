@@ -245,8 +245,9 @@ class Tarefa(models.Model):
         '''
         last_sum = self.tarefa_set.all().last()
         last_sum_data_ini = last_sum.data_ini if last_sum else self.data_ini
-
-        return self.cartao.get_data_pagamento_mes(last_sum_data_ini)
+        if self.cartao:
+            return self.cartao.get_data_pagamento_mes(last_sum_data_ini)
+        return self.data_ini
 
     def list_parcelas(self):
         '''

@@ -54,7 +54,7 @@ class TarefaForm(forms.ModelForm):
         self.fields['servico'].required = True
 
     def clean_valor(self):
-        '''
+        '''#20
         se tiver nr+nr_parcela
         e não tiver valor, vai dividir Zero por nr_parcela
         e não por None
@@ -76,7 +76,7 @@ class TarefaForm(forms.ModelForm):
                 instance.set_data_parcela_mae()
         instance.save()
         nr_parcela = self.cleaned_data['nr_parcela'] or 1
-        if instance.cartao and nr_parcela > 1:
+        if nr_parcela > 1:
             instance.set_parcela_filha()
         return instance
 
@@ -145,9 +145,9 @@ class TarefaSearchForm(BaseSearchForm):
         return
 
     def prepare_data_fim(self):
-        data_ini = self.cleaned_data['data_fim']
-        if data_ini:
-            return Q(data_ini__lte=data_ini)
+        data_fim = self.cleaned_data['data_fim']
+        if data_fim:
+            return Q(data_ini__lte=data_fim)
         return
 
     def prepare_confirmado(self):
@@ -162,35 +162,35 @@ class TarefaSearchForm(BaseSearchForm):
             return Q(pago=pago)
         return
 
-    def get_result_queryset(self):
-        # import pdb; pdb.set_trace()
-        q = Q(data_ini__gte=date.today()) | Q(pago=False) | Q(pago=None)
-        if self.is_valid():
-            q = Q()
-            servico = self.cleaned_data['servico']
-            if servico:
-                q = q & Q(servico__nome__icontains=servico)
-            titulo = self.cleaned_data['titulo']
-            if titulo:
-                q = q & Q(titulo__icontains=titulo)
-            descricao = self.cleaned_data['descricao']
-            if descricao:
-                q = q & Q(descricao__icontains=descricao)
-            data_ini = self.cleaned_data['data_ini']
-            if data_ini:
-                q = q & Q(data_ini__gte=data_ini)
-            data_fim = self.cleaned_data['data_fim']
-            if data_fim:
-                q = q & Q(data_ini__lte=data_ini)
-            confirmado = self.cleaned_data['confirmado']
-            if confirmado:
-                q = q & Q(confirmado=True)
-            pago = self.cleaned_data['pago']
-            if pago:
-                q = q & Q(pago=True)
+    # def get_result_queryset(self):
+    #     # import pdb; pdb.set_trace()
+    #     q = Q(data_ini__gte=date.today()) | Q(pago=False) | Q(pago=None)
+    #     if self.is_valid():
+    #         q = Q()
+    #         servico = self.cleaned_data['servico']
+    #         if servico:
+    #             q = q & Q(servico__nome__icontains=servico)
+    #         titulo = self.cleaned_data['titulo']
+    #         if titulo:
+    #             q = q & Q(titulo__icontains=titulo)
+    #         descricao = self.cleaned_data['descricao']
+    #         if descricao:
+    #             q = q & Q(descricao__icontains=descricao)
+    #         data_ini = self.cleaned_data['data_ini']
+    #         if data_ini:
+    #             q = q & Q(data_ini__gte=data_ini)
+    #         data_fim = self.cleaned_data['data_fim']
+    #         if data_fim:
+    #             q = q & Q(data_ini__lte=data_ini)
+    #         confirmado = self.cleaned_data['confirmado']
+    #         if confirmado:
+    #             q = q & Q(confirmado=True)
+    #         pago = self.cleaned_data['pago']
+    #         if pago:
+    #             q = q & Q(pago=True)
 
-            return Tarefa.objects.filter(q)
-        return Tarefa.objects.filter(q)
+    #         return Tarefa.objects.filter(q)
+    #     return Tarefa.objects.filter(q)
 
     class Meta:
         base_qs = Tarefa.objects
