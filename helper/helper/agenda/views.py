@@ -175,6 +175,6 @@ tarefa_list = (
     TarefaFormListView.as_view(
                                 model=Tarefa,
                                 form_class=TarefaSearchForm,
-                                paginate_by=10
+                                paginate_by=30
                                 )
                             )

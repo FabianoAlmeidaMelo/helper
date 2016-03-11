@@ -119,6 +119,7 @@ class TarefaSearchForm(BaseSearchForm):
                             )
     confirmado = forms.BooleanField(label='Confirmado', required=False)
     pago = forms.BooleanField(label='Pago', required=False)
+    not_pago = forms.BooleanField(label='Não Pago', required=False)
 
     def __init__(self, *args, **kwargs):
         super(TarefaSearchForm, self).__init__(*args, **kwargs)
@@ -147,6 +148,13 @@ class TarefaSearchForm(BaseSearchForm):
         if pago:
             return Q(pago=pago)
         return
+
+    def prepare_not_pago(self):
+        not_pago = self.cleaned_data['not_pago']
+        if not_pago:
+            return Q(pago=False) | Q(pago__isnull=True)
+        return
+
 
     class Meta:
         base_qs = Tarefa.objects
