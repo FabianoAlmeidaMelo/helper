@@ -9,6 +9,10 @@
 <form class="form-inline well" method="GET" action="#">
 <fieldset style="margin:0; padding-bottom:0;">
     <div class="row-fluid">
+        {{ form.q|as_bootstrap:"inline" }}
+    </div>
+    <br>
+        <div class="row-fluid">
         {{ form.confirmado|as_bootstrap:"inline" }}
         {{ form.pago|as_bootstrap:"inline" }}
     </div>
@@ -16,12 +20,6 @@
     <div class="row-fluid">
         {{ form.data_ini|as_bootstrap:"inline" }}
         {{ form.data_fim|as_bootstrap:"inline" }}
-    </div>
-    <br>
-    <div class="row-fluid">
-        {{ form.servico|as_bootstrap:"inline" }}
-        {{ form.titulo|as_bootstrap:"inline" }}
-        {{ form.descricao|as_bootstrap:"inline" }}
     </div>
     <br>
 
@@ -67,7 +65,8 @@
                 <tr><td colspan="100%">Nenhum item disponível</td></tr>
             {% endfor %}
         </table>
-        <tfoot></tfoot>
+        <tfoot>
+        </tfoot>
     </div>
 {% bootstrap_pagination page_obj extra=request.GET.urlencode %}
 {% endblock content %}

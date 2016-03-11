@@ -1,5 +1,5 @@
 # coding: utf-8
-from django.db.models import Q
+from django.db.models import Q, Sum
 from datetime import date
 # from datetime import datetime
 from django.core.urlresolvers import reverse
@@ -153,15 +153,20 @@ class TarefaFormListView(SearchFormListView):
         self.form = self.get_form(self.get_form_class())
         if self.form.is_valid():
             self.object_list = self.form.get_result_queryset()
-            # q = Q(data_ini__gte=date.today()) | Q(pago=False) | Q(pago=None)
-            # self.object_list = Tarefa.objects.filter(q)
         else:
             self.object_list = []
+        # TODO por user, ...
+        entradas = self.object_list.filter(tipo=1).aggregate(Sum('valor')).get('valor__sum', None) or Decimal('0.00')
+        saidas = self.object_list.filter(tipo=2).aggregate(Sum('valor')).get('valor__sum', None) or Decimal('0.00')
+        resultado = entradas - saidas
 
         context = self.get_context_data(
             object_list=self.object_list,
             form=self.form,
-            url_params=request.GET.urlencode()
+            url_params=request.GET.urlencode(),
+            entradas=entradas,
+            saidas=saidas,
+            resultado=resultado
         )
 
         return self.render_to_response(context)
@@ -170,7 +175,6 @@ tarefa_list = (
     TarefaFormListView.as_view(
                                 model=Tarefa,
                                 form_class=TarefaSearchForm,
-                                paginate_by=30
+                                paginate_by=10
                                 )
                             )
-

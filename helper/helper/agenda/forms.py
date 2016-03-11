@@ -111,35 +111,21 @@ class TarefaSearchForm(BaseSearchForm):
                                 label='Data Inicial',
                                 widget=BootstrapDateInput,
                                 required=False
-                                )
+                            )
     data_fim = forms.DateField(
                                 label='Data Final',
                                 widget=BootstrapDateInput,
                                 required=False
-                                )
+                            )
     confirmado = forms.BooleanField(label='Confirmado', required=False)
     pago = forms.BooleanField(label='Pago', required=False)
 
-    def prepare_servico(self):
-        servico = self.cleaned_data['servico']
-        if servico:
-            return Q(servico__nome__icontains=servico)
-        return
-
-    def prepare_titulo(self):
-        titulo = self.cleaned_data['titulo']
-        if titulo:
-            return Q(titulo__icontains=titulo)
-        return
-
-    def prepare_descricao(self):
-        descricao = self.cleaned_data['descricao']
-        if descricao:
-            return Q(descricao__icontains=descricao)
-        return
+    def __init__(self, *args, **kwargs):
+        super(TarefaSearchForm, self).__init__(*args, **kwargs)
+        self.fields['q'].widget.attrs['placeholder'] = u'Nome do serviço, Título, Descrição'
 
     def prepare_data_ini(self):
-        data_ini = self.cleaned_data['data_ini']
+        data_ini = self.cleaned_data['data_ini'] or date.today()
         if data_ini:
             return Q(data_ini__gte=data_ini)
         return
@@ -162,11 +148,15 @@ class TarefaSearchForm(BaseSearchForm):
             return Q(pago=pago)
         return
 
+    class Meta:
+        base_qs = Tarefa.objects
+        search_fields = ('servico__nome', 'titulo', 'descricao')
+
     # def get_result_queryset(self):
     #     # import pdb; pdb.set_trace()
     #     q = Q(data_ini__gte=date.today()) | Q(pago=False) | Q(pago=None)
     #     if self.is_valid():
-    #         q = Q()
+    #         # q = Q()
     #         servico = self.cleaned_data['servico']
     #         if servico:
     #             q = q & Q(servico__nome__icontains=servico)
@@ -191,6 +181,3 @@ class TarefaSearchForm(BaseSearchForm):
 
     #         return Tarefa.objects.filter(q)
     #     return Tarefa.objects.filter(q)
-
-    class Meta:
-        base_qs = Tarefa.objects
