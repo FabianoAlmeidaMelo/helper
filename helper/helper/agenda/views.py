@@ -155,18 +155,11 @@ class TarefaFormListView(SearchFormListView):
             self.object_list = self.form.get_result_queryset()
         else:
             self.object_list = []
-        # TODO por user, ...
-        entradas = self.object_list.filter(tipo=1).aggregate(Sum('valor')).get('valor__sum', None) or Decimal('0.00')
-        saidas = self.object_list.filter(tipo=2).aggregate(Sum('valor')).get('valor__sum', None) or Decimal('0.00')
-        resultado = entradas - saidas
 
         context = self.get_context_data(
             object_list=self.object_list,
             form=self.form,
             url_params=request.GET.urlencode(),
-            entradas=entradas,
-            saidas=saidas,
-            resultado=resultado
         )
 
         return self.render_to_response(context)

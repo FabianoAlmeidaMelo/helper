@@ -120,13 +120,15 @@ class TarefaSearchForm(BaseSearchForm):
     confirmado = forms.BooleanField(label='Confirmado', required=False)
     pago = forms.BooleanField(label='Pago', required=False)
     not_pago = forms.BooleanField(label='Não Pago', required=False)
+    hoje = forms.BooleanField(label='Hoje e Não Pagos', required=False)
 
     def __init__(self, *args, **kwargs):
         super(TarefaSearchForm, self).__init__(*args, **kwargs)
-        self.fields['q'].widget.attrs['placeholder'] = u'Nome do serviço, Título, Descrição'
+        self.fields['q'].widget.attrs['placeholder'] = u'Agenda, Nome do serviço, Título, Descrição'
+        self.fields['hoje'].initial = True
 
     def prepare_data_ini(self):
-        data_ini = self.cleaned_data['data_ini'] or date.today()
+        data_ini = self.cleaned_data['data_ini']  # or date.today()
         if data_ini:
             return Q(data_ini__gte=data_ini)
         return
@@ -135,6 +137,12 @@ class TarefaSearchForm(BaseSearchForm):
         data_fim = self.cleaned_data['data_fim']
         if data_fim:
             return Q(data_ini__lte=data_fim)
+        return
+
+    def prepare_hoje(self):
+        hoje = self.cleaned_data['hoje']
+        if hoje:
+            return Q(pago=False) | Q(pago__isnull=True) | Q(data_ini=date.today())
         return
 
     def prepare_confirmado(self):
@@ -155,10 +163,14 @@ class TarefaSearchForm(BaseSearchForm):
             return Q(pago=False) | Q(pago__isnull=True)
         return
 
-
     class Meta:
         base_qs = Tarefa.objects
-        search_fields = ('servico__nome', 'titulo', 'descricao')
+        search_fields = (
+                          'servico__nome',
+                          'titulo',
+                          'descricao',
+                          'servico__agenda__nome'
+                    )
 
     # def get_result_queryset(self):
     #     # import pdb; pdb.set_trace()
