@@ -239,14 +239,24 @@ class Tarefa(models.Model):
         '''
         ref #17
         deve setar a data inicial de Tarefa
+        obs, parcela is None e tarefa_mae, é redundância
         '''
         cartao = self.cartao
         data_ini = self.data_ini
+        acao = u'compra' if self.tipo == 1 else u'venda'
 
-        if cartao and self.pago is not True and self.parcela is None:
+        if self.tarefa_mae and self.pago is not True and self.parcela is None:
             self.data_ini = cartao.get_data_pagamento_mes(data_ini)
-            self.descricao += '\n\n **Data da compra %s: \n%s %s' % (data_ini, '1/', str(self.nr_parcela))
+            self.descricao += '\n\n **Data da %s %s: \n%s %s' % (acao,data_ini, '1/', str(self.nr_parcela))
         return self
+
+    def set_data_trinta_dias(self, last_sum_data_ini):
+        '''
+        #20
+        '''
+        if self.tarefa_mae:
+            return last_sum_data_ini + datetime.timedelta(days=30)
+        return self.data_ini
 
     def set_data_parcela_filha(self):
         '''
@@ -257,6 +267,8 @@ class Tarefa(models.Model):
         last_sum_data_ini = last_sum.data_ini if last_sum else self.data_ini
         if self.cartao:
             return self.cartao.get_data_pagamento_mes(last_sum_data_ini)
+        elif not self.cartao:
+            return self.set_data_trinta_dias(last_sum_data_ini)
         return self.data_ini
 
     def list_parcelas(self):
