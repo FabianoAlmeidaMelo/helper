@@ -225,6 +225,16 @@ class Tarefa(models.Model):
     def __unicode__(self):
         return self.titulo
 
+    @property
+    def tarefa_mae(self):
+        '''
+        Booleano,
+        retorna True se tem alguma tarefa 'filha'
+        '''
+        if self.tarefa_set.all():
+            return True
+        return False
+
     def set_data_parcela_mae(self):
         '''
         ref #17
@@ -263,34 +273,36 @@ class Tarefa(models.Model):
         '''
         risco, na edição criar infinitas parcelas ...
         comparar com o nr de parcelas
-        se tiver menos, apaga o excesso
+        se tiver menos, apagar o excesso
         '''
-        parcelas = self.list_parcelas()
-        nr_parcelas = self.nr_parcela
-        valor = self.valor/self.nr_parcela
-        for parcela in parcelas:
-            t = Tarefa()  # melhor get_or_create pela data_ini, titulo!!
-            t.servico = self.servico
-            t.titular = self.titular
-            t.titulo = self.titulo + u': ' + str(parcela + 1) + u' / ' + str(nr_parcelas)
-            t.descricao = self.descricao
-            t.tipo = self.tipo
-            t.descricao += u'\n\n%s - Parcela nr: %s de %s' % (valor, (parcela + 1), str(nr_parcelas))
-            t.data_ini = self.set_data_parcela_filha()
-            t.hora_ini = self.hora_ini
-            t.data_fim = self.data_fim
-            t.hora_fim = self.hora_fim
-            t.confirmado = self.confirmado
-            t.valor = self.valor
-            t.parcela = self
-            t.valor = valor  # dividido ...
-            t.pago = None
-            t.cartao = self.cartao
-            t.parcela = self
-            t.save()
-        self.titulo += u': 1/ ' + str(self.nr_parcela)
-        self.valor = valor
-        self.save()
+        if self.tarefa_mae:
+            parcelas = self.list_parcelas()
+            nr_parcelas = self.nr_parcela
+            valor = self.valor/self.nr_parcela
+            for parcela in parcelas:
+                t = Tarefa()  # melhor get_or_create pela data_ini, titulo!!
+                t.servico = self.servico
+                t.titular = self.titular
+                t.titulo = self.titulo + u': ' + str(parcela + 1) + u' / ' + str(nr_parcelas)
+                t.descricao = self.descricao
+                t.tipo = self.tipo
+                t.descricao += u'\n\n%s - Parcela nr: %s de %s' % (valor, (parcela + 1), str(nr_parcelas))
+                t.data_ini = self.set_data_parcela_filha()
+                t.hora_ini = self.hora_ini
+                t.data_fim = self.data_fim
+                t.hora_fim = self.hora_fim
+                t.confirmado = self.confirmado
+                t.valor = self.valor
+                t.parcela = self
+                t.valor = valor  # dividido ...
+                t.pago = None
+                t.cartao = self.cartao
+                t.parcela = self
+                t.save()
+            self.titulo += u': 1/ ' + str(self.nr_parcela)
+            self.valor = valor
+            self.save()
+        return
 
 
     # def set_parcela_filha(self, nr_parcelas=1):

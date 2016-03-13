@@ -55,7 +55,7 @@ class TarefaForm(forms.ModelForm):
 
     def clean_valor(self):
         '''#20
-        se tiver nr+nr_parcela
+        se tiver nr + nr_parcela
         e não tiver valor, vai dividir Zero por nr_parcela
         e não por None
         '''
@@ -76,7 +76,7 @@ class TarefaForm(forms.ModelForm):
                 instance.set_data_parcela_mae()
         instance.save()
         nr_parcela = self.cleaned_data['nr_parcela'] or 1
-        if nr_parcela > 1:
+        if nr_parcela > 1 and instance.tarefa_mae is True:
             instance.set_parcela_filha()
         return instance
 
