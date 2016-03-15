@@ -1,4 +1,5 @@
 # coding: utf-8
+from dateutil.relativedelta import relativedelta
 from django.db import models
 from django.core.exceptions import ValidationError
 from datetime import date, datetime
@@ -255,7 +256,7 @@ class Tarefa(models.Model):
         #20
         '''
         if self.tarefa_mae:
-            return last_sum_data_ini + datetime.timedelta(days=30)
+            return last_sum_data_ini + relativedelta(months=1)
         return self.data_ini
 
     def set_data_parcela_filha(self):
