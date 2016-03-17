@@ -72,12 +72,16 @@ class TarefaForm(forms.ModelForm):
         instance = super(TarefaForm, self).save(*args, **kargs)
 
         if data_ini != data_ini_form:
-            if instance.cartao and instance.pago is not True:
+            nr_parcela = self.cleaned_data['nr_parcela'] or 1
+            if all(
+                    [instance.pago is not True,
+                     int(nr_parcela) > 1,
+                     instance.parcela is None]):
                 instance.set_data_parcela_mae()
-        instance.save()
-        nr_parcela = self.cleaned_data['nr_parcela'] or 1
-        if nr_parcela > 1 and instance.tarefa_mae is True:
+            instance.save()
             instance.set_parcela_filha()
+        else:
+            instance.save()
         return instance
 
     class Meta:

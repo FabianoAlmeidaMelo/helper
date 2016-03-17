@@ -244,20 +244,21 @@ class Tarefa(models.Model):
         '''
         cartao = self.cartao
         data_ini = self.data_ini
-        acao = u'compra' if self.tipo == 1 else u'venda'
+        acao = u'Entrada' if self.tipo == 1 else u'Saída'
 
-        if self.tarefa_mae and self.pago is not True and self.parcela is None:
+        if self.cartao and self.pago is not True and self.parcela is None:
             self.data_ini = cartao.get_data_pagamento_mes(data_ini)
-            self.descricao += '\n\n **Data da %s %s: \n%s %s' % (acao,data_ini, '1/', str(self.nr_parcela))
+            self.descricao += '\n\n **Data da %s %s: \n%s %s' % (acao, data_ini, '1/', str(self.nr_parcela))
+        elif not self.cartao and self.pago is not True and self.parcela is None:
+            self.descricao += '\n\n **Data da %s %s: \n%s %s' % (acao, data_ini, '1/', str(self.nr_parcela))
+
         return self
 
     def set_data_trinta_dias(self, last_sum_data_ini):
         '''
         #20
         '''
-        if self.tarefa_mae:
-            return last_sum_data_ini + relativedelta(months=1)
-        return self.data_ini
+        return last_sum_data_ini + relativedelta(months=1)
 
     def set_data_parcela_filha(self):
         '''
@@ -288,34 +289,33 @@ class Tarefa(models.Model):
         comparar com o nr de parcelas
         se tiver menos, apagar o excesso
         '''
-        if self.tarefa_mae:
-            parcelas = self.list_parcelas()
-            nr_parcelas = self.nr_parcela
-            valor = self.valor/self.nr_parcela
-            for parcela in parcelas:
-                t = Tarefa()  # melhor get_or_create pela data_ini, titulo!!
-                t.servico = self.servico
-                t.titular = self.titular
-                t.titulo = self.titulo + u': ' + str(parcela + 1) + u' / ' + str(nr_parcelas)
-                t.descricao = self.descricao
-                t.tipo = self.tipo
-                t.descricao += u'\n\n%s - Parcela nr: %s de %s' % (valor, (parcela + 1), str(nr_parcelas))
-                t.data_ini = self.set_data_parcela_filha()
-                t.hora_ini = self.hora_ini
-                t.data_fim = self.data_fim
-                t.hora_fim = self.hora_fim
-                t.confirmado = self.confirmado
-                t.valor = self.valor
-                t.parcela = self
-                t.valor = valor  # dividido ...
-                t.pago = None
-                t.cartao = self.cartao
-                t.parcela = self
-                t.save()
-            self.titulo += u': 1/ ' + str(self.nr_parcela)
-            self.valor = valor
-            self.save()
-        return
+
+        parcelas = self.list_parcelas()
+        nr_parcelas = self.nr_parcela
+        valor = self.valor/self.nr_parcela
+        for parcela in parcelas:
+            t = Tarefa()  # melhor get_or_create pela data_ini, titulo!!
+            t.servico = self.servico
+            t.titular = self.titular
+            t.titulo = self.titulo + u': ' + str(parcela + 1) + u' / ' + str(nr_parcelas)
+            t.descricao = self.descricao
+            t.tipo = self.tipo
+            t.descricao += u'\n\n%s - Parcela nr: %s de %s' % (valor, (parcela + 1), str(nr_parcelas))
+            t.data_ini = self.set_data_parcela_filha()
+            t.hora_ini = self.hora_ini
+            t.data_fim = self.data_fim
+            t.hora_fim = self.hora_fim
+            t.confirmado = self.confirmado
+            t.valor = self.valor
+            t.parcela = self
+            t.valor = valor  # dividido ...
+            t.pago = None
+            t.cartao = self.cartao
+            t.parcela = self
+            t.save()
+        self.titulo += u': 1/ ' + str(self.nr_parcela)
+        self.valor = valor
+        self.save()
 
 
     # def set_parcela_filha(self, nr_parcelas=1):
