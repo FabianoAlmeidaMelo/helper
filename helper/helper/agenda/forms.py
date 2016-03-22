@@ -79,7 +79,8 @@ class TarefaForm(forms.ModelForm):
                      instance.parcela is None]):
                 instance.set_data_parcela_mae()
             instance.save()
-            instance.set_parcela_filha()
+            if self.instance.nr_parcela:
+                instance.set_parcela_filha()
         else:
             instance.save()
         return instance
