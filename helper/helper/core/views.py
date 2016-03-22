@@ -8,7 +8,7 @@ from django.shortcuts import get_object_or_404
 
 from django.views.generic.edit import FormMixin
 from django.views.generic.list import ListView
-
+from django.views.generic import TemplateView
 
 from .models import (
     Developer,
@@ -45,9 +45,13 @@ class SearchFormListView(FormMixin, ListView):
     def post(self, request, *args, **kwargs):
         return self.get(request, *args, **kwargs)
 
+# View home para usuário deslogado
+home_anonymous = TemplateView.as_view(template_name='base.html')
+
 
 def index(request):
-    return developer_list(request)
+    pass
+    # return developer_list(request)
 
 
 def developer_list(request):
