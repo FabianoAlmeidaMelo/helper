@@ -75,7 +75,7 @@ class TarefaForm(forms.ModelForm):
             nr_parcela = self.cleaned_data['nr_parcela'] or 1
             if all(
                     [instance.pago is not True,
-                     int(nr_parcela) > 1,
+                     int(nr_parcela) >= 1,
                      instance.parcela is None]):
                 instance.set_data_parcela_mae()
             instance.save()
