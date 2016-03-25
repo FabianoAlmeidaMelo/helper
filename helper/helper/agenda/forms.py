@@ -31,6 +31,30 @@ class AgendaForm(forms.ModelForm):
                     )
 
 
+class CartaoCreditoForm(forms.ModelForm):
+
+    class Meta:
+        model = CartaoCredito
+        fields = (
+                    'usuario',  # TODO remover, é o dono da conta
+                    'bandeira',
+                    'vencimento',
+                    'fechamento',
+                    'limite',
+                    )
+
+
+class CartaoCreditoBaseSearchForm(BaseSearchForm):
+
+    class Meta:
+        base_qs = CartaoCredito.objects
+        search_fields = (
+                          'bandeira',
+                          'fechamento',
+                          'vencimento',
+                    )
+
+
 class ServicoForm(forms.ModelForm):
 
     class Meta:

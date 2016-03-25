@@ -1,7 +1,9 @@
 # coding: utf-8
 from django.db.models import Q, Sum
 from datetime import date
-# from datetime import datetime
+
+from django.core.urlresolvers import reverse_lazy
+from django.views.generic import CreateView  # UpdateView, ListView # DeleteView
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 # from django.contrib.auth.decorators import login_required, user_passes_test
@@ -11,12 +13,15 @@ from django.shortcuts import get_object_or_404, redirect, render
 
 from .models import (
     Agenda,
+    CartaoCredito,
     Servico,
     Tarefa,
     )
 
 from .forms import (
     AgendaForm,
+    CartaoCreditoForm,
+    CartaoCreditoBaseSearchForm,
     ServicoForm,
     TarefaForm,
     TarefaSearchForm,
@@ -142,32 +147,54 @@ def tarefa_form(request, pk=None):
     )
 
 
-class TarefaFormListView(SearchFormListView):
-    '''
-    ref #19
-    datas anteriores a data corrente,
-        devem encabeçar a listagem, quando:
-        Tiverem valor e não estiverem marcadas como PAGO
-    '''
-    def get(self, request, *args, **kwargs):
-        self.form = self.get_form(self.get_form_class())
-        if self.form.is_valid():
-            self.object_list = self.form.get_result_queryset()
-        else:
-            self.object_list = []
+# class TarefaFormListView(SearchFormListView):
+#     '''
+#     ref #19
+#     datas anteriores a data corrente,
+#         devem encabeçar a listagem, quando:
+#         Tiverem valor e não estiverem marcadas como PAGO
+#     '''
+#     def get(self, request, *args, **kwargs):
+#         self.form = self.get_form(self.get_form_class())
+#         if self.form.is_valid():
+#             self.object_list = self.form.get_result_queryset()
+#         else:
+#             self.object_list = []
 
-        context = self.get_context_data(
-            object_list=self.object_list,
-            form=self.form,
-            url_params=request.GET.urlencode(),
-        )
+#         context = self.get_context_data(
+#             object_list=self.object_list,
+#             form=self.form,
+#             url_params=request.GET.urlencode(),
+#         )
 
-        return self.render_to_response(context)
+#         return self.render_to_response(context)
 
 tarefa_list = (
-    TarefaFormListView.as_view(
+    SearchFormListView.as_view(
                                 model=Tarefa,
                                 form_class=TarefaSearchForm,
+                                paginate_by=30
+                                )
+                            )
+
+
+class CartaoCreditoCreate(CreateView):
+    '''Model: Project '''
+
+    form_class = CartaoCreditoForm
+    template_name = 'agenda/cartaocredito_form.html'
+
+    def get_success_url(self):
+        return reverse_lazy('carato_list')
+
+
+cartao_form = CartaoCreditoCreate.as_view()
+
+
+cartao_list = (
+    SearchFormListView.as_view(
+                                model=CartaoCredito,
+                                form_class=CartaoCreditoBaseSearchForm,
                                 paginate_by=30
                                 )
                             )

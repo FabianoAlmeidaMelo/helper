@@ -43,4 +43,17 @@ urlpatterns = patterns(
         r'^tarefa_form/(?P<pk>\d+)/$',
         'helper.agenda.views.tarefa_form', name='tarefa_edit'
         ),
+    #  Cartão Credito
+    url(
+        r'^cartao_list/$',
+        'helper.agenda.views.cartao_list', name='cartao_list'
+        ),
+    url(
+        r'^cartao_form/$',
+        'helper.agenda.views.cartao_form', name='cartao_add'
+        ),
+    # url(
+    #     r'^agenda_form/(?P<pk>\d+)/$',
+    #     'helper.agenda.views.agenda_form', name='agenda_edit'
+    #     ),
 )
