@@ -3,7 +3,7 @@ from django.db.models import Q, Sum
 from datetime import date
 
 from django.core.urlresolvers import reverse_lazy
-from django.views.generic import CreateView  # UpdateView, ListView # DeleteView
+from django.views.generic import CreateView, UpdateView  #, ListView # DeleteView
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 # from django.contrib.auth.decorators import login_required, user_passes_test
@@ -178,17 +178,45 @@ tarefa_list = (
                             )
 
 
-class CartaoCreditoCreate(CreateView):
-    '''Model: Project '''
+# class CartaoCreditoCreate(CreateView):
+#     '''Funciona só para Novo '''
 
-    form_class = CartaoCreditoForm
-    template_name = 'agenda/cartaocredito_form.html'
+#     form_class = CartaoCreditoForm
+#     template_name = 'agenda/cartaocredito_form.html'
 
-    def get_success_url(self):
-        return reverse_lazy('carato_list')
+#     def get_success_url(self):
+#         return reverse_lazy('carato_list')
 
 
-cartao_form = CartaoCreditoCreate.as_view()
+# cartao_form = CartaoCreditoCreate.as_view()
+
+
+def cartao_form(request, pk=None):
+    if pk:
+        cartao = get_object_or_404(CartaoCredito, pk=pk)
+        msg = u'Cartao de Crédito alterado com sucesso.'
+    else:
+        cartao = None
+        msg = u'Cartao de Crédito criado.'
+
+    form = CartaoCreditoForm(request.POST or None, instance=cartao)
+
+    if request.method == 'POST':
+        if form.is_valid():
+            cartao = form.save()
+            messages.success(request, msg)
+
+            return redirect(reverse('cartao_list'))
+        else:
+            messages.warning(request, u'Falha no cadastro de Cartao Credito')
+
+    return render(
+        request,
+        'agenda/cartaocredito_form.html',
+        {
+            'form': form,
+        }
+    )
 
 
 cartao_list = (

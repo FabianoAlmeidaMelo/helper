@@ -52,8 +52,8 @@ urlpatterns = patterns(
         r'^cartao_form/$',
         'helper.agenda.views.cartao_form', name='cartao_add'
         ),
-    # url(
-    #     r'^agenda_form/(?P<pk>\d+)/$',
-    #     'helper.agenda.views.agenda_form', name='agenda_edit'
-    #     ),
+    url(
+        r'^cartao_form/(?P<pk>\d+)/$',
+        'helper.agenda.views.cartao_form', name='cartao_edit'
+        ),
 )
