@@ -1,5 +1,6 @@
 # coding: utf-8
 from django import forms
+from django.contrib.auth.forms import AuthenticationForm as AuthAuthenticationForm
 from django.conf import settings
 
 from django.db.models import Q
@@ -24,6 +25,13 @@ class DeveloperForm(forms.ModelForm):
     class Meta:
         model = Developer
         fields = ('name', )
+
+
+class AuthenticationForm(AuthAuthenticationForm):
+    keep_me_logged_in = forms.BooleanField(
+                                            label=u'Mantenha-me conectado',
+                                            required=False
+                                        )
 
 
 class BaseSearchForm(forms.Form):

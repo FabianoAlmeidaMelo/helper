@@ -22,6 +22,11 @@
     </div>
     <br>
     <div class="row-fluid">
+        {{ form.tipo|as_bootstrap:"inline" }}
+        {{ form.valor|as_bootstrap:"inline" }}
+    </div>
+    <br>
+    <div class="row-fluid">
         {{ form.data_ini|as_bootstrap:"inline" }}
         {{ form.data_fim|as_bootstrap:"inline" }}
     </div>

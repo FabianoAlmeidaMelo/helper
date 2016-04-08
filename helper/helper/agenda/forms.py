@@ -129,6 +129,13 @@ class TarefaForm(forms.ModelForm):
                     )
 
 
+TIPO_CHOICES = (
+    ('', '---'),
+    (1, u'(+)'),
+    (2, u'(-)'),
+    )
+
+
 class TarefaSearchForm(BaseSearchForm):
     '''
     #12
@@ -150,6 +157,15 @@ class TarefaSearchForm(BaseSearchForm):
     pago = forms.BooleanField(label='Pago', required=False)
     not_pago = forms.BooleanField(label='Não Pago', required=False)
     hoje = forms.BooleanField(label='Hoje e Não Pagos', required=False)
+    tipo = forms.ChoiceField(
+                             label='Tipo',
+                             choices=TIPO_CHOICES,
+                             required=False
+                        )
+    valor = forms.DecimalField(
+                                u'Valor',
+                                required=False
+                        )
 
     def __init__(self, *args, **kwargs):
         super(TarefaSearchForm, self).__init__(*args, **kwargs)
@@ -186,10 +202,22 @@ class TarefaSearchForm(BaseSearchForm):
             return Q(pago=pago)
         return
 
+    def prepare_tipo(self):
+        tipo = self.cleaned_data['tipo']
+        if tipo:
+            return Q(tipo=tipo)
+        return
+
     def prepare_not_pago(self):
         not_pago = self.cleaned_data['not_pago']
         if not_pago:
             return Q(pago=False) | Q(pago__isnull=True)
+        return
+
+    def prepare_valor(self):
+        valor = self.cleaned_data['valor']
+        if valor:
+            return Q(valor__icontains=valor)
         return
 
     class Meta:

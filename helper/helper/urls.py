@@ -2,10 +2,62 @@ from django.conf.urls import include
 from django.conf.urls import patterns
 from django.conf.urls import url
 from django.views.generic import TemplateView
+from django.contrib.auth.views import logout, login
+from helper.core.forms import AuthenticationForm
 
 urlpatterns = patterns(
     '',
     url(r'^$', TemplateView.as_view(template_name="base.html")),
     url(r'^core/', include('helper.core.urls')),
     url(r'^agenda/', include('helper.agenda.urls')),
+
+#     # Logins
+#     url(r'^logout/$', logout, {"next_page": "/"}, name="logout"),
+#     url(
+#         r'^signin/$',
+#         login,
+#         {
+#          'template_name': 'login.html',
+#          'authentication_form': AuthenticationForm,
+#         },
+#         name="login"),
+# )
+# urlpatterns = patterns(
+#     '',
+
+    # Logins
+    url(r'^logout/$', logout, {"next_page": "/"}, name="logout"),
+    url(r'^login/$|^$', login,
+        {
+            'template_name': 'login.html',
+            'authentication_form': AuthenticationForm,
+        }, name="login"),
+
+    # url(r'^$', TemplateView.as_view(template_name='land_page.html')),
+    url(r'^', include('helper.core.urls')),
+
+    # url(r'^', include(core_urls)),  # core urls ...  home, login, etc.
+
+    # url(r'^users/', include(users_urls)),  # users - profile, users mangt.
+
+    # password Reset
+    url(
+        r'^user/password/reset/$',
+        'django.contrib.auth.views.password_reset',
+        {'post_reset_redirect': '/user/password/reset/done/'},
+        name="password_reset"
+    ),
+    url(
+        r'^user/password/reset/done/$',
+        'django.contrib.auth.views.password_reset_done'
+    ),
+    url(
+        r'^user/password/reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>.+)/$',
+        'django.contrib.auth.views.password_reset_confirm',
+        {'post_reset_redirect': '/user/password/done/'}
+    ),
+    url(
+        r'^user/password/done/$',
+        'django.contrib.auth.views.password_reset_complete'
+    ),
 )
