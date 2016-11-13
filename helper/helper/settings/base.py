@@ -29,7 +29,7 @@ PROJECT_DIR = os.path.dirname(
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'yjy7z*_n@w3%r%g8l$b$i@f(j-+@1u^$djodm-o@syrv(vcg)s'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['.localhost']
 
 
 # Application definition

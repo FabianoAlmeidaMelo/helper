@@ -11,34 +11,15 @@ urlpatterns = patterns(
     url(r'^core/', include('helper.core.urls')),
     url(r'^agenda/', include('helper.agenda.urls')),
 
-#     # Logins
-#     url(r'^logout/$', logout, {"next_page": "/"}, name="logout"),
-#     url(
-#         r'^signin/$',
-#         login,
-#         {
-#          'template_name': 'login.html',
-#          'authentication_form': AuthenticationForm,
-#         },
-#         name="login"),
-# )
-# urlpatterns = patterns(
-#     '',
-
     # Logins
     url(r'^logout/$', logout, {"next_page": "/"}, name="logout"),
-    url(r'^login/$|^$', login,
+    url(r'^login/$',
+        login,
         {
-            'template_name': 'login.html',
-            'authentication_form': AuthenticationForm,
-        }, name="login"),
-
-    # url(r'^$', TemplateView.as_view(template_name='land_page.html')),
-    url(r'^', include('helper.core.urls')),
-
-    # url(r'^', include(core_urls)),  # core urls ...  home, login, etc.
-
-    # url(r'^users/', include(users_urls)),  # users - profile, users mangt.
+         'template_name': 'login.html',
+         'authentication_form': AuthenticationForm,
+        },
+        name="login"),
 
     # password Reset
     url(
