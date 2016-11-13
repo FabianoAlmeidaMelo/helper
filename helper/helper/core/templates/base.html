@@ -22,10 +22,11 @@
                     <div class="nav-collapse collapse">
                         <ul class="nav">
                                     <li>
-                                        <a href="#" title="{{ section.name }}">
+                                        <a href="/" title="{{ section.name }}">
                                             <i class="icon-home"></i> Home
                                         </a>
                                     </li>
+                                    {% if user.is_authenticated %}
                                     <li>
                                         <a href="{% url 'agenda_list' %}" title="{{ section.name }}">
                                             Agendas
@@ -47,6 +48,8 @@
                                         </a>
                                     </li>
 
+                                {% endif %}
+
                                     <li class="{% if section.selected %}active{% endif %}">
                                         <a href="#">
                                             <i class="{{ section.icon }}"></i> {{ section.name }}
@@ -61,11 +64,12 @@
                                         <i class="icon-user"></i> {{request.user.email}}
                                     </a>
                                 </li>
-                                <li><a href="#"><i class="icon-off"></i> Sair </a></li>
-
-                                <li><a href="{% url 'login' %}"><i class="icon-arrow-up"></i> Entrar </a></li>
-                                <li><a href="#"><i class="icon-arrow-right"></i> Cadastrar </a></li>
-
+                                {% if user.is_authenticated %}
+                                    <li><a href="{% url 'logout' %}"><i class="icon-off"></i> Sair </a></li>
+                                {% else %}
+                                    <li><a href="{% url 'login' %}"><i class="icon-arrow-up"></i> Entrar </a></li>
+                                    <li><a href="#"><i class="icon-arrow-right"></i> Cadastrar </a></li>
+                                {% endif %}
                         </ul>
                     </div>
                 </div>

@@ -6,7 +6,7 @@ from django.core.urlresolvers import reverse_lazy
 from django.views.generic import CreateView, UpdateView  #, ListView # DeleteView
 from django.core.urlresolvers import reverse
 from django.contrib import messages
-# from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import login_required, user_passes_test
 # from django.contrib.contenttypes.models import ContentType
 
 from django.shortcuts import get_object_or_404, redirect, render
@@ -29,7 +29,7 @@ from .forms import (
 
 from helper.core.views import SearchFormListView
 
-
+@login_required
 def agenda_form(request, pk=None):
     '''
         #12
@@ -60,7 +60,7 @@ def agenda_form(request, pk=None):
         }
     )
 
-
+@login_required
 def agenda_list(request):
     object_list = Agenda.objects.all()
     # object_list = AgendaSearchForm(request.POST or None)
@@ -72,7 +72,7 @@ def agenda_list(request):
                                             }
     )
 
-
+@login_required
 def servico_form(request, pk=None):
     '''
         #12
@@ -103,7 +103,7 @@ def servico_form(request, pk=None):
         }
     )
 
-
+@login_required
 def servico_list(request):
     object_list = Servico.objects.all()
     # form = ServicoSearchForm(request.POST or None)
@@ -115,7 +115,7 @@ def servico_list(request):
                                             }
     )
 
-
+@login_required
 def tarefa_form(request, pk=None):
     '''
         #12
@@ -190,7 +190,7 @@ tarefa_list = (
 
 # cartao_form = CartaoCreditoCreate.as_view()
 
-
+@login_required
 def cartao_form(request, pk=None):
     if pk:
         cartao = get_object_or_404(CartaoCredito, pk=pk)
@@ -226,3 +226,4 @@ cartao_list = (
                                 paginate_by=30
                                 )
                             )
+login_required(cartao_list)
