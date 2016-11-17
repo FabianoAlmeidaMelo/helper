@@ -15,6 +15,66 @@
     </head>
 
     <body>
+        <div class="navbar">
+            <div class="navbar-inner">
+                <div class="container-fluid">
+                    <a class="brand" href="#"></a>
+                    <div class="nav-collapse collapse">
+                        <ul class="nav">
+                                    <li>
+                                        <a href="/" title="{{ section.name }}">
+                                            <i class="icon-home"></i> Home
+                                        </a>
+                                    </li>
+                                    {% if user.is_authenticated %}
+                                    <li>
+                                        <a href="{% url 'agenda_list' %}" title="{{ section.name }}">
+                                            Agendas
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'servico_list' %}" title="{{ section.name }}">
+                                            Serviços
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'cartao_list' %}" title="{{ section.name }}">
+                                            Cartões
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'tarefa_list' %}" title="{{ section.name }}">
+                                            Tarefas
+                                        </a>
+                                    </li>
+
+                                {% endif %}
+
+                                    <li class="{% if section.selected %}active{% endif %}">
+                                        <a href="#">
+                                            <i class="{{ section.icon }}"></i> {{ section.name }}
+                                        </a>
+                                    </li>
+
+                        </ul>
+                        <ul class="nav pull-right">
+
+                                <li{% if active_perfil %} class="active"{% endif %}>
+                                    <a href="#">
+                                        <i class="icon-user"></i> {{request.user.email}}
+                                    </a>
+                                </li>
+                                {% if user.is_authenticated %}
+                                    <li><a href="{% url 'logout' %}"><i class="icon-off"></i> Sair </a></li>
+                                {% else %}
+                                    <li><a href="{% url 'login' %}"><i class="icon-arrow-up"></i> Entrar </a></li>
+                                    <li><a href="#"><i class="icon-arrow-right"></i> Cadastrar </a></li>
+                                {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
         <div class="container">
             <div class="row-fluid">
                 <div class="span12">

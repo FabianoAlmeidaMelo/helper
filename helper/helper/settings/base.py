@@ -1,3 +1,4 @@
+# coding: utf-8
 """
 Django settings for helper project.
 
@@ -13,7 +14,13 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 
-PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+PROJECT_DIR = os.path.dirname(
+                              os.path.dirname(
+                                              os.path.dirname(
+                                                os.path.abspath(__file__)
+                                                )
+                                              )
+                              )
 
 
 # Quick-start development settings - unsuitable for production
@@ -22,7 +29,7 @@ PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'yjy7z*_n@w3%r%g8l$b$i@f(j-+@1u^$djodm-o@syrv(vcg)s'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['.localhost']
 
 
 # Application definition
@@ -38,6 +45,7 @@ INSTALLED_APPS = (
     'bootstrap_toolkit',
 
     'helper.core',
+    'helper.agenda'
 )
 
 MIDDLEWARE_CLASSES = (
