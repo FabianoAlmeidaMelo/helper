@@ -67,6 +67,16 @@ class ServicoForm(forms.ModelForm):
 
 class TarefaForm(forms.ModelForm):
     nr_parcela = forms.IntegerField(label='Nr de Parcelas', required=False)
+    data_ini = forms.DateField(
+                                label='Data Inicial',
+                                widget=BootstrapDateInput,
+                                required=True
+                            ) 
+    data_fim = forms.DateField(
+                                label='Data Final',
+                                widget=BootstrapDateInput,
+                                required=False
+                            ) 
 
     def __init__(self, *args, **kargs):
         self.user = kargs.pop('user', None)
