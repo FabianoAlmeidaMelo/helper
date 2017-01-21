@@ -2,41 +2,75 @@
 
 {% load bootstrap_toolkit %}
 
+{% block css %}
+  <style type="text/css">
+
+    #id_descricao{
+      width: 465px;
+      height: 70px;
+    }
+    #id_data_ini,
+    #id_data_fim{
+        width: 75px;
+    }
+    #id_hora_ini,
+    #id_hora_fim,
+    #id_nr_parcela{
+        width: 35px;
+    }
+   </style>
+
+{% endblock css %}
+{% block page_title %}Tarefa{% endblock page_title %}
 {% block content %}
 <div class="container">
     <form method="POST" class="form-inline" >
         {% csrf_token %}
-        <div class="row-fluid">
             <div class="controls cwell">
                 <div class="row-fluid">
                     {{ form.servico|as_bootstrap }}
                     {{ form.titulo|as_bootstrap }}
-                    {{ form.descricao|as_bootstrap }}
-                    {{ form.tipo|as_bootstrap }}
                 </div>
+                 <div class="row-fluid">
+                    {{ form.descricao|as_bootstrap }}
+                 </div>
                 <div class="row-fluid">
                     {{ form.data_ini|as_bootstrap }}
-                    {{ form.data_fim|as_bootstrap }}
                     {{ form.hora_ini|as_bootstrap }}
+                </div>
+                 <div class="row-fluid">
+                    {{ form.data_fim|as_bootstrap }}
                     {{ form.hora_fim|as_bootstrap }}
                 </div>
                 <div class="row-fluid">
                     {{ form.confirmado|as_bootstrap }}
-                    {{ form.pago|as_bootstrap }}
-                    {{ form.valor|as_bootstrap }}
-                    {{ form.cartao|as_bootstrap }}
-                    {{ form.nr_parcela|as_bootstrap }}
+                    {{ form.tipo|as_bootstrap }}
+                </div>
+                <div class="form-line"
+                     id="div_financeiro" {% if not form.instance.tipo %}style="display:none"{% endif %}>
+                    <div class="row-fluid">
+                        {{ form.pago|as_bootstrap }}
+                        {{ form.valor|as_bootstrap }}
+                        {{ form.cartao|as_bootstrap }}
+                        {{ form.nr_parcela|as_bootstrap }}
+                    </div>
                 </div>
             </div>
-                <div class="form-actions">
-                    <input type="submit" value="Salvar" class="btn btn-primary">
-                    <a href="{% url 'tarefa_list' %}" class="btn btn-secondary">Voltar</a>
-                </div>
-        </div>
+            <div class="form-actions">
+                <input type="submit" value="Salvar" class="btn btn-primary">
+                <a href="{% url 'tarefa_list' %}" class="btn btn-secondary">Voltar</a>
+            </div>
+
     </form>
 </div>
 
 {% endblock content %}
+
 {% block extra_js %}
     {{ form.media }}
+    <script type="text/javascript">
+    jQuery("#id_tipo").click(function(){
+         jQuery("#div_financeiro").toggle();
+    });
+</script>
 {% endblock extra_js %}
