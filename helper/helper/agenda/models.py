@@ -148,7 +148,7 @@ class Agenda(models.Model):
     '''
     conta = models.ForeignKey(Conta)
     nome = models.CharField(u'Nome', max_length=200)
-    observacao = models.TextField(null=True, blank=True)
+    observacao = models.TextField('observação', null=True, blank=True)
     # agenda_usuario = models.ManyToManyField(User, through='AgendaUsuario')
 
     class Meta:
