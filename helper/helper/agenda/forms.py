@@ -166,11 +166,11 @@ class TarefaSearchForm(BaseSearchForm):
     confirmado = forms.BooleanField(label='Confirmado', required=False)
     pago = forms.BooleanField(label='Pago', required=False)
     not_pago = forms.BooleanField(label='Não Pago', required=False)
-    hoje = forms.BooleanField(label='Hoje e Não Pagos', required=False)
+    hoje = forms.BooleanField(label='Hoje e não pagas ...', required=False, initial=True)
     tipo = forms.ChoiceField(
                              label='Tipo',
                              choices=TIPO_CHOICES,
-                             required=False
+                             required=False                            
                         )
     valor = forms.DecimalField(
                                 u'Valor',
@@ -180,7 +180,7 @@ class TarefaSearchForm(BaseSearchForm):
     def __init__(self, *args, **kwargs):
         super(TarefaSearchForm, self).__init__(*args, **kwargs)
         self.fields['q'].widget.attrs['placeholder'] = u'Agenda, Nome do serviço, Título, Descrição'
-        self.fields['hoje'].initial = True
+        # self.fields['hoje'].widget=forms.CheckboxInput(attrs={'checked' : 'checked'})
 
     def prepare_data_ini(self):
         data_ini = self.cleaned_data['data_ini']  # or date.today()
@@ -195,9 +195,10 @@ class TarefaSearchForm(BaseSearchForm):
         return
 
     def prepare_hoje(self):
+        # import pdb; pdb.set_trace()
         hoje = self.cleaned_data['hoje']
         if hoje:
-            return Q(pago=False) | Q(pago__isnull=True) | Q(data_ini=date.today())
+            return  Q(pago=False) | Q(pago__isnull=True) | Q(data_ini=date.today())
         return
 
     def prepare_confirmado(self):

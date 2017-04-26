@@ -177,19 +177,6 @@ tarefa_list = (
                                 )
                             )
 
-
-# class CartaoCreditoCreate(CreateView):
-#     '''Funciona só para Novo '''
-
-#     form_class = CartaoCreditoForm
-#     template_name = 'agenda/cartaocredito_form.html'
-
-#     def get_success_url(self):
-#         return reverse_lazy('carato_list')
-
-
-# cartao_form = CartaoCreditoCreate.as_view()
-
 @login_required
 def cartao_form(request, pk=None):
     if pk:

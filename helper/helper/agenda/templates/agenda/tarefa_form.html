@@ -19,9 +19,10 @@
         width: 35px;
     }
    </style>
-
 {% endblock css %}
+
 {% block page_title %}Tarefa{% endblock page_title %}
+
 {% block content %}
 <div class="container">
     <form method="POST" class="form-inline" >
@@ -46,8 +47,7 @@
                     {{ form.confirmado|as_bootstrap }}
                     {{ form.tipo|as_bootstrap }}
                 </div>
-                <div class="form-line"
-                     id="div_financeiro" {% if not form.instance.tipo %}style="display:none"{% endif %}>
+                <div class="form-line" id="div_financeiro" {% if not form.instance.tipo %}style="display:none"{% endif %}>
                     <div class="row-fluid">
                         {{ form.pago|as_bootstrap }}
                         {{ form.valor|as_bootstrap }}
