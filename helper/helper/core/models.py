@@ -3,7 +3,7 @@
 from django.db import models
 from django.utils import timezone
 
-from django.contrib.auth.models import(
+from django.contrib.auth.models import (
     AbstractBaseUser,
     BaseUserManager,
 )
@@ -11,7 +11,7 @@ from django.contrib.auth.models import(
 SEXO = (
     (1, "M"),
     (2, "F"),
-    )
+)
 
 
 class Developer(models.Model):
@@ -49,11 +49,11 @@ class User(AbstractBaseUser):
     is_active = models.BooleanField('ativo', default=True,)
     date_joined = models.DateTimeField(
         'data de cadastro', default=timezone.now
-        )
+    )
     nascimento = models.DateField(u'Data Nascimento', null=True, blank=True)
     profissao = models.CharField(
         u'Profissão', max_length=100, null=True, blank=True
-        )
+    )
     sexo = models.IntegerField(u'Sexo', choices=SEXO, null=True, blank=True)
 
     objects = UserManager()

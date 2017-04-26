@@ -1,7 +1,6 @@
 # Helper
 
-Sistema para gerenciamento de eventos (compromissos, consultas, atendimentos, ...)
-que possibilita a interação de vários usuáios com múltiplas agendas, em um mesmo ambiente.
+Sistema para gerenciamento de eventos (compromissos, consultas, atendimentos, ...) que possibilita a interação de vários usuáios com múltiplas agendas, em um mesmo ambiente.
 
 ### Clientes e Usuários
 
