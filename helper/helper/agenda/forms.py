@@ -84,7 +84,7 @@ class TarefaForm(forms.ModelForm):
         self.agenda = kargs.pop('agenda', None)
         super(TarefaForm, self).__init__(*args, **kargs)
         self.fields['parcela'].widget = forms.HiddenInput()
-        self.fields['cartao'].queryset = CartaoCredito.objects.filter()
+        self.fields['cartao'].queryset = CartaoCredito.objects.filter(ativo=True)
 
         self.fields['servico'].required = True
 
