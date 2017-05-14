@@ -184,6 +184,7 @@ class Tarefa(models.Model):
     #12
     TODO
         se serviço é None, de qual agenda e conta é essa tarefa???
+        não pode ser null.
     """
     servico = models.ForeignKey(Servico, null=True, blank=True)
     titular = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True)
