@@ -96,6 +96,7 @@ class CartaoCredito(models.Model):
         blank=True,
         null=True
     )
+    ativo = models.BooleanField(u'ativo', default=True)
 
     def __unicode__(self):
         return self.get_bandeira_display()
