@@ -41,6 +41,7 @@ class CartaoCreditoForm(forms.ModelForm):
                     'vencimento',
                     'fechamento',
                     'limite',
+                    'ativo',
                     )
 
 

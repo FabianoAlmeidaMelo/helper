@@ -3,26 +3,27 @@ from dateutil.relativedelta import relativedelta
 from django.db import models
 from django.core.exceptions import ValidationError
 from datetime import date, datetime
-from helper.core.models import User
+from django.conf import settings
+
 
 TIPO = (
     (1, u'Bronze'),
     (2, u'Prata'),
     (3, u'Ouro'),
-    )
+)
 
 CARTAO_CHOICES = (
     (1, 'Visa'),
     (2, 'Master Card'),
     (3, 'Amex'),
     (4, 'Outros'),
-    )
+)
 
 TIPO_CHOICES = (
     # (0, '---'),
     (1, u'(+)'),
     (2, u'(-)'),
-    )
+)
 
 
 def validate_vencimento(value):
@@ -44,15 +45,15 @@ class Conta(models.Model):
     TODO:
         Levar para app core ?
     """
-    dono = models.ForeignKey(User)
+    dono = models.ForeignKey(settings.AUTH_USER_MODEL)
     tipo = models.SmallIntegerField(u'tipo', choices=TIPO)
     valor = models.DecimalField(
-                                u'Valor',
-                                max_digits=7,
-                                decimal_places=2,
-                                blank=True,
-                                null=True
-                                )
+        u'Valor',
+        max_digits=7,
+        decimal_places=2,
+        blank=True,
+        null=True
+    )
     validade = models.DateTimeField(u'Data')
 
     class Meta:
@@ -76,25 +77,26 @@ class CartaoCredito(models.Model):
             acho que não, varia de acordo com contrato das Operadoras E
             Banco Intermediário
     '''
-    usuario = models.ForeignKey(User)
+    usuario = models.ForeignKey(settings.AUTH_USER_MODEL)
     bandeira = models.SmallIntegerField(u"Bandeira", choices=CARTAO_CHOICES)
     vencimento = models.IntegerField(
-                                     u'Dia de Pagar',
-                                     validators=[validate_vencimento],
-                                )
+        u'Dia de Pagar',
+        validators=[validate_vencimento],
+    )
     fechamento = models.IntegerField(
-                                     u'Dia do Fechamento',
-                                     validators=[validate_fechamento],
-                                     null=True,
-                                     blank=True
-                                )
+        u'Dia do Fechamento',
+        validators=[validate_fechamento],
+        null=True,
+        blank=True
+    )
     limite = models.DecimalField(
-                                u'Limite $',
-                                max_digits=7,
-                                decimal_places=2,
-                                blank=True,
-                                null=True
-                            )
+        u'Limite $',
+        max_digits=7,
+        decimal_places=2,
+        blank=True,
+        null=True
+    )
+    ativo = models.BooleanField(u'ativo', default=True)
 
     def __unicode__(self):
         return self.get_bandeira_display()
@@ -184,7 +186,7 @@ class Tarefa(models.Model):
         se serviço é None, de qual agenda e conta é essa tarefa???
     """
     servico = models.ForeignKey(Servico, null=True, blank=True)
-    titular = models.ForeignKey(User, null=True, blank=True)
+    titular = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True)
     titulo = models.CharField(verbose_name=u'Título', max_length=255)
     descricao = models.TextField(verbose_name=u'Descrição')
     data_ini = models.DateField(u'Data')
@@ -193,30 +195,30 @@ class Tarefa(models.Model):
     hora_fim = models.TimeField(u'Hora Final', null=True, blank=True)
     confirmado = models.NullBooleanField(u'Confirmado')
     valor = models.DecimalField(
-                                u'Valor',
-                                max_digits=7,
-                                decimal_places=2,
-                                blank=True,
-                                null=True
-                                )
+        u'Valor',
+        max_digits=7,
+        decimal_places=2,
+        blank=True,
+        null=True
+    )
     pago = models.NullBooleanField(u'Pago')
     cartao = models.ForeignKey(CartaoCredito, null=True, blank=True)
     tipo = models.SmallIntegerField(
-                                    u"Tipo",
-                                    choices=TIPO_CHOICES,
-                                    null=True,
-                                    blank=True
-                                )
+        u"Tipo",
+        choices=TIPO_CHOICES,
+        null=True,
+        blank=True
+    )
     parcela = models.ForeignKey(
-                                'Tarefa',
-                                null=True,
-                                blank=True
-                            )
+        'Tarefa',
+        null=True,
+        blank=True
+    )
     nr_parcela = models.PositiveSmallIntegerField(
-                                           u'Nr de Parcelas',
-                                           null=True,
-                                           blank=True
-                                    )
+        u'Nr de Parcelas',
+        null=True,
+        blank=True
+    )
 
     class Meta:
         verbose_name = u'Tarefa'
@@ -292,7 +294,7 @@ class Tarefa(models.Model):
 
         parcelas = self.list_parcelas()
         nr_parcelas = self.nr_parcela
-        valor = self.valor/self.nr_parcela
+        valor = self.valor / self.nr_parcela
         for parcela in parcelas:
             t = Tarefa()  # melhor get_or_create pela data_ini, titulo!!
             t.servico = self.servico
@@ -316,7 +318,6 @@ class Tarefa(models.Model):
         self.titulo += u': 1/ ' + str(self.nr_parcela)
         self.valor = valor
         self.save()
-
 
     # def set_parcela_filha(self, nr_parcelas=1):
     #     '''
