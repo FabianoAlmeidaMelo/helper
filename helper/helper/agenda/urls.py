@@ -6,28 +6,28 @@ urlpatterns = patterns(
     '',
     #  agenda
     url(
-        r'^agenda_list/$',
+        r'^agenda_list/conta/(?P<conta_pk>\d+)/$',
         'helper.agenda.views.agenda_list', name='agenda_list'
         ),
     url(
-        r'^agenda_form/$',
+        r'^agenda_form/conta/(?P<conta_pk>\d+)/$',
         'helper.agenda.views.agenda_form', name='agenda_add'
         ),
     url(
-        r'^agenda_form/(?P<pk>\d+)/$',
+        r'^agenda_form/conta/(?P<conta_pk>\d+)/(?P<pk>\d+)/$',
         'helper.agenda.views.agenda_form', name='agenda_edit'
         ),
     #  serviço
     url(
-        r'^servico_list/$',
+        r'^servico_list/conta/(?P<conta_pk>\d+)/$',
         'helper.agenda.views.servico_list', name='servico_list'
         ),
     url(
-        r'^servico_form/$',
+        r'^servico_form/conta/(?P<conta_pk>\d+)/$',
         'helper.agenda.views.servico_form', name='servico_add'
         ),
     url(
-        r'^servico_form/(?P<pk>\d+)/$',
+        r'^servico_form/conta/(?P<conta_pk>\d+)/(?P<pk>\d+)/$',
         'helper.agenda.views.servico_form', name='servico_edit'
         ),
     #  tarefa

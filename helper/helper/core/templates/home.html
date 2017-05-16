@@ -40,29 +40,7 @@
                                     <i class="icon-home"></i> Home
                                 </a>
                             </li>
-                            {% if user.is_authenticated %}
-                            <li>
-                                <a href="{% url 'agenda_list' conta.id %}" title="{{ section.name }}">
-                                    Agendas
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{% url 'servico_list' conta.id %}" title="{{ section.name }}">
-                                    Serviços
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{% url 'cartao_list' %}" title="{{ section.name }}">
-                                    Cartões
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{% url 'tarefa_list' %}" title="{{ section.name }}">
-                                    Tarefas
-                                </a>
-                            </li>
 
-                        {% endif %}
 
                             <li class="{% if section.selected %}active{% endif %}">
                                 <a href="#">

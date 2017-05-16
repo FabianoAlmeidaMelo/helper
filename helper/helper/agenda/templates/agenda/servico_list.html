@@ -34,7 +34,7 @@
 </form>
 
     <div class="row-fluid">
-        <a class="btn btn-success" href="{% url 'servico_add' %}">Novo Serviço</a>
+        <a class="btn btn-success" href="{% url 'servico_add' conta.id %}">Novo Serviço</a>
 
         <table class="table table-striped table-condensed table-hover">
             <thead>
@@ -46,7 +46,7 @@
             {% for object in object_list %}
                 <tr>
                     <td>
-                        <a href="{% url 'servico_edit' object.pk %}">
+                        <a href="{% url 'servico_edit' conta.pk object.pk %}">
                             {{ object.nome }}
                         </a>
                     </td>

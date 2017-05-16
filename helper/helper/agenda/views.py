@@ -14,6 +14,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from .models import (
     Agenda,
     CartaoCredito,
+    Conta,
     Servico,
     Tarefa,
     )
@@ -30,10 +31,11 @@ from .forms import (
 from helper.core.views import SearchFormListView
 
 @login_required
-def agenda_form(request, pk=None):
+def agenda_form(request, conta_pk, pk=None):
     '''
         #12
     '''
+    conta = get_object_or_404(Conta, id=conta_pk)
     if pk:
         agenda = get_object_or_404(Agenda, pk=pk)
         msg = u'agenda alterada com sucesso.'
@@ -41,7 +43,10 @@ def agenda_form(request, pk=None):
         agenda = None
         msg = u'agenda criada.'
 
-    form = AgendaForm(request.POST or None, instance=agenda, user=request.user)
+    form = AgendaForm(request.POST or None, instance=agenda, user=request.user, conta=conta)
+    context = {}
+    context['conta'] = conta
+    context['form'] = form
 
     if request.method == 'POST':
         if form.is_valid():
@@ -52,31 +57,24 @@ def agenda_form(request, pk=None):
         else:
             messages.warning(request, u'Falha no cadastro de agenda')
 
-    return render(
-        request,
-        'agenda/agenda_form.html',
-        {
-            'form': form,
-        }
-    )
+    return render(request,'agenda/agenda_form.html', context)
 
 @login_required
-def agenda_list(request):
-    object_list = Agenda.objects.all()
-    # object_list = AgendaSearchForm(request.POST or None)
+def agenda_list(request, conta_pk):
+    conta = get_object_or_404(Conta, id=conta_pk)
+    object_list = Agenda.objects.filter(conta=conta)
 
-    return render(
-        request, 'agenda/agenda_list.html', {
-                                            'object_list': object_list,
-                                            # 'form': form,
-                                            }
-    )
+    context = {}
+    context['conta'] = conta
+    context['object_list'] = object_list
+    return render(request, 'agenda/agenda_list.html', context)
 
 @login_required
-def servico_form(request, pk=None):
+def servico_form(request, conta_pk, pk=None):
     '''
         #12
     '''
+    conta = get_object_or_404(Conta, id=conta_pk)
     if pk:
         servico = get_object_or_404(Servico, pk=pk)
         msg = u'servico alterado com sucesso.'
@@ -86,6 +84,10 @@ def servico_form(request, pk=None):
 
     form = ServicoForm(request.POST or None, instance=servico)
 
+    context = {}
+    context['conta'] = conta
+    context['form'] = form
+    
     if request.method == 'POST':
         if form.is_valid():
             servico = form.save()
@@ -95,25 +97,21 @@ def servico_form(request, pk=None):
         else:
             messages.warning(request, u'Falha no cadastro de serviço')
 
-    return render(
-        request,
-        'agenda/servico_form.html',
-        {
-            'form': form,
-        }
-    )
+    return render(request,'agenda/servico_form.html',context)
+
 
 @login_required
-def servico_list(request):
-    object_list = Servico.objects.all()
+def servico_list(request, conta_pk):
+    conta = get_object_or_404(Conta, id=conta_pk)
+    object_list = Servico.objects.filter(agenda__conta__id=conta_pk)
     # form = ServicoSearchForm(request.POST or None)
+    context = {}
+    context['conta'] = conta
+    context['object_list'] = object_list
+    # context['form'] = form
 
     return render(
-        request, 'agenda/servico_list.html', {
-                                            'object_list': object_list,
-                                            # 'form': form,
-                                            }
-    )
+        request, 'agenda/servico_list.html', context)
 
 @login_required
 def tarefa_form(request, pk=None):

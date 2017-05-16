@@ -17,10 +17,11 @@ from bootstrap_toolkit.widgets import BootstrapDateInput
 class AgendaForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user', None)
+        self.conta = kwargs.pop('conta', None)
         super(AgendaForm, self).__init__(*args, **kwargs)
 
     def save(self):
-        self.conta = self.user.conta_set.all().last()
+        self.conta = self.conta
         self.instance.save()
 
     class Meta:
