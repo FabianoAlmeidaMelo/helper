@@ -32,7 +32,7 @@ urlpatterns = patterns(
         ),
     #  tarefa
     url(
-        r'^tarefa_list/$',
+        r'^tarefa_list/conta/(?P<conta_pk>\d+)$',
         'helper.agenda.views.tarefa_list', name='tarefa_list'
         ),
     url(
@@ -45,7 +45,7 @@ urlpatterns = patterns(
         ),
     #  Cartão Credito
     url(
-        r'^cartao_list/$',
+        r'^cartao_list/conta/(?P<conta_pk>\d+)/$',
         'helper.agenda.views.cartao_list', name='cartao_list'
         ),
     url(

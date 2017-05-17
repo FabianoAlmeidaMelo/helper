@@ -167,13 +167,27 @@ def tarefa_form(request, pk=None):
 
 #         return self.render_to_response(context)
 
-tarefa_list = (
-    SearchFormListView.as_view(
-                                model=Tarefa,
-                                form_class=TarefaSearchForm,
-                                paginate_by=30
-                                )
-                            )
+# tarefa_list = (
+#     SearchFormListView.as_view(
+#                                 model=Tarefa,
+#                                 form_class=TarefaSearchForm,
+#                                 paginate_by=30
+#                                 )
+#                             )
+
+@login_required
+def tarefa_list(request, conta_pk):
+    conta = get_object_or_404(Conta, id=conta_pk)
+    object_list = Tarefa.objects.filter(servico__agenda__conta__id=conta_pk)
+
+    context = {}
+    context['conta'] = conta
+    context['object_list'] = object_list
+    context['paginate_by'] = 30
+
+    return render(
+        request, 'agenda/tarefa_list.html', context)
+
 
 @login_required
 def cartao_form(request, pk=None):
@@ -204,11 +218,15 @@ def cartao_form(request, pk=None):
     )
 
 
-cartao_list = (
-    SearchFormListView.as_view(
-                                model=CartaoCredito,
-                                form_class=CartaoCreditoBaseSearchForm,
-                                paginate_by=30
-                                )
-                            )
-login_required(cartao_list)
+@login_required
+def cartao_list(request, conta_pk):
+    conta = get_object_or_404(Conta, id=conta_pk)
+    object_list = CartaoCredito.objects.filter() # não tem relação: TODO vincular a conta e ou agenda
+
+    context = {}
+    context['conta'] = conta
+    context['object_list'] = object_list
+
+
+    return render(
+        request, 'agenda/cartaocredito_list.html', context)
