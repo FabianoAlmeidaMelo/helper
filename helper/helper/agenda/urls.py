@@ -49,11 +49,11 @@ urlpatterns = patterns(
         'helper.agenda.views.cartao_list', name='cartao_list'
         ),
     url(
-        r'^cartao_form/$',
+        r'^cartao_form/conta/(?P<conta_pk>\d+)/$',
         'helper.agenda.views.cartao_form', name='cartao_add'
         ),
     url(
-        r'^cartao_form/(?P<pk>\d+)/$',
+        r'^cartao_form/conta/(?P<conta_pk>\d+)/(?P<pk>\d+)/$',
         'helper.agenda.views.cartao_form', name='cartao_edit'
         ),
 )

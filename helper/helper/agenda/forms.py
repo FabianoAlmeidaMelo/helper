@@ -33,6 +33,13 @@ class AgendaForm(forms.ModelForm):
 
 
 class CartaoCreditoForm(forms.ModelForm):
+    '''
+    Cartao é o do dono da Conta, um User
+    pode estar vinculado a mais de 1 agenda
+    '''
+    def __init__(self, *args, **kargs):
+        self.conta = kargs.pop('conta', None)
+        super(CartaoCreditoForm, self).__init__(*args, **kargs)
 
     class Meta:
         model = CartaoCredito

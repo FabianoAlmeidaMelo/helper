@@ -191,7 +191,13 @@ def tarefa_list(request, conta_pk):
 
 
 @login_required
-def cartao_form(request, pk=None):
+def cartao_form(request, conta_pk, pk=None):
+    '''
+    o cartao é o do dono da conta (um user)
+    '''
+    conta = get_object_or_404(Conta, id=conta_pk)
+    context = {}
+    context['conta'] = conta
     if pk:
         cartao = get_object_or_404(CartaoCredito, pk=pk)
         msg = u'Cartao de Crédito alterado com sucesso.'
@@ -199,8 +205,8 @@ def cartao_form(request, pk=None):
         cartao = None
         msg = u'Cartao de Crédito criado.'
 
-    form = CartaoCreditoForm(request.POST or None, instance=cartao)
-
+    form = CartaoCreditoForm(request.POST or None, instance=cartao, conta=conta)
+    context['form'] = form
     if request.method == 'POST':
         if form.is_valid():
             cartao = form.save()
@@ -210,13 +216,7 @@ def cartao_form(request, pk=None):
         else:
             messages.warning(request, u'Falha no cadastro de Cartao Credito')
 
-    return render(
-        request,
-        'agenda/cartaocredito_form.html',
-        {
-            'form': form,
-        }
-    )
+    return render(request, 'agenda/cartaocredito_form.html', context)
 
 
 @login_required
