@@ -53,7 +53,7 @@ def agenda_form(request, conta_pk, pk=None):
             agenda = form.save()
             messages.success(request, msg)
 
-            return redirect(reverse('agenda_list'))
+            return redirect(reverse('agenda_list', kwargs={'conta_pk': conta.pk}))
         else:
             messages.warning(request, u'Falha no cadastro de agenda')
 
@@ -93,7 +93,7 @@ def servico_form(request, conta_pk, pk=None):
             servico = form.save()
             messages.success(request, msg)
 
-            return redirect(reverse('servico_list'))
+            return redirect(reverse('servico_list', kwargs={'conta_pk': conta.pk}))
         else:
             messages.warning(request, u'Falha no cadastro de serviço')
 
@@ -209,7 +209,7 @@ def cartao_form(request, conta_pk, pk=None):
             cartao = form.save()
             messages.success(request, msg)
 
-            return redirect(reverse('cartao_list'))
+            return redirect(reverse('cartao_list', kwargs={'conta_pk': conta.pk}))
         else:
             messages.warning(request, u'Falha no cadastro de Cartao Credito')
 
