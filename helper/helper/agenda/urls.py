@@ -36,11 +36,11 @@ urlpatterns = patterns(
         'helper.agenda.views.tarefa_list', name='tarefa_list'
         ),
     url(
-        r'^tarefa_form/$',
+        r'^tarefa_form/conta/(?P<conta_pk>\d+)$',
         'helper.agenda.views.tarefa_form', name='tarefa_add'
         ),
     url(
-        r'^tarefa_form/(?P<pk>\d+)/$',
+        r'^tarefa_form/conta/(?P<conta_pk>\d+)/(?P<pk>\d+)/$',
         'helper.agenda.views.tarefa_form', name='tarefa_edit'
         ),
     #  Cartão Credito
