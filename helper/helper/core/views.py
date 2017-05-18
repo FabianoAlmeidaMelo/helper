@@ -10,8 +10,8 @@ from django.views.generic.edit import FormMixin
 from django.views.generic.list import ListView
 from django.views.generic import TemplateView
 
-from .models import (
-    Developer,
+from helper.agenda.models import (
+    Conta,
 )
 
 from .forms import (
@@ -46,5 +46,23 @@ class SearchFormListView(FormMixin, ListView):
         return self.get(request, *args, **kwargs)
 
 # View home para usuário deslogado
-home_anonymous = TemplateView.as_view(template_name='base.html')
+home_anonymous = TemplateView.as_view(template_name='home.html')
 
+# class HomeView(TemplateView):
+#     template_name = 'base.html'
+
+#     def get_context_data(self, **kwargs):
+#         context = {}
+#         if request.user.is_authenticated:
+#             context = super(HomeView, self).get_context_data(**kwargs)
+#             context['conta'] = Conta.objects.filter(dono=request.user)
+#         return context
+
+def home(request):
+
+    conta = None
+    context = {}
+    if request.user.is_authenticated():
+        conta = get_object_or_404(Conta, dono=request.user)
+    context['conta'] = conta
+    return render(request, 'base.html', context)

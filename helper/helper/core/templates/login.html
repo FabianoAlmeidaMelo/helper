@@ -55,7 +55,7 @@
         {% endfor %}
     {% endif %}
 
-    <form class="form-signin" method="POST" action="{% if not next %}?next={% url 'tarefa_list'%}{% endif %}">
+    <form class="form-signin" method="POST" action="{% if not next %}?next=/{% endif %}">
         {% csrf_token %}
         {{ form|as_bootstrap }}
         <button class="btn btn-large btn-small btn-primary" type="submit">Login</button>

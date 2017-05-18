@@ -175,6 +175,7 @@ def tarefa_form(request, pk=None):
 #                                 )
 #                             )
 
+
 @login_required
 def tarefa_list(request, conta_pk):
     conta = get_object_or_404(Conta, id=conta_pk)

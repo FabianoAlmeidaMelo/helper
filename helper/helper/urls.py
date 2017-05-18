@@ -4,10 +4,13 @@ from django.conf.urls import url
 from django.views.generic import TemplateView
 from django.contrib.auth.views import logout, login
 from helper.core.forms import AuthenticationForm
+# from helper.core.views import home
 
 urlpatterns = patterns(
     '',
-    url(r'^$', TemplateView.as_view(template_name="base.html")),
+    # url(r'^$', TemplateView.as_view(template_name="home.html")),
+    url(r'^$', 'helper.core.views.home', name='home'),
+
     url(r'^core/', include('helper.core.urls')),
     url(r'^agenda/', include('helper.agenda.urls')),
 
