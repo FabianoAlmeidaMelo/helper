@@ -135,7 +135,7 @@ def tarefa_form(request, conta_pk, pk=None):
             tarefa = form.save()
             messages.success(request, msg)
 
-            return redirect(reverse('tarefa_list'))
+            return redirect(reverse('tarefa_list', kwargs={'conta_pk': conta.pk}))
         else:
             messages.warning(request, u'Falha no cadastro de tarefa de Coleta')
 
