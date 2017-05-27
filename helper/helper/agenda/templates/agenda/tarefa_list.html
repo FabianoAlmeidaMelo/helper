@@ -35,7 +35,7 @@
 
 </fieldset>
         <button type="submit" class="btn btn-small btn-success" title="Filtrar"><i class="icon-search"></i></button>
-        <a class="btn btn-small btn-info" href="." title="Apaga o filtro e listar todos"><i class="icon-remove-circle"></i></a>
+        <a class="btn btn-small btn-info" href="{% url 'tarefa_list' conta.id %}" title="Apaga o filtro e listar todos"><i class="icon-remove-circle"></i></a>
       </div>
 
 </form>
@@ -49,6 +49,7 @@
                 <th>Titulo</th>
                 <th>Agenda</th>
                 <th>Serviço</th>
+                <th>Nr Doc.</th>
                 <th>Data</th>
                 <th>Hora</th>
                 <th>Valor</th>
@@ -65,6 +66,7 @@
                     </td>
                     <td>{{ object.servico.agenda|default:"--" }}</td>
                     <td>{{ object.servico.nome|default:'--' }}</td>
+                    <td>{{ object.nr_documento|default:'--' }}</td>
                     <td>{{ object.data_ini|date:"d/m/Y" }}</td>
                     <td>{{ object.hora_ini }}</td>
                     <td>{{ object.get_tipo_display|default:"" }} $ {{ object.valor|default:'--'  }}</td>
@@ -78,7 +80,7 @@
         <tfoot>
         </tfoot>
     </div>
-<!-- {#{% bootstrap_pagination page_obj extra=request.GET.urlencode %} #}-->
+ {% bootstrap_pagination page_obj extra=request.GET.urlencode %}
 {% endblock content %}
 {% block extra_js %}
     {{ form.media.js}}

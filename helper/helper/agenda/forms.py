@@ -145,6 +145,7 @@ class TarefaForm(forms.ModelForm):
                     'cartao',
                     'parcela',
                     'nr_parcela',
+                    'nr_documento',
                     )
 
 
@@ -246,7 +247,8 @@ class TarefaSearchForm(BaseSearchForm):
                           'servico__nome',
                           'titulo',
                           'descricao',
-                          'servico__agenda__nome'
+                          'servico__agenda__nome',
+                          'nr_documento',
                     )
 
     # def get_result_queryset(self):
@@ -269,9 +271,7 @@ class TarefaSearchForm(BaseSearchForm):
     #         data_fim = self.cleaned_data['data_fim']
     #         if data_fim:
     #             q = q & Q(data_ini__lte=data_ini)
-    #         confirmado = self.cleaned_data['confirmado']
-    #         if confirmado:
-    #             q = q & Q(confirmado=True)
+    #         confirmado =     #             q = q & Q(confirmado=True)
     #         pago = self.cleaned_data['pago']
     #         if pago:
     #             q = q & Q(pago=True)

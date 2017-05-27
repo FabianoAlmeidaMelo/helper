@@ -142,49 +142,54 @@ def tarefa_form(request, conta_pk, pk=None):
     return render(request,'agenda/tarefa_form.html', context)
 
 
-# class TarefaFormListView(SearchFormListView):
-#     '''
-#     ref #19
-#     datas anteriores a data corrente,
-#         devem encabeçar a listagem, quando:
-#         Tiverem valor e não estiverem marcadas como PAGO
-#     '''
-#     def get(self, request, *args, **kwargs):
-#         self.form = self.get_form(self.get_form_class())
-#         if self.form.is_valid():
-#             self.object_list = self.form.get_result_queryset()
-#         else:
-#             self.object_list = []
+class TarefaFormListView(SearchFormListView):
+    '''
+    ref #19
+    datas anteriores a data corrente,
+        devem encabeçar a listagem, quando:
+        Tiverem valor e não estiverem marcadas como PAGO
+    '''
+    def get(self, request, *args, **kwargs):
+        self.form = self.get_form(self.get_form_class())
+        
+        if self.form.is_valid():
+            self.object_list = self.form.get_result_queryset()
+        else:
+            self.object_list = []
+        
+        conta = None
+        if 'conta_pk' in self.kwargs:
+            conta_pk = self.kwargs['conta_pk']
+            conta = get_object_or_404(Conta, id=conta_pk)
+        
+        context = self.get_context_data(
+            object_list=self.object_list,
+            form=self.form,
+            url_params=request.GET.urlencode(),
+            conta=conta,)
 
-#         context = self.get_context_data(
-#             object_list=self.object_list,
-#             form=self.form,
-#             url_params=request.GET.urlencode(),
-#         )
+        return self.render_to_response(context)
 
-#         return self.render_to_response(context)
-
-# tarefa_list = (
-#     SearchFormListView.as_view(
-#                                 model=Tarefa,
-#                                 form_class=TarefaSearchForm,
-#                                 paginate_by=30
-#                                 )
-#                             )
+tarefa_list = (
+    TarefaFormListView.as_view(
+                                model=Tarefa,
+                                form_class=TarefaSearchForm,
+                                paginate_by=30,
+                                )
+                            )
 
 
-@login_required
-def tarefa_list(request, conta_pk):
-    conta = get_object_or_404(Conta, id=conta_pk)
-    object_list = Tarefa.objects.filter(servico__agenda__conta__id=conta_pk)
+# @login_required
+# def tarefa_list(request, conta_pk):
+#     conta = get_object_or_404(Conta, id=conta_pk)
+#     object_list = Tarefa.objects.filter(servico__agenda__conta__id=conta_pk)
 
-    context = {}
-    context['conta'] = conta
-    context['object_list'] = object_list
-    context['paginate_by'] = 30
+#     context = {}
+#     context['conta'] = conta
+#     context['object_list'] = object_list
 
-    return render(
-        request, 'agenda/tarefa_list.html', context)
+#     return render(
+#         request, 'agenda/tarefa_list.html', context)
 
 
 @login_required
@@ -220,10 +225,11 @@ def cartao_form(request, conta_pk, pk=None):
 def cartao_list(request, conta_pk):
     conta = get_object_or_404(Conta, id=conta_pk)
     object_list = CartaoCredito.objects.filter() # não tem relação: TODO vincular a conta e ou agenda
-
+    form = CartaoCreditoBaseSearchForm(request.POST or None)
     context = {}
     context['conta'] = conta
     context['object_list'] = object_list
+    context['form'] = form
 
 
     return render(

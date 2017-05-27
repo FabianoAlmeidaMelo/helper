@@ -61,7 +61,11 @@
                                 Tarefas
                             </a>
                         </li>
-
+                        <li>
+                            <a href="{% url 'tarefa_list' conta.id %}" title="{{ section.name }}">
+                                Mensagens
+                            </a>
+                        </li>
                     {% endif %}
 
                         <li class="{% if section.selected %}active{% endif %}">

@@ -220,6 +220,7 @@ class Tarefa(models.Model):
         null=True,
         blank=True
     )
+    nr_documento = models.CharField(verbose_name=u'Nr Documento', max_length=20, null=True, blank=True)
 
     class Meta:
         verbose_name = u'Tarefa'
