@@ -152,15 +152,16 @@ class TarefaFormListView(SearchFormListView):
     def get(self, request, *args, **kwargs):
         self.form = self.get_form(self.get_form_class())
         
-        if self.form.is_valid():
-            self.object_list = self.form.get_result_queryset()
-        else:
-            self.object_list = []
-        
         conta = None
         if 'conta_pk' in self.kwargs:
             conta_pk = self.kwargs['conta_pk']
             conta = get_object_or_404(Conta, id=conta_pk)
+
+        if self.form.is_valid():
+            self.object_list = self.form.get_result_queryset().filter(servico__agenda__conta=conta)
+        else:
+            self.object_list = []
+        
         
         context = self.get_context_data(
             object_list=self.object_list,
