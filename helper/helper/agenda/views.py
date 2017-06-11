@@ -225,7 +225,7 @@ def cartao_form(request, conta_pk, pk=None):
 @login_required
 def cartao_list(request, conta_pk):
     conta = get_object_or_404(Conta, id=conta_pk)
-    object_list = CartaoCredito.objects.filter() # não tem relação: TODO vincular a conta e ou agenda
+    object_list = CartaoCredito.objects.filter(usuario=conta.dono) # não tem relação: TODO vincular a conta e ou agenda
     form = CartaoCreditoBaseSearchForm(request.POST or None)
     context = {}
     context['conta'] = conta
