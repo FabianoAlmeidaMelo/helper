@@ -14,10 +14,6 @@ from helper.agenda.models import (
     Conta,
 )
 
-from .forms import (
-    DeveloperForm,
-)
-
 
 class SearchFormListView(FormMixin, ListView):
 

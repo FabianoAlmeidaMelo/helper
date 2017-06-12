@@ -8,9 +8,6 @@ from django.db.models.query import QuerySet
 from django.utils.text import smart_split
 from django.utils.translation import ugettext_lazy as _
 
-from .models import (
-    Developer,
-)
 
 if settings.DATABASES:
     DATABASE_ENGINE = settings.DATABASES[settings.DATABASES.keys()[0]]['ENGINE'].split('.')[-1]
@@ -19,12 +16,6 @@ else:
 
 
 DEFAULT_STOPWORDS = ('de,o,a,os,as')
-
-
-class DeveloperForm(forms.ModelForm):
-    class Meta:
-        model = Developer
-        fields = ('name', )
 
 
 class AuthenticationForm(AuthAuthenticationForm):

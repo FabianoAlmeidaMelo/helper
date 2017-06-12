@@ -14,10 +14,6 @@ SEXO = (
 )
 
 
-class Developer(models.Model):
-    name = models.CharField(verbose_name=u'Nome', max_length=255)
-
-
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         now = timezone.now()
