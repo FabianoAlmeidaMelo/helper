@@ -40,7 +40,7 @@
                                 <i class="icon-home"></i> Home
                             </a>
                         </li>
-                        {% if user.is_authenticated %}
+                        {% if user.is_authenticated and user.conta_set.count %}
                         <li>
                             <a href="{% url 'agenda_list' conta.id %}" title="{{ section.name }}">
                                 Agendas

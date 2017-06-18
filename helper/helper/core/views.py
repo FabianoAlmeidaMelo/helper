@@ -55,10 +55,10 @@ home_anonymous = TemplateView.as_view(template_name='home.html')
 #         return context
 
 def home(request):
-
+    user = request.user
     conta = None
     context = {}
-    if request.user.is_authenticated():
+    if user.is_authenticated() and user.conta_set.count():
         conta = get_object_or_404(Conta, dono=request.user)
     context['conta'] = conta
     return render(request, 'base.html', context)
