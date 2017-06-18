@@ -2,11 +2,14 @@
 
 from django.db import models
 from django.utils import timezone
-
+from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.models import (
     AbstractBaseUser,
     BaseUserManager,
 )
+
+from municipios.models import Municipio
+
 
 SEXO = (
     (1, "M"),
@@ -35,14 +38,26 @@ class UserManager(BaseUserManager):
         return user
 
 
-class User(AbstractBaseUser):
+class User(AbstractBaseUser, PermissionsMixin):
     '''
         Usuário do sistema
         is_superuser == usuário Administrador
+    'email': u'',
+    'first_name': u'',
+    'id': None,
+    'is_active': True,
+    'is_staff': False,
+    'is_superuser': False,
+    'last_login': None,
+    'last_name': u'',
+    'password': u'',
+    'username': u''
     '''
     email = models.EmailField('e-mail', unique=True)
     nome = models.CharField(verbose_name=u'Nome', max_length=100)
-    is_active = models.BooleanField('ativo', default=True,)
+    is_active = models.BooleanField('ativo', default=True)
+
+    is_staff = models.BooleanField('ativo', default=False)
     date_joined = models.DateTimeField(
         'data de cadastro', default=timezone.now
     )
@@ -63,3 +78,23 @@ class User(AbstractBaseUser):
 
     def __unicode__(self):
         return self.email
+
+    def get_short_name(self):
+        return self.nome
+
+class Endereco(models.Model):
+    '''
+    #26
+    '''
+    cep = models.CharField(max_length=9)
+    logradouro = models.CharField(max_length=100)
+    numero = models.CharField(verbose_name=u'Número', max_length=50)
+    complemento = models.CharField(max_length=100, null=True, blank=True)
+    bairro = models.CharField(max_length=100)
+    municipio = models.ForeignKey(Municipio)
+
+    def __unicode__(self):
+        return u"%s - %s" % (self.cep, self.numero)
+
+    class Meta:
+        verbose_name = u'Endereço'

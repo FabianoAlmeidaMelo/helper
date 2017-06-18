@@ -1,14 +1,14 @@
 # coding: utf-8
-from dateutil.relativedelta import relativedelta
-from django.db import models
-from django.core.exceptions import ValidationError
 from datetime import date, datetime
+from dateutil.relativedelta import relativedelta
 from django.conf import settings
-
+from django.core.exceptions import ValidationError
+from django.db import models
+from helper.contabil.models import Contador
 
 TIPO = (
-    (1, u'Bronze'),
-    (2, u'Prata'),
+    (1, u'Contador'),
+    (2, u'Empresarial'),
     (3, u'Ouro'),
 )
 
@@ -55,6 +55,7 @@ class Conta(models.Model):
         null=True
     )
     validade = models.DateTimeField(u'Data')
+    contador = models.ForeignKey(Contador, null=True, blank=True)
 
     class Meta:
         verbose_name = u'Conta'

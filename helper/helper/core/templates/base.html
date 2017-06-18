@@ -62,8 +62,13 @@
                             </a>
                         </li>
                         <li>
-                            <a href="{% url 'tarefa_list' conta.id %}" title="{{ section.name }}">
+                            <a href="#" title="{{ section.name }}">
                                 Mensagens
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'contador_leitura' conta.id %}" title="{{ section.name }}">
+                                Contador
                             </a>
                         </li>
                     {% endif %}

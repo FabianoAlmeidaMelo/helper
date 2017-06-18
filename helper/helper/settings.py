@@ -42,9 +42,11 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     # 'test_without_migrations',
     'bootstrap_toolkit',
-
+    'localbr',
+    'municipios',
     'helper.core',
-    'helper.agenda'
+    'helper.agenda',
+    'helper.contabil',
 )
 
 MIDDLEWARE_CLASSES = (
