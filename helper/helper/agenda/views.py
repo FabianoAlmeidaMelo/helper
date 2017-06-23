@@ -82,7 +82,7 @@ def servico_form(request, conta_pk, pk=None):
         servico = None
         msg = u'servico criado.'
 
-    form = ServicoForm(request.POST or None, instance=servico)
+    form = ServicoForm(request.POST or None, instance=servico, conta=conta)
 
     context = {}
     context['conta'] = conta
