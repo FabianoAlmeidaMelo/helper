@@ -89,10 +89,12 @@ class TarefaForm(forms.ModelForm):
     def __init__(self, *args, **kargs):
         self.user = kargs.pop('user', None)
         self.agenda = kargs.pop('agenda', None)
+        self.conta = kargs.pop('conta', None)
         super(TarefaForm, self).__init__(*args, **kargs)
         self.fields['parcela'].widget = forms.HiddenInput()
-        self.fields['cartao'].queryset = CartaoCredito.objects.filter(ativo=True)
-
+        dono = self.conta.dono
+        self.fields['cartao'].queryset = CartaoCredito.objects.filter(ativo=True, usuario=dono)
+        self.fields['servico'].queryset = Servico.objects.filter(agenda__conta=self.conta)
         self.fields['servico'].required = True
 
     def clean_valor(self):

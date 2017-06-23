@@ -126,7 +126,7 @@ def tarefa_form(request, conta_pk, pk=None):
         tarefa = None
         msg = u'Tarefa criada.'
 
-    form = TarefaForm(request.POST or None, instance=tarefa, )
+    form = TarefaForm(request.POST or None, instance=tarefa, conta=conta)
     context = {}
     context['conta'] = conta
     context['form'] = form
