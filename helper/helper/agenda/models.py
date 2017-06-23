@@ -6,11 +6,16 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from helper.contabil.models import Contador
 
-TIPO = (
+TIPO = ( # conta
     (1, u'Contador'),
     (2, u'Empresarial'),
-    (3, u'Ouro'),
+    (3, u'Outra'),
 )
+
+TIPO_AGENDA = (
+    (1, u'Pessoa Jurídica'),
+    (2, u'Pessoa Física'),
+)    
 
 CARTAO_CHOICES = (
     (1, 'Visa'),
@@ -145,13 +150,13 @@ class CartaoCredito(models.Model):
 class Agenda(models.Model):
     '''
     agenda:
-      Fzda Vera Cruz
-      ZNC
-      Helper
+      Pessoa Jurídica ** essa o Contador tem algum acesso.
+      Pessoa Física
     '''
     conta = models.ForeignKey(Conta)
     nome = models.CharField(u'Nome', max_length=200)
     observacao = models.TextField('observação', null=True, blank=True)
+    tipo = models.SmallIntegerField(u'Tipo', choices=TIPO_AGENDA, default=2)
     # agenda_usuario = models.ManyToManyField(User, through='AgendaUsuario')
 
     class Meta:

@@ -24,5 +24,21 @@
             Email: {{ contador.email|default:"--"  }}</div>
     </div>
 </div>
+<div class="row-fluid">
+    {% if contador.setor_set.count %}
+    <div class="controls cwell">
+        <div class="row-fluid">
+            Nome: {{ contador.nome|default:"--"  }}</div>
+        <div class="row-fluid">
+            Contato: {{ contador.nome_contato|default:"--"  }}</div>
+        <div class="row-fluid">
+            Telefone: {{ contador.telefone|default:"--" }}</div>
+        <div class="row-fluid">
+            Telefone: {{ contador.telefone2|default:"--"  }}</div>
+        <div class="row-fluid">
+            Email: {{ contador.email|default:"--"  }}</div>
+    </div>
+    {% endif %}
+</div>
 
 {% endblock %}

@@ -21,15 +21,14 @@ class AgendaForm(forms.ModelForm):
         super(AgendaForm, self).__init__(*args, **kwargs)
 
     def save(self):
-        self.conta = self.conta
+        self.instance.conta = self.conta
         self.instance.save()
 
     class Meta:
         model = Agenda
-        fields = (
-                    'nome',
-                    'observacao',
-                    )
+        fields = ('nome',
+                  'observacao',
+                  'tipo')
 
 
 class CartaoCreditoForm(forms.ModelForm):
