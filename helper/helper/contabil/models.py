@@ -15,7 +15,7 @@ class Contador(models.Model):
     email = models.EmailField(u'email', max_length=50, null=True, blank=True)
     # Contato
     nome_contato = models.CharField(u'Nome do Contato', max_length=200)
-    # contador_usuario = models.ManyToManyField(User, through='ContadorUsuario')
+    #siet = models.(User, through='ContadorUsuario')
 
     def __unicode__(self):
         return self.nome    

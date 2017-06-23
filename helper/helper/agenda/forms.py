@@ -74,6 +74,7 @@ class ServicoForm(forms.ModelForm):
 
 
 class TarefaForm(forms.ModelForm):
+    servico = forms.ModelChoiceField(label='Agenda', queryset=Servico)
     nr_parcela = forms.IntegerField(label='Nr de Parcelas', required=False)
     data_ini = forms.DateField(
                                 label='Data Inicial',
