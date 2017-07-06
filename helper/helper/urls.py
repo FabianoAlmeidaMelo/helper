@@ -1,3 +1,6 @@
+from django.conf import settings
+from django.conf.urls.static import static
+
 from django.conf.urls import include
 from django.conf.urls import patterns
 from django.conf.urls import url
@@ -16,34 +19,21 @@ urlpatterns = patterns(
 
     # Logins
     url(r'^logout/$', logout, {"next_page": "/"}, name="logout"),
-    url(r'^login/$',
-        login,
-        {
-         'template_name': 'login.html',
-         'authentication_form': AuthenticationForm,
-        },
-        name="login"),
+    url(r'^login/$',login,{'template_name': 'login.html',
+                           'authentication_form': AuthenticationForm}, name="login"),
 
     # password Reset
-    url(
-        r'^user/password/reset/$',
-        'django.contrib.auth.views.password_reset',
+    url(r'^user/password/reset/$', 'django.contrib.auth.views.password_reset',
         {'post_reset_redirect': '/user/password/reset/done/'},
-        name="password_reset"
-    ),
-    url(
-        r'^user/password/reset/done/$',
-        'django.contrib.auth.views.password_reset_done'
-    ),
-    url(
-        r'^user/password/reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>.+)/$',
+        name="password_reset"),
+    url(r'^user/password/reset/done/$',
+        'django.contrib.auth.views.password_reset_done'),
+    url(r'^user/password/reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>.+)/$',
         'django.contrib.auth.views.password_reset_confirm',
-        {'post_reset_redirect': '/user/password/done/'}
-    ),
-    url(
-        r'^user/password/done/$',
-        'django.contrib.auth.views.password_reset_complete'
-    ),
+        {'post_reset_redirect': '/user/password/done/'}),
+    url(r'^user/password/done/$',
+        'django.contrib.auth.views.password_reset_complete'),
     url(r'^municipios_app/', include('municipios.urls')),
     url(r'^admin/', include(admin.site.urls)),
-)
+
+) 

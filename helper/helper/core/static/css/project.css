@@ -2,7 +2,7 @@
 body{
     background-color: #eee;
     /*padding-top: 168px;*/
-    background-image: url("../img/background.png");
+    /*background-image: url("../img/background.png");*/
     border-top: 6px solid #67B953;
 }
 select, textarea, input[type="text"],
