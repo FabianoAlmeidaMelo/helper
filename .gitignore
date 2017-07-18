@@ -1,5 +1,5 @@
 *.py[cod]
-.env
+
 *pyc
 
 # C extensions
@@ -42,6 +42,7 @@ nosetests.xml
 #geral
 staticfiles
 .env
+.enve
 settings_local.py
 local_settings.py
 *.sublime-project
