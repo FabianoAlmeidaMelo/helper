@@ -1,4 +1,6 @@
 *.py[cod]
+.env
+*pyc
 
 # C extensions
 *.so
@@ -6,7 +8,7 @@
 # Packages
 *.egg
 *.egg-info
-.env
+
 env
 dist
 build
@@ -39,7 +41,7 @@ nosetests.xml
 
 #geral
 staticfiles
-
+.env
 settings_local.py
 local_settings.py
 *.sublime-project
