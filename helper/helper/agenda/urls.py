@@ -36,6 +36,10 @@ urlpatterns = patterns(
         'helper.agenda.views.tarefa_list', name='tarefa_list'
         ),
     url(
+        r'^agenda_tarefa_list/conta/(?P<conta_pk>\d+)/agenda/(?P<agenda_pk>\d+)$',
+        'helper.agenda.views.agenda_tarefa_list', name='agenda_tarefa_list'
+        ),
+    url(
         r'^tarefa_form/conta/(?P<conta_pk>\d+)$',
         'helper.agenda.views.tarefa_form', name='tarefa_add'
         ),

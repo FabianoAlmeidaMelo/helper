@@ -175,6 +175,46 @@ tarefa_list = (login_required(TarefaFormListView.as_view(
                                 )
                             )
                         )
+
+class AgendaTarefaFormListView(SearchFormListView):
+    '''
+    ref #**
+    listagem de Tarefas, por agenda
+    '''
+    def get(self, request, *args, **kwargs):
+        self.form = self.get_form(self.get_form_class())
+        
+        conta = None
+        agenda = None
+        if 'conta_pk' in self.kwargs:
+            conta_pk = self.kwargs['conta_pk']
+            conta = get_object_or_404(Conta, id=conta_pk)
+        if 'agenda_pk' in self.kwargs:
+            agenda_pk = self.kwargs['agenda_pk']
+            agenda = get_object_or_404(Agenda, id=agenda_pk)
+
+        if self.form.is_valid():
+            self.object_list = self.form.get_result_queryset().filter(servico__agenda=agenda)
+        else:
+            self.object_list = []
+        
+        
+        context = self.get_context_data(
+            object_list=self.object_list,
+            form=self.form,
+            url_params=request.GET.urlencode(),
+            conta=conta,)
+
+        return self.render_to_response(context)
+
+agenda_tarefa_list = (login_required(AgendaTarefaFormListView.as_view(
+                                model=Tarefa,
+                                form_class=TarefaSearchForm,
+                                paginate_by=30,
+                                template_name='agenda/tarefa_list.html'
+                                )
+                            )
+                        )
 #login_required(TemplateView.as_view(template_name='foo_index.html'))
 
 # @login_required

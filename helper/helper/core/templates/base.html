@@ -63,25 +63,20 @@
                         </ul>
                         <!-- {# dropdown ADM fim #} -->
                         <!-- {# dropdown Agendas INI #} -->
-<!--                         <ul class="nav">
+                        <ul class="nav">
                           <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                              Administração
+                              Agendas
                               <b class="caret"></b>
                             </a>
                             <ul class="dropdown-menu">
-                            <li>
-                              <a href="{% url 'agenda_list' conta.id %}" title="{{ section.name }}">Agendas</a>
-                            </li>
-                            <li>
-                              <a href="{% url 'servico_list' conta.id %}" title="{{ section.name }}">Serviços</a>
-                            </li>
-                            <li>
-                              <a href="{% url 'cartao_list' conta.id %}" title="{{ section.name }}">Cartões</a>
-                            </li>
-                            </ul>
+                            {% for agenda in conta.agenda_set.all %}
+                                <li>
+                                  <a href="{% url 'agenda_tarefa_list' conta.id agenda.id %}" title="{{ section.name }}">{{ agenda.nome }}</a>
+                                </li>
+                            {% endfor %}
                           </li>
-                        </ul> -->
+                        </ul>
                         <!-- {# dropdown Agendas fim #} -->
 
                         <li>
