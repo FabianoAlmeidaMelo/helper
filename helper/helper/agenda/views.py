@@ -145,9 +145,6 @@ def tarefa_form(request, conta_pk, pk=None):
 class TarefaFormListView(SearchFormListView):
     '''
     ref #19
-    datas anteriores a data corrente,
-        devem encabeçar a listagem, quando:
-        Tiverem valor e não estiverem marcadas como PAGO
     '''
     def get(self, request, *args, **kwargs):
         self.form = self.get_form(self.get_form_class())
@@ -171,14 +168,14 @@ class TarefaFormListView(SearchFormListView):
 
         return self.render_to_response(context)
 
-tarefa_list = (
-    TarefaFormListView.as_view(
+tarefa_list = (login_required(TarefaFormListView.as_view(
                                 model=Tarefa,
                                 form_class=TarefaSearchForm,
                                 paginate_by=30,
                                 )
                             )
-
+                        )
+#login_required(TemplateView.as_view(template_name='foo_index.html'))
 
 # @login_required
 # def tarefa_list(request, conta_pk):
