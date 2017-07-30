@@ -10,7 +10,11 @@
 
    </style>
 {% endblock css %}
-{% block page_title %}Tarefas{% endblock page_title %}
+{% block page_title %}
+    {% if agenda %}
+        {{ agenda.nome }}
+    {% else %}Tarefas{% endif %}
+{% endblock page_title %}
 
 {% block content %}
 

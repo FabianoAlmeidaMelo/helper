@@ -203,7 +203,8 @@ class AgendaTarefaFormListView(SearchFormListView):
             object_list=self.object_list,
             form=self.form,
             url_params=request.GET.urlencode(),
-            conta=conta,)
+            conta=conta,
+            agenda=agenda)
 
         return self.render_to_response(context)
 
