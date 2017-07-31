@@ -203,7 +203,7 @@ class TarefaSearchForm(BaseSearchForm):
 
     def __init__(self, *args, **kwargs):
         super(TarefaSearchForm, self).__init__(*args, **kwargs)
-        self.fields['q'].widget.attrs['placeholder'] = u'Agenda, Nome do serviço, Título, Descrição'
+        self.fields['q'].widget.attrs['placeholder'] = u'Nome do serviço, Título, Descrição'
         # self.fields['hoje'].widget=forms.CheckboxInput(attrs={'checked' : 'checked'})
 
     def prepare_data_ini(self):

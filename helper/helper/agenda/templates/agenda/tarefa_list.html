@@ -55,7 +55,9 @@
             <thead>
               <tr>
                 <th>Titulo</th>
-                <th>Agenda</th>
+                {% if not agenda %}
+                    <th>Agenda</th>
+                {% endif %}
                 <th>Serviço</th>
                 <th>Nr Doc.</th>
                 <th>Data</th>
@@ -74,7 +76,9 @@
                             <a href="{% url 'tarefa_edit' conta.id object.pk %}">{{ object.titulo }}</a>
                         {% endif %}
                     </td>
-                    <td>{{ object.servico.agenda|default:"--" }}</td>
+                    {% if not agenda %}
+                        <td>{{ object.servico.agenda|default:"--" }}</td>
+                    {% endif %}
                     <td>{{ object.servico.nome|default:'--' }}</td>
                     <td>{{ object.nr_documento|default:'--' }}</td>
                     <td>{{ object.data_ini|date:"d/m/Y" }}</td>
