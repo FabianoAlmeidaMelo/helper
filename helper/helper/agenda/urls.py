@@ -30,7 +30,7 @@ urlpatterns = patterns(
         r'^servico_form/conta/(?P<conta_pk>\d+)/(?P<pk>\d+)/$',
         'helper.agenda.views.servico_form', name='servico_edit'
         ),
-    #  tarefa
+    #  TAREFAS
     url(
         r'^tarefa_list/conta/(?P<conta_pk>\d+)$',
         'helper.agenda.views.tarefa_list', name='tarefa_list'
@@ -40,12 +40,20 @@ urlpatterns = patterns(
         'helper.agenda.views.agenda_tarefa_list', name='agenda_tarefa_list'
         ),
     url(
-        r'^tarefa_form/conta/(?P<conta_pk>\d+)$',
+        r'^agenda_tarefa_form/conta/(?P<conta_pk>\d+)/(?P<agenda_pk>\d+)$',
+        'helper.agenda.views.tarefa_form', name='agenda_tarefa_add'
+        ),
+    url(
+        r'^tarefa_form/conta/(?P<conta_pk>\d+)/$',
         'helper.agenda.views.tarefa_form', name='tarefa_add'
         ),
     url(
         r'^tarefa_form/conta/(?P<conta_pk>\d+)/(?P<pk>\d+)/$',
         'helper.agenda.views.tarefa_form', name='tarefa_edit'
+        ),
+    url(
+        r'^agenda_tarefa_form/conta/(?P<conta_pk>\d+)/(?P<agenda_pk>\d+)/(?P<pk>\d+)/$',
+        'helper.agenda.views.tarefa_form', name='agenda_tarefa_edit'
         ),
     #  Cartão Credito
     url(

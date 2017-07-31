@@ -83,7 +83,7 @@ class ServicoForm(forms.ModelForm):
 
 
 class TarefaForm(forms.ModelForm):
-    servico = forms.ModelChoiceField(label='Agenda', queryset=Servico)
+    servico = forms.ModelChoiceField(label='Serviço', queryset=Servico)
     nr_parcela = forms.IntegerField(label='Nr de Parcelas', required=False)
     data_ini = forms.DateField(
                                 label='Data Inicial',
@@ -104,7 +104,10 @@ class TarefaForm(forms.ModelForm):
         self.fields['parcela'].widget = forms.HiddenInput()
         dono = self.conta.dono
         self.fields['cartao'].queryset = CartaoCredito.objects.filter(ativo=True, usuario=dono)
-        self.fields['servico'].queryset = Servico.objects.filter(agenda__conta=self.conta)
+        if self.agenda:
+            self.fields['servico'].queryset = Servico.objects.filter(agenda=self.agenda)
+        else:
+            self.fields['servico'].queryset = Servico.objects.filter(agenda__conta=self.conta)
         self.fields['servico'].required = True
 
     def clean_valor(self):

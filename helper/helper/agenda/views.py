@@ -114,11 +114,14 @@ def servico_list(request, conta_pk):
         request, 'agenda/servico_list.html', context)
 
 @login_required
-def tarefa_form(request, conta_pk, pk=None):
+def tarefa_form(request, conta_pk, agenda_pk=None, pk=None):
     '''
         #12
     '''
     conta = get_object_or_404(Conta, id=conta_pk)
+    agenda = None
+    if agenda_pk:
+        agenda = get_object_or_404(Agenda, id=agenda_pk)
     if pk:
         tarefa = get_object_or_404(Tarefa, pk=pk)
         msg = u'Tarefa alterada com sucesso.'
@@ -126,16 +129,19 @@ def tarefa_form(request, conta_pk, pk=None):
         tarefa = None
         msg = u'Tarefa criada.'
 
-    form = TarefaForm(request.POST or None, instance=tarefa, conta=conta)
+    form = TarefaForm(request.POST or None, instance=tarefa, conta=conta, agenda=agenda)
     context = {}
     context['conta'] = conta
+    context['agenda'] = agenda
     context['form'] = form
     if request.method == 'POST':
         if form.is_valid():
             tarefa = form.save()
             messages.success(request, msg)
-
-            return redirect(reverse('tarefa_list', kwargs={'conta_pk': conta.pk}))
+            if agenda:
+                return redirect(reverse('agenda_tarefa_list', kwargs={'conta_pk': conta.pk, 'agenda_pk':agenda.pk}))
+            else:
+                return redirect(reverse('tarefa_list', kwargs={'conta_pk': conta.pk}))
         else:
             messages.warning(request, u'Falha no cadastro de tarefa de Coleta')
 

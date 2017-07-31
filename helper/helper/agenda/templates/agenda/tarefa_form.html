@@ -21,7 +21,11 @@
    </style>
 {% endblock css %}
 
-{% block page_title %}Tarefa{% endblock page_title %}
+{% block page_title %}
+    {% if agenda %}
+        {{ agenda.nome }}
+    {% else %}Tarefa{% endif %}
+{% endblock page_title %}
 
 {% block content %}
 <div class="container">
@@ -59,7 +63,11 @@
             </div>
             <div class="form-actions">
                 <input type="submit" value="Salvar" class="btn btn-primary">
-                <a href="{% url 'tarefa_list' conta.id %}" class="btn btn-secondary">Voltar</a>
+                {% if agenda %}
+                    <a href="{% url 'agenda_tarefa_list' conta.id agenda.id %}" class="btn btn-secondary">Voltar</a>
+                {% else %}
+                    <a href="{% url 'tarefa_list' conta.id %}" class="btn btn-secondary">Voltar</a>
+                {% endif %}
             </div>
 
     </form>
