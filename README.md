@@ -2,6 +2,8 @@
 
 www.ctrlh.online ou www.controlh.online
 
+ssh ubuntu@18.220.11.41
+
 # .env
 ex:
 
