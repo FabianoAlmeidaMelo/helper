@@ -1,3 +1,33 @@
+# produção
+
+www.ctrlh.online ou www.controlh.online
+
+# .env
+ex:
+
+```
+SECRET_KEY==sua_chave_secreta_aqui
+#Local
+DEBUG=True
+
+ALLOWED_HOSTS=127.0.0.1, .localhost, .
+
+DATABASE_NAME=helper
+DATABASE_USER=fabiano
+DATABASE_PASS=fabiano
+DATABASE_HOST=localhost
+DATABASE_PORT=5432
+DATABASE_ENGINE=django.db.backends.postgresql_psycopg2
+
+EMAIL_BACKEND=django.core.mail.backends.console.EmailBackend
+EMAIL_HOST=localhost
+EMAIL_PORT=25
+EMAIL_USE_TLS=False
+EMAIL_HOST_USER=
+EMAIL_HOST_PASSWORD=
+```
+
+
 # Helper
 
 Sistema para gerenciamento de eventos (compromissos, consultas, atendimentos, ...) que possibilita a interação de vários usuáios com múltiplas agendas, em um mesmo ambiente.
