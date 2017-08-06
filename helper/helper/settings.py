@@ -32,7 +32,7 @@ ADMINS = (
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default=[], cast=Csv())
 
-# ALLOWED_HOSTS = ['.localhost']
+DEFAULT_FROM_EMAIL = u'contato@controlh.online'
 
 
 # Application definition
@@ -141,3 +141,15 @@ UPLOAD_PATH = '/media/'
 SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_BROWSER_XSS_FILTER = True
 CSRF_COOKIE_HTTPONLY = True
+
+# Email configuration
+EMAIL_BACKEND = config('EMAIL_BACKEND')
+EMAIL_HOST = config('EMAIL_HOST')
+EMAIL_PORT = config('EMAIL_PORT', cast=int)
+EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+
+
+# if DEBUG is False:
+#     INSTALLED_APPS += ('storages',)
