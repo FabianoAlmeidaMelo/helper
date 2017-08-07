@@ -1,7 +1,7 @@
 # coding: utf-8
 from django.core.mail import EmailMessage
 from django.core.management.base import BaseCommand
-
+from django.core.mail import send_mail
 from helper.settings import DEFAULT_FROM_EMAIL
 from helper.agenda.models import Tarefa, Conta, Agenda, Servico
 from datetime import date
@@ -16,16 +16,16 @@ class Command(BaseCommand):
         comando:
         python manage.py send_mail_diario_tarefas
         '''
-        #hoje = date.today()
         hoje = date(2017,8,13)
+        hoje = date.today()
         tarefas = Tarefa.objects.filter(Q(pago=False)|Q(pago=None), data_ini=hoje)
         servico_ids = list(set(tarefas.values_list('servico_id', flat=True)))
         agenda_ids = list(set(Servico.objects.filter(id__in=servico_ids).values_list('agenda_id', flat=True)))
         contas_ids = list(set(Agenda.objects.filter(id__in=agenda_ids).values_list('conta_id', flat=True)))
         contas = Conta.objects.filter(id__in=contas_ids)
-
-        for conta in contas:
-            self.send_mail_alerta_tarefa_diario(conta, hoje)
+        if tarefas.count():
+            for conta in contas:
+                self.send_mail_alerta_tarefa_diario(conta, hoje)
 
     def send_mail_alerta_tarefa_diario(self, conta, hoje):
 
@@ -36,7 +36,7 @@ class Command(BaseCommand):
             msg += u'\n%s ; %s; valor: %s R$ %s \n ' % (tarefa.servico.agenda.nome, tarefa.servico.nome, tipo, str(tarefa.valor))
             msg += 80 * u'-'
 
-        print msg
+        send_mail(u'Alerta diário', msg, DEFAULT_FROM_EMAIL, [conta.dono.email], fail_silently=False)
 
 
 
@@ -65,7 +65,6 @@ class Command(BaseCommand):
 
             email = EmailMessage(u'AJUSTE SISTEMA',
                                  mensagem, DEFAULT_FROM_EMAIL,
-                                 ['financeiro.programas@sosma.org.br'], emails, headers={'Reply-To': DEFAULT_FROM_EMAIL})
+                                 [], emails, headers={'Reply-To': DEFAULT_FROM_EMAIL})
             email.send(fail_silently=False)
 
-    print 80 * '-'
