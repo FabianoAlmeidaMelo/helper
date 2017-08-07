@@ -15,8 +15,8 @@ class Command(BaseCommand):
         ref #30:
         comando:
         python manage.py send_mail_diario_tarefas
+        # hoje = date(2017,8,13)
         '''
-        hoje = date(2017,8,13)
         hoje = date.today()
         tarefas = Tarefa.objects.filter(Q(pago=False)|Q(pago=None), data_ini=hoje)
         servico_ids = list(set(tarefas.values_list('servico_id', flat=True)))
