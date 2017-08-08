@@ -7,6 +7,16 @@ from helper.agenda.models import Tarefa, Conta, Agenda, Servico
 from datetime import date
 from django.db.models import Q
 
+"""ref #30
+cat /etc/cron.d/helper
+
+sudo nano /etc/cron.d/helper
+05 01 * * * arcplan /var/www/projetos/helper/helper/helper/scripts/send_mail_diario_tarefas.sh
+
+#tornar o arquivo executavel
+cd /var/www/projetos/helper/helper/helper/script
+sudo chmod +x send_mail_diario_tarefas.sh
+"""
 
 class Command(BaseCommand):
 
