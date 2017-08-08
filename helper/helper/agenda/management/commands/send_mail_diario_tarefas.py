@@ -11,7 +11,7 @@ from django.db.models import Q
 cat /etc/cron.d/helper
 
 sudo nano /etc/cron.d/helper
-05 01 * * * arcplan /var/www/projetos/helper/helper/helper/scripts/send_mail_diario_tarefas.sh
+05 01 * * * arcplan /var/www/projetos/helper/helper/helper/scripts/send_mail_diario_tarefas.sh 2>&1 > /tmp/email_tarefas_py.txt
 
 #tornar o arquivo executavel
 cd /var/www/projetos/helper/helper/helper/script
@@ -25,7 +25,7 @@ class Command(BaseCommand):
         ref #30:
         comando:
         python manage.py send_mail_diario_tarefas
-        # hoje = date(2017,8,13)
+        # hoje = date(2017,8,8)
         '''
         hoje = date.today()
         tarefas = Tarefa.objects.filter(Q(pago=False)|Q(pago=None), data_ini=hoje)
@@ -36,6 +36,8 @@ class Command(BaseCommand):
         if tarefas.count():
             for conta in contas:
                 self.send_mail_alerta_tarefa_diario(conta, hoje)
+        print u'Envio de emails de Tarefas do dia:', hoje
+        print u'Nr de Contas apitas:', contas.count(), 
 
     def send_mail_alerta_tarefa_diario(self, conta, hoje):
 
