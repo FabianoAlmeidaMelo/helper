@@ -182,7 +182,7 @@ class Servico(models.Model):
         return u"%s - %s" % (self.agenda, self.nome)
 
     class Meta:
-        ordering = ('agenda__nome', 'nome',)
+        ordering = ('agenda__nome', 'id',)
 
 
 class Tarefa(models.Model):
