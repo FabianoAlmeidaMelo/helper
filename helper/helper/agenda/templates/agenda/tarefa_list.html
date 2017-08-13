@@ -13,46 +13,44 @@
 {% block page_title %}
     {% if agenda %}
         {{ agenda.nome }}
-    {% else %}Tarefas{% endif %}
+    {% else %}
+        Tarefas
+    {% endif %}
 {% endblock page_title %}
 
+
 {% block content %}
-<!-- 
-<h5>Filtro</h5> -->
+ 
+<h5>{{ data_ini|date:"d/m/Y" }} a {{ data_fim|date:"d/m/Y" }}</h5> 
 <form class="form-inline well" method="GET" action="#">
 <fieldset style="margin:0; padding-bottom:0;">
-
-
-<legend style="font-size:12px;">
-   <a href="#" class="panel-showhide"><i class="icon-plus-sign"></i>Opções de Filtro</a>
-</legend>
-    <div class="panel-showhide">
         <div class="row-fluid">
             {{ form.q|as_bootstrap:"inline" }}
-            {{ form.hoje|as_bootstrap:"inline" }}
-            {{ form.confirmado|as_bootstrap:"inline" }}
-            {{ form.pago|as_bootstrap:"inline" }}
-            {{ form.not_pago|as_bootstrap:"inline" }}
-        </div>
-        <br>
-
-        <div class="row-fluid">
-            {{ form.tipo|as_bootstrap:"inline" }}
-            {{ form.valor|as_bootstrap:"inline" }}
             {{ form.data_ini|as_bootstrap:"inline" }}
             {{ form.data_fim|as_bootstrap:"inline" }}
         </div>
-    <button type="submit" class="btn btn-small btn-success" title="Filtrar"><i class="icon-search"></i></button>
-    {% if agenda %}
-        <a class="btn btn-small btn-info" href="{% url 'agenda_tarefa_list' conta.id  agenda.id%}" title="Apaga o filtro e listar todos"><i class="icon-remove-circle"></i></a>
-    {% else %}
-        <a class="btn btn-small btn-info" href="{% url 'tarefa_list' conta.id %}" title="Apaga o filtro e listar todos"><i class="icon-remove-circle"></i></a>
-    {% endif %}
-      </div>
-</div>
-    
-</fieldset>
-<br>
+        <br>
+    <fieldset style="margin:0; padding-bottom:0;">
+    <legend style="font-size:12px;">
+       <a href="#" class="panel-showhide"><i class="icon-plus-sign"></i>Opções de Filtro</a></legend>
+        <div class="panel-showhide">
+            <div class="row-fluid">
+                {{ form.hoje|as_bootstrap:"inline" }}
+                {{ form.confirmado|as_bootstrap:"inline" }}
+                {{ form.pago|as_bootstrap:"inline" }}
+                {{ form.not_pago|as_bootstrap:"inline" }}
+                {{ form.tipo|as_bootstrap:"inline" }}
+                {{ form.valor|as_bootstrap:"inline" }}
+            </div>
+        </div>
+    </fieldset>
+        <button type="submit" class="btn btn-small btn-success" title="Filtrar"><i class="icon-search"></i></button>
+        {% if agenda %}
+            <a class="btn btn-small btn-info" href="{% url 'agenda_tarefa_list' conta.id  agenda.id%}" title="Apaga o filtro e listar todos"><i class="icon-remove-circle"></i></a>
+        {% else %}
+            <a class="btn btn-small btn-info" href="{% url 'tarefa_list' conta.id %}" title="Apaga o filtro e listar todos"><i class="icon-remove-circle"></i></a>
+        {% endif %}
+    </div>
 </fieldset>
 
 </form>
@@ -101,7 +99,7 @@
                     <td>{{ object.pago|yesno:"Sim,Não" }}</td>
                 </tr>
             {% empty %}
-                <tr><td colspan="100%">Nenhum item disponível</td></tr>
+                <tr><td colspan="100%">Nenhuma tarefa no período</td></tr>
             {% endfor %}
         </table>
         <tfoot>
