@@ -1,6 +1,7 @@
 # coding: utf-8
 from decimal import Decimal
 from datetime import date
+import calendar
 from django import forms
 from django.db.models import Q
 
@@ -190,7 +191,7 @@ class TarefaSearchForm(BaseSearchForm):
     confirmado = forms.BooleanField(label='Confirmado', required=False)
     pago = forms.BooleanField(label='Pago', required=False)
     not_pago = forms.BooleanField(label='Não Pago', required=False)
-    hoje = forms.BooleanField(label='Hoje e não pagas ...', required=False, initial=True)
+    # hoje = forms.BooleanField(label='Hoje e não pagas ...', required=False, initial=True)
     tipo = forms.ChoiceField(
                              label='Tipo',
                              choices=TIPO_CHOICES,
@@ -204,6 +205,12 @@ class TarefaSearchForm(BaseSearchForm):
     def __init__(self, *args, **kwargs):
         super(TarefaSearchForm, self).__init__(*args, **kwargs)
         self.fields['q'].widget.attrs['placeholder'] = u'Nome do serviço, Título, Descrição'
+        self.data_hoje = date.today()
+        self.last_day = calendar.monthrange(self.data_hoje.year, self.data_hoje.month)[1]
+        self.ini = date(self.data_hoje.year, self.data_hoje.month, 1)
+        self.fim = date(self.data_hoje.year, self.data_hoje.month, int(self.last_day))
+        self.fields['data_ini'].initial = self.ini
+        self.fields['data_fim'].initial = self.fim
         # self.fields['hoje'].widget=forms.CheckboxInput(attrs={'checked' : 'checked'})
 
     def prepare_data_ini(self):
@@ -218,12 +225,12 @@ class TarefaSearchForm(BaseSearchForm):
             return Q(data_ini__lte=data_fim)
         return
 
-    def prepare_hoje(self):
-        # import pdb; pdb.set_trace()
-        hoje = self.cleaned_data['hoje']
-        if hoje:
-            return  Q(pago=False) | Q(pago__isnull=True) | Q(data_ini=date.today())
-        return
+    # def prepare_hoje(self):
+    #     # import pdb; pdb.set_trace()
+    #     hoje = self.cleaned_data['hoje']
+    #     if hoje:
+    #         return  Q(pago=False) | Q(pago__isnull=True) | Q(data_ini=date.today())
+    #     return
 
     def prepare_confirmado(self):
         confirmado = self.cleaned_data['confirmado']
@@ -265,30 +272,41 @@ class TarefaSearchForm(BaseSearchForm):
                           'nr_documento',
                     )
 
-    # def get_result_queryset(self):
-    #     # import pdb; pdb.set_trace()
-    #     q = Q(data_ini__gte=date.today()) | Q(pago=False) | Q(pago=None)
-    #     if self.is_valid():
-    #         # q = Q()
-    #         servico = self.cleaned_data['servico']
-    #         if servico:
-    #             q = q & Q(servico__nome__icontains=servico)
-    #         titulo = self.cleaned_data['titulo']
-    #         if titulo:
-    #             q = q & Q(titulo__icontains=titulo)
-    #         descricao = self.cleaned_data['descricao']
-    #         if descricao:
-    #             q = q & Q(descricao__icontains=descricao)
-    #         data_ini = self.cleaned_data['data_ini']
-    #         if data_ini:
-    #             q = q & Q(data_ini__gte=data_ini)
-    #         data_fim = self.cleaned_data['data_fim']
-    #         if data_fim:
-    #             q = q & Q(data_ini__lte=data_ini)
-    #         confirmado =     #             q = q & Q(confirmado=True)
-    #         pago = self.cleaned_data['pago']
-    #         if pago:
-    #             q = q & Q(pago=True)
+    def get_result_queryset(self):
+        # import pdb; pdb.set_trace()
+        q = Q(data_ini__gte=date.today()) | Q(pago=False) | Q(pago=None)
+        if self.is_valid():
+            # q = Q()
+            servico = self.cleaned_data['servico']
+            if servico:
+                q = q & Q(servico__nome__icontains=servico)
+            titulo = self.cleaned_data['titulo']
+            if titulo:
+                q = q & Q(titulo__icontains=titulo)
+            descricao = self.cleaned_data['descricao']
+            if descricao:
+                q = q & Q(descricao__icontains=descricao)
+            data_ini = self.cleaned_data['data_ini']
+            # ini DEFAULT é o mês corrente
+            if data_ini:
+                q = q & Q(data_ini__gte=data_ini)
+            else:
+                q = q & Q(data_ini__gte=self.ini)
+            data_fim = self.cleaned_data['data_fim'] 
+            if data_fim:
+                q = q & Q(data_ini__lte=data_fim)
+            else:
+                q = q & Q(data_ini__lte=self.fim)
+            # fim DEFAULT é o mês corrente
+            confirmado =  self.cleaned_data['pago']
+            if confirmado: 
+                q = q & Q(confirmado=True)
+            pago = self.cleaned_data['pago']
+            if pago:
+                q = q & Q(pago=True)
+            tipo = self.cleaned_data['tipo']
+            if tipo:
+                q = q & Q(tipo=True)
 
-    #         return Tarefa.objects.filter(q)
-    #     return Tarefa.objects.filter(q)
+            return Tarefa.objects.filter(q)
+        return Tarefa.objects.filter(q)

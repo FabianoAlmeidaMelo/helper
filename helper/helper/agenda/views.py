@@ -164,13 +164,21 @@ class TarefaFormListView(SearchFormListView):
             self.object_list = self.form.get_result_queryset().filter(servico__agenda__conta=conta)
         else:
             self.object_list = []
-        
+
+
+
+        get_ = "data_ini=%s&data_ini=%s" % (
+            request.GET.get('data_ini', ''),
+            request.GET.get('data_ini', ''),
+            )
+
         
         context = self.get_context_data(
             object_list=self.object_list,
             form=self.form,
             url_params=request.GET.urlencode(),
-            conta=conta,)
+            conta=conta,
+            get_=get_)
 
         return self.render_to_response(context)
 
@@ -203,7 +211,7 @@ class AgendaTarefaFormListView(SearchFormListView):
             self.object_list = self.form.get_result_queryset().filter(servico__agenda=agenda)
         else:
             self.object_list = []
-        
+
         
         context = self.get_context_data(
             object_list=self.object_list,

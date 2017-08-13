@@ -21,26 +21,39 @@
 <h5>Filtro</h5>
 <form class="form-inline well" method="GET" action="#">
 <fieldset style="margin:0; padding-bottom:0;">
-    <div class="row-fluid">
-        {{ form.q|as_bootstrap:"inline" }}
-        {{ form.hoje|as_bootstrap:"inline" }}
-        {{ form.confirmado|as_bootstrap:"inline" }}
-        {{ form.pago|as_bootstrap:"inline" }}
-        {{ form.not_pago|as_bootstrap:"inline" }}
-    </div>
-    <br>
-    <div class="row-fluid">
-        {{ form.tipo|as_bootstrap:"inline" }}
-        {{ form.valor|as_bootstrap:"inline" }}
-        {{ form.data_ini|as_bootstrap:"inline" }}
-        {{ form.data_fim|as_bootstrap:"inline" }}
-    </div>
-    <br>
 
-</fieldset>
-        <button type="submit" class="btn btn-small btn-success" title="Filtrar"><i class="icon-search"></i></button>
+
+<legend style="font-size:12px;">
+   <a href="#" class="panel-showhide"><i class="icon-plus-sign"></i>Opções de Filtro</a>
+</legend>
+    <!-- <div class="panel-showhide"> -->
+        <div class="row-fluid">
+            {{ form.q|as_bootstrap:"inline" }}
+            {{ form.hoje|as_bootstrap:"inline" }}
+            {{ form.confirmado|as_bootstrap:"inline" }}
+            {{ form.pago|as_bootstrap:"inline" }}
+            {{ form.not_pago|as_bootstrap:"inline" }}
+        </div>
+        <br>
+
+        <div class="row-fluid">
+            {{ form.tipo|as_bootstrap:"inline" }}
+            {{ form.valor|as_bootstrap:"inline" }}
+            {{ form.data_ini|as_bootstrap:"inline" }}
+            {{ form.data_fim|as_bootstrap:"inline" }}
+        </div>
+    <button type="submit" class="btn btn-small btn-success" title="Filtrar"><i class="icon-search"></i></button>
+    {% if agenda %}
+        <a class="btn btn-small btn-info" href="{% url 'agenda_tarefa_list' conta.id  agenda.id%}" title="Apaga o filtro e listar todos"><i class="icon-remove-circle"></i></a>
+    {% else %}
         <a class="btn btn-small btn-info" href="{% url 'tarefa_list' conta.id %}" title="Apaga o filtro e listar todos"><i class="icon-remove-circle"></i></a>
+    {% endif %}
       </div>
+<!--     </div> -->
+    
+</fieldset>
+<br>
+</fieldset>
 
 </form>
 
@@ -98,4 +111,24 @@
 {% endblock content %}
 {% block extra_js %}
     {{ form.media.js}}
+    <script type="text/javascript">
+        jQuery(document).ready( function() {
+            /*
+            Show / Hide qualquer div com a class="panel-showhide"
+            O objeto que recebe a funcao para show/hide deve ser um LINK com a mesma classe.
+            Ambos devem estar dentro de um container (fieldset, div ...)
+            */
+            jQuery('div.panel-showhide').hide();
+            jQuery('a.panel-showhide').click( function() {
+                jQuery(this).parent().parent().find('div.panel-showhide').toggle();
+            });
+
+            $('td a.enviar').not('.disabled').click(function (){
+                var pedido_pk = $(this).data('pedido');
+                $('#id_pedido_pk').val(pedido_pk);
+                $('#ModalEnviar').modal('show');
+            });
+        });
+        </script>
+
 {% endblock extra_js %}
