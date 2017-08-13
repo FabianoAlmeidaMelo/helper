@@ -305,8 +305,10 @@ class TarefaSearchForm(BaseSearchForm):
             pago = self.cleaned_data['pago']
             if pago:
                 q = q & Q(pago=True)
+            not_pago = self.cleaned_data['not_pago']
+            if not_pago:
+                q = q & Q(pago=False) | Q(pago=None)
             tipo = self.cleaned_data['tipo']
-            # import pdb; pdb.set_trace()
             if tipo:
                 q = q & Q(tipo=tipo)
 
