@@ -274,7 +274,8 @@ class TarefaSearchForm(BaseSearchForm):
 
     def get_result_queryset(self):
         # import pdb; pdb.set_trace()
-        q = Q(data_ini__gte=date.today()) | Q(pago=False) | Q(pago=None)
+        # q = Q(data_ini__gte=date.today()) | Q(pago=False) | Q(pago=None)
+        q = Q()
         if self.is_valid():
             # q = Q()
             servico = self.cleaned_data['servico']
@@ -305,8 +306,9 @@ class TarefaSearchForm(BaseSearchForm):
             if pago:
                 q = q & Q(pago=True)
             tipo = self.cleaned_data['tipo']
+            # import pdb; pdb.set_trace()
             if tipo:
-                q = q & Q(tipo=True)
+                q = q & Q(tipo=tipo)
 
             return Tarefa.objects.filter(q)
         return Tarefa.objects.filter(q)
