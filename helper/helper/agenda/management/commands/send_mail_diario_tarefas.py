@@ -11,7 +11,7 @@ from django.db.models import Q
 cat /etc/cron.d/helper
 
 sudo nano /etc/cron.d/helper
-05 01 * * * arcplan /var/www/projetos/helper/helper/helper/scripts/send_mail_diario_tarefas.sh 2>&1 > /tmp/email_tarefas_py.txt
+05 01 * * * ubuntu /var/www/projetos/helper/helper/helper/scripts/send_mail_diario_tarefas.sh 2>&1 > /tmp/email_tarefas_py.txt
 
 #tornar o arquivo executavel
 cd /var/www/projetos/helper/helper/helper/script
@@ -45,38 +45,7 @@ class Command(BaseCommand):
         tarefas_alerta = Tarefa.objects.filter(Q(pago=False)|Q(pago=None), servico__agenda__conta=conta, data_ini=hoje).order_by('servico__agenda')
         for tarefa in tarefas_alerta:
             tipo = tarefa.get_tipo_display() or u''
-            msg += u'\n%s ; %s; valor: %s R$ %s \n ' % (tarefa.servico.agenda.nome, tarefa.servico.nome, tipo, str(tarefa.valor))
+            msg += u'\n%s ; %s; %s, Valor: %s R$ %s \n ' % (tarefa.servico.agenda.nome, tarefa.servico.nome, tipo, tareafa.titulo, str(tarefa.valor))
             msg += 80 * u'-'
 
         send_mail(u'Alerta diário', msg, DEFAULT_FROM_EMAIL, [conta.dono.email], fail_silently=False)
-
-
-
-    def envia_email_retratacao_tcra(self, emails):
-        '''
-        '''
-        if emails:
-            emails.append(u'fabiano@znc.com.br')
-            emails.append(u'financeiro.programas@sosma.org.br ')
-
-            mensagem = u'Caros requerentes do Programa Florestas do Futuro TCRA,\n\n'
-            mensagem += u'Comunicamos que em virtude de atualizações e aprimoramentos do sistema de gestão da Fundação SOS Mata Atlântica, o sistema realizou o envio de e-mails, com as instruções sobre o primeiro acesso à plataforma..\n\n'
-            mensagem += u'Favor desconsiderar as mensagens anteriores, pois estamos trabalhando para a geração de novos acessos à plataforma de gestão.:\n\n'
-            mensagem += u'Em breve, cada responsável será notificado com os dados de login e senha para o site.\n\n'
-            mensagem += u'Pedimos desculpas pelo transtorno e seguimos à disposição.\n\n'
-            mensagem += u'Cordialmente.\n\n'
-            mensagem += assinatura_email_geral()
-
-        #     send_mail(
-        #         u'AJUSTE SISTEMA',
-        #         mensagem,
-        #         DEFAULT_FROM_EMAIL,
-        #         emails,
-        #         fail_silently=False
-        # )
-
-            email = EmailMessage(u'AJUSTE SISTEMA',
-                                 mensagem, DEFAULT_FROM_EMAIL,
-                                 [], emails, headers={'Reply-To': DEFAULT_FROM_EMAIL})
-            email.send(fail_silently=False)
-
