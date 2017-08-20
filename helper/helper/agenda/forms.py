@@ -210,16 +210,11 @@ class TarefaSearchForm(BaseSearchForm):
     confirmado = forms.BooleanField(label='Confirmado', required=False)
     pago = forms.BooleanField(label='Pago', required=False)
     not_pago = forms.BooleanField(label='Não Pago', required=False)
-    # hoje = forms.BooleanField(label='Hoje e não pagas ...', required=False, initial=True)
-    tipo = forms.ChoiceField(
-                             label='Tipo',
+    tipo = forms.ChoiceField(label='Tipo',
                              choices=TIPO_CHOICES,
-                             required=False                            
-                        )
-    valor = forms.DecimalField(
-                                u'Valor',
-                                required=False
-                        )
+                             required=False)
+    valor = forms.DecimalField(u'Valor',
+                               required=False)
 
     def __init__(self, *args, **kwargs):
         super(TarefaSearchForm, self).__init__(*args, **kwargs)
@@ -230,26 +225,18 @@ class TarefaSearchForm(BaseSearchForm):
         self.fim = date(self.data_hoje.year, self.data_hoje.month, int(self.last_day))
         self.fields['data_ini'].initial = self.ini
         self.fields['data_fim'].initial = self.fim
-        # self.fields['hoje'].widget=forms.CheckboxInput(attrs={'checked' : 'checked'})
 
     def prepare_data_ini(self):
         data_ini = self.cleaned_data['data_ini']  # or date.today()
         if data_ini:
             return Q(data_ini__gte=data_ini)
-        return
+        return Q(data_ini__gte=self.ini)
 
     def prepare_data_fim(self):
         data_fim = self.cleaned_data['data_fim']
         if data_fim:
             return Q(data_ini__lte=data_fim)
-        return
-
-    # def prepare_hoje(self):
-    #     # import pdb; pdb.set_trace()
-    #     hoje = self.cleaned_data['hoje']
-    #     if hoje:
-    #         return  Q(pago=False) | Q(pago__isnull=True) | Q(data_ini=date.today())
-    #     return
+        return Q(data_ini__gte=self.fim)
 
     def prepare_confirmado(self):
         confirmado = self.cleaned_data['confirmado']
@@ -283,20 +270,17 @@ class TarefaSearchForm(BaseSearchForm):
 
     class Meta:
         base_qs = Tarefa.objects
-        search_fields = (
-                          'servico__nome',
+        search_fields = ('servico__nome',
                           'titulo',
                           'descricao',
                           'servico__agenda__nome',
-                          'nr_documento',
-                    )
+                          'nr_documento')
 
     def get_result_queryset(self):
         # import pdb; pdb.set_trace()
         # q = Q(data_ini__gte=date.today()) | Q(pago=False) | Q(pago=None)
         q = Q()
         if self.is_valid():
-            # q = Q()
             servico = self.cleaned_data['servico']
             if servico:
                 q = q & Q(servico__nome__icontains=servico)
@@ -306,7 +290,7 @@ class TarefaSearchForm(BaseSearchForm):
             descricao = self.cleaned_data['descricao']
             if descricao:
                 q = q & Q(descricao__icontains=descricao)
-            data_ini = self.cleaned_data['data_ini']
+            data_ini = self.cleaned_data['data_ini'] or self.ini
             # ini DEFAULT é o mês corrente
             if data_ini:
                 q = q & Q(data_ini__gte=data_ini)
@@ -318,6 +302,9 @@ class TarefaSearchForm(BaseSearchForm):
             else:
                 q = q & Q(data_ini__lte=self.fim)
             # fim DEFAULT é o mês corrente
+            valor = self.cleaned_data['valor']
+            if valor:
+                q = q & Q(valor__icontains=valor)
             confirmado =  self.cleaned_data['pago']
             if confirmado: 
                 q = q & Q(confirmado=True)
@@ -330,6 +317,4 @@ class TarefaSearchForm(BaseSearchForm):
             tipo = self.cleaned_data['tipo']
             if tipo:
                 q = q & Q(tipo=tipo)
-
-            return Tarefa.objects.filter(q)
         return Tarefa.objects.filter(q)
