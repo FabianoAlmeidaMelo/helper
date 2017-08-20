@@ -60,8 +60,10 @@
                   </ul>
                 <!-- {# dropdown Agendas fim #} -->
                   <li><a href="{% url 'tarefa_list' conta.id %}" title="{{ section.name }}">Tarefas</a></li>
+              {%  if conta.contador %}<!-- {# Se não tem contador, não acessa #} -->
                   <li><a href="#" title="{{ section.name }}">Mensagens</a></li>
                   <li><a href="{% url 'contador_leitura' conta.id %}" title="{{ section.name }}">Contador</a></li>
+              {% endif %}
               {% endif %}
                 <li class="{% if section.selected %}active{% endif %}"><a href="#"><i class="{{ section.icon }}"></i> {{ section.name }}</a></li>
               {% if user.is_authenticated %}
