@@ -91,7 +91,7 @@ class ServicoSearchForm(forms.Form):
         self.fields['agenda'].queryset = Agenda.objects.filter(conta=self.conta)
 
     def get_result_queryset(self):
-        q = Q()
+        q = Q(agenda__conta=self.conta)
         if self.is_valid():
             agenda = self.cleaned_data['agenda']
             if agenda:

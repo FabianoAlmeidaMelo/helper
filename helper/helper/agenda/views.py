@@ -105,7 +105,7 @@ def servico_form(request, conta_pk, pk=None):
 def servico_list(request, conta_pk):
     conta = get_object_or_404(Conta, id=conta_pk)
     form = ServicoSearchForm(request.GET or None, conta=conta)
-    object_list = form.get_result_queryset().filter(agenda__conta_id=conta_pk)
+    object_list = form.get_result_queryset()
     context = {}
     context['conta'] = conta
     context['object_list'] = object_list
