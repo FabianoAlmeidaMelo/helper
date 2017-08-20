@@ -67,12 +67,8 @@ class CartaoCreditoBaseSearchForm(BaseSearchForm):
 class ServicoForm(forms.ModelForm):
 
     def __init__(self, *args, **kargs):
-        # self.user = kargs.pop('user', None)
-        # self.agenda = kargs.pop('agenda', None)
         self.conta = kargs.pop('conta', None)
         super(ServicoForm, self).__init__(*args, **kargs)
-        # self.fields['parcela'].widget = forms.HiddenInput()
-        #dono = self.conta.dono
         self.fields['agenda'].queryset = Agenda.objects.filter(conta=self.conta)
 
     class Meta:
@@ -86,22 +82,20 @@ class ServicoSearchForm(forms.Form):
     '''
     #33 
     '''
-    agenda = forms.CharField(label=u'Agenda', required=False)
     nome = forms.CharField(label=u'Nome', required=False)
-    # agenda = forms.ModelChoiceField(label=u'Selecione a Agenda', queryset=Agenda.objects.all(), required=False)
+    agenda = forms.ModelChoiceField(label=u'Selecione a Agenda', queryset=Agenda.objects.all(), required=False)
 
-    # def __init__(self, *args, **kargs):
-    #     super(ServicoSearchForm, self).__init__(*args, **kargs)
-    #     self.conta = kargs.pop('conta', None)
-    #     self.fields['agenda'].queryset = Agenda.objects.filter(conta=self.conta)
+    def __init__(self, *args, **kargs):
+        self.conta = kargs.pop('conta', None)
+        super(ServicoSearchForm, self).__init__(*args, **kargs)
+        self.fields['agenda'].queryset = Agenda.objects.filter(conta=self.conta)
 
     def get_result_queryset(self):
         q = Q()
         if self.is_valid():
             agenda = self.cleaned_data['agenda']
             if agenda:
-                q = q & Q(agenda__nome__icontains=agenda)
-                # q = q & Q(agenda=agenda)
+                q = q & Q(agenda=agenda)
             nome = self.cleaned_data['nome']
             if nome:
                 q = q & Q(nome__icontains=nome)
