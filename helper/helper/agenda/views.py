@@ -198,6 +198,7 @@ tarefa_list = (login_required(TarefaFormListView.as_view(
                                 model=Tarefa,
                                 form_class=TarefaSearchForm,
                                 paginate_by=30,
+                                template_name='agenda/tarefa_list.html'
                                 )
                             )
                         )

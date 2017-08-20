@@ -4,7 +4,7 @@ from datetime import date
 import calendar
 from django import forms
 from django.db.models import Q
-from django.forms.util import ErrorList
+from django.forms.utils import ErrorList
 
 from .models import (
     Agenda,
