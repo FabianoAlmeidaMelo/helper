@@ -4,6 +4,7 @@ from datetime import date
 import calendar
 from django import forms
 from django.db.models import Q
+from django.forms.util import ErrorList
 
 from .models import (
     Agenda,
@@ -225,6 +226,19 @@ class TarefaSearchForm(BaseSearchForm):
         self.fim = date(self.data_hoje.year, self.data_hoje.month, int(self.last_day))
         self.fields['data_ini'].initial = self.ini
         self.fields['data_fim'].initial = self.fim
+
+
+    def clean(self):
+        cleaned_data = self.cleaned_data
+        if cleaned_data.get('data_ini') and not cleaned_data.get('data_fim'):
+            if cleaned_data.get('data_ini') > self.fim:
+                self._errors['data_fim'] = ErrorList(['Informe uma data final maior que a Data Inicial'])
+        if cleaned_data.get('data_ini') and cleaned_data.get('data_fim'):
+            if cleaned_data.get('data_ini') > cleaned_data.get('data_fim'):
+                self._errors['data_fim'] = ErrorList(['Informe uma data final maior que a Data Inicial'])
+
+        return cleaned_data
+
 
     def prepare_data_ini(self):
         data_ini = self.cleaned_data['data_ini']  # or date.today()
