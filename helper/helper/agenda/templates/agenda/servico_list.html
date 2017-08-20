@@ -10,22 +10,8 @@
 <form class="form-inline well" method="GET" action="#">
 
     <div class="row-fluid">
-        
-        {{ form.titulo|as_bootstrap:"inline" }}
-        {{ form.descricao|as_bootstrap:"inline" }}
-    </div>
-    <div class="row-fluid">
-        {{ form.data_ini|as_bootstrap:"inline" }}
-        {{ form.data_fim|as_bootstrap:"inline" }}
-    </div>
-    <div class="row-fluid">
-        {{ form.confirmado|as_bootstrap:"inline" }}
-        {{ form.pago|as_bootstrap:"inline" }}
-    </div>
-    <label>Busca por (Not Implemented)...</label>
-    <div class="row-fluid">
-
-        {{ form.mes|as_bootstrap:"inline" }}
+        {{ form.nome|as_bootstrap:"inline" }}
+        {{ form.agenda|as_bootstrap:"inline" }}
     </div>
         <button type="submit" class="btn btn-small btn-success" title="Filtrar"><i class="icon-search"></i></button>
         <a class="btn btn-small btn-info" href="." title="Apaga o filtro e listar todos"><i class="icon-remove-circle"></i></a>

@@ -24,6 +24,7 @@ from .forms import (
     CartaoCreditoForm,
     CartaoCreditoBaseSearchForm,
     ServicoForm,
+    ServicoSearchForm,
     TarefaForm,
     TarefaSearchForm,
     )
@@ -103,12 +104,12 @@ def servico_form(request, conta_pk, pk=None):
 @login_required
 def servico_list(request, conta_pk):
     conta = get_object_or_404(Conta, id=conta_pk)
-    object_list = Servico.objects.filter(agenda__conta__id=conta_pk)
-    # form = ServicoSearchForm(request.POST or None)
+    form = ServicoSearchForm(request.GET or None)
+    object_list = form.get_result_queryset().filter(agenda__conta_id=conta_pk)
     context = {}
     context['conta'] = conta
     context['object_list'] = object_list
-    # context['form'] = form
+    context['form'] = form
 
     return render(
         request, 'agenda/servico_list.html', context)
