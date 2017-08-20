@@ -69,6 +69,9 @@ class Conta(models.Model):
     def __unicode__(self):
         return self.dono.nome
 
+    def can_acess(self, user):
+        return user == self.dono
+
 
 class CartaoCredito(models.Model):
     '''
