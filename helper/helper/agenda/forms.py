@@ -240,6 +240,24 @@ class TarefaSearchForm(BaseSearchForm):
         return cleaned_data
 
 
+    def prepare_servico(self):
+        servico = self.cleaned_data['servico']
+        if servico:
+            return Q(servico__nome__icontains=servico)
+        return 
+
+    def prepare_titulo(self):
+        titulo = self.cleaned_data['titulo']
+        if titulo:
+            return Q(titulo__icontains=titulo)
+        return
+
+    def prepare_descricao(self):
+        descricao = self.cleaned_data['descricao']
+        if descricao:
+            return Q(descricao__icontains=descricao)
+        return 
+
     def prepare_data_ini(self):
         data_ini = self.cleaned_data['data_ini']  # or date.today()
         if data_ini:

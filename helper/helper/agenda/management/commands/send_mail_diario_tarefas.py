@@ -16,6 +16,9 @@ sudo nano /etc/cron.d/helper
 #tornar o arquivo executavel
 cd /var/www/projetos/helper/helper/helper/script
 sudo chmod +x send_mail_diario_tarefas.sh
+
+sudo cron service status
+sudo cron service restart
 """
 
 class Command(BaseCommand):
