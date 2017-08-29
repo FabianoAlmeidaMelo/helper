@@ -13,12 +13,11 @@ cat /etc/cron.d/helper
 sudo nano /etc/cron.d/helper
 05 01 * * * ubuntu /var/www/projetos/helper/helper/helper/scripts/send_mail_diario_tarefas.sh 2>&1 > /tmp/email_tarefas_py.txt
 
-#tornar o arquivo executavel
-cd /var/www/projetos/helper/helper/helper/script
-sudo chmod +x send_mail_diario_tarefas.sh
+# torna o arquivo executável:
+chmod +x /var/www/projetos/helper/helper/helper/scripts/send_mail_diario_tarefas.sh 
 
-sudo cron service status
-sudo cron service restart
+sudo systemctl status cron
+sudo systemctl restart cron
 """
 
 class Command(BaseCommand):
