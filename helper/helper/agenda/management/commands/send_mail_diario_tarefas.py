@@ -47,7 +47,7 @@ class Command(BaseCommand):
         tarefas_alerta = Tarefa.objects.filter(Q(pago=False)|Q(pago=None), servico__agenda__conta=conta, data_ini=hoje).order_by('servico__agenda')
         for tarefa in tarefas_alerta:
             tipo = tarefa.get_tipo_display() or u''
-            msg += u'\n%s ; %s; %s, Valor: %s R$ %s \n ' % (tarefa.servico.agenda.nome, tarefa.servico.nome, tipo, tareafa.titulo, str(tarefa.valor))
+            msg += u'\n%s ; %s; %s, Valor: %s R$ %s \n ' % (tarefa.servico.agenda.nome, tarefa.servico.nome, tipo, tarefa.titulo, str(tarefa.valor))
             msg += 80 * u'-'
 
         send_mail(u'Alerta diário', msg, DEFAULT_FROM_EMAIL, [conta.dono.email], fail_silently=False)
