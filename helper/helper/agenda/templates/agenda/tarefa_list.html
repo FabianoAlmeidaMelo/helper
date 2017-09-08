@@ -5,17 +5,21 @@
     #id_valor,
     #id_data_ini,
     #id_data_fim{
-        width: 75px;
+        width: 95px;
     }
 
    </style>
 {% endblock css %}
 {% block page_title %}
+  <div class="page-header">
+  <!-- TODO erver esse br -->
+    <br>
     {% if agenda %}
-        {{ agenda.nome }}
+      {{ agenda.nome }}
     {% else %}
-        Tarefas
+      Tarefas
     {% endif %}
+  </div>
 {% endblock page_title %}
 
 
@@ -23,112 +27,112 @@
  
 <h5>{{ data_ini|date:"d/m/Y" }} a {{ data_fim|date:"d/m/Y" }}</h5> 
 <form class="form-inline well" method="GET" action="#">
-<fieldset style="margin:0; padding-bottom:0;">
-        <div class="row-fluid">
-            {{ form.servico|as_bootstrap:"inline" }}
-            {{ form.titulo|as_bootstrap:"inline" }}
-            {{ form.descricao|as_bootstrap:"inline" }}
-            {{ form.data_ini|as_bootstrap:"inline" }}
-            {{ form.data_fim|as_bootstrap:"inline" }}
-        </div>
-        <br>
-    <fieldset style="margin:0; padding-bottom:0;">
-    <legend style="font-size:12px;">
-       <a href="#" class="panel-showhide"><i class="icon-plus-sign"></i>Opções de Filtro</a></legend>
-        <div class="panel-showhide">
-            <div class="row-fluid">
-                {{ form.hoje|as_bootstrap:"inline" }}
-                {{ form.confirmado|as_bootstrap:"inline" }}
-                {{ form.pago|as_bootstrap:"inline" }}
-                {{ form.not_pago|as_bootstrap:"inline" }}
-                {{ form.tipo|as_bootstrap:"inline" }}
-                {{ form.valor|as_bootstrap:"inline" }}
-            </div>
-        </div>
-    </fieldset>
-        <button type="submit" class="btn btn-small btn-success" title="Filtrar"><i class="icon-search"></i></button>
-        {% if agenda %}
-            <a class="btn btn-small btn-info" href="{% url 'agenda_tarefa_list' conta.id  agenda.id%}" title="Apaga o filtro e listar todos"><i class="icon-remove-circle"></i></a>
-        {% else %}
-            <a class="btn btn-small btn-info" href="{% url 'tarefa_list' conta.id %}" title="Apaga o filtro e listar todos"><i class="icon-remove-circle"></i></a>
-        {% endif %}
+  <fieldset style="margin:0; padding-bottom:0;">
+    <div class="row-fluid">
+      Titulo:{{ form.titulo }}
+      Serviço:{{ form.servico }}
+      {{ form.descricao }}
+      {{ form.data_ini }}
+      {{ form.data_fim }}
     </div>
-</fieldset>
-
+    <br>
+    <fieldset style="margin:0; padding-bottom:0;">
+      <legend style="font-size:12px;">
+         <a href="#" class="panel-showhide"><i class="icon-plus-sign"></i>Opções de Filtro</a></legend>
+          <div class="panel-showhide">
+            <div class="row-fluid">
+              {{ form.hoje }}
+              {{ form.confirmado }}
+              {{ form.pago }}
+              {{ form.not_pago }}
+              {{ form.tipo }}
+              {{ form.valor }}
+            </div>
+          </div>
+    </fieldset>
+    <button type="submit" class="btn btn-small btn-success" title="Filtrar"><i class="icon-search"></i></button>
+    {% if agenda %}
+      <a class="btn btn-small btn-info" href="{% url 'agenda_tarefa_list' conta.id  agenda.id%}" title="Apaga o filtro e listar todos"><i class="icon-remove-circle"></i></a>
+    {% else %}
+      <a class="btn btn-small btn-info" href="{% url 'tarefa_list' conta.id %}" title="Apaga o filtro e listar todos"><i class="icon-remove-circle"></i></a>
+    {% endif %}
+  </fieldset>
 </form>
 
-    <div class="row-fluid">
-        {% if agenda %}
-            <a class="btn btn-success" href="{% url 'agenda_tarefa_add' conta.id agenda.id %}">Nova Tarefa</a>
-        {% else %}
-             <a class="btn btn-success" href="{% url 'tarefa_add' conta.id %}">Nova Tarefa</a>
-        {% endif %}
+<div class="row-fluid">
+  {% if agenda %}
+    <a class="btn btn-success" href="{% url 'agenda_tarefa_add' conta.id agenda.id %}">Nova Tarefa</a>
+  {% else %}
+    <a class="btn btn-success" href="{% url 'tarefa_add' conta.id %}">Nova Tarefa</a>
+  {% endif %}
 
-        <table class="table table-striped table-condensed table-hover">
-            <thead>
-              <tr>
-                <th>Titulo</th>
-                {% if not agenda %}
-                    <th>Agenda</th>
-                {% endif %}
-                <th>Serviço</th>
-                <th>Nr Doc.</th>
-                <th>Data</th>
-                <th>Hora</th>
-                <th>Valor</th>
-                <th>Confirmado</th>
-                <th>Pago</th>
-              </tr>
-            </thead>
-            {% for object in object_list %}
-                <tr>
-                    <td>
-                        {% if agenda %}
-                            <a href="{% url 'agenda_tarefa_edit' conta.id agenda.id object.pk %}">{{ object.titulo }}</a>
-                        {% else %}
-                            <a href="{% url 'tarefa_edit' conta.id object.pk %}">{{ object.titulo }}</a>
-                        {% endif %}
-                    </td>
-                    {% if not agenda %}
-                        <td>{{ object.servico.agenda|default:"--" }}</td>
-                    {% endif %}
-                    <td>{{ object.servico.nome|default:'--' }}</td>
-                    <td>{{ object.nr_documento|default:'--' }}</td>
-                    <td>{{ object.data_ini|date:"d/m/Y" }}</td>
-                    <td>{{ object.hora_ini }}</td>
-                    <td>{{ object.get_tipo_display|default:"" }} $ {{ object.valor|default:'--'  }}</td>
-                    <td>{{ object.confirmado|yesno:"Sim,Não" }}</td>
-                    <td>{{ object.pago|yesno:"Sim,Não" }}</td>
-                </tr>
-            {% empty %}
-                <tr><td colspan="100%">Nenhuma tarefa no período</td></tr>
-            {% endfor %}
-        </table>
-        <tfoot>
-        </tfoot>
-    </div>
+  <table class="table table-striped table-condensed table-hover">
+    <thead>
+      <tr>
+        <th>Titulo</th>
+        {% if not agenda %}
+          <th>Agenda</th>
+        {% endif %}
+        <th>Serviço</th>
+        <th>Nr Doc.</th>
+        <th>Data</th>
+        <th>Hora</th>
+        <th>Valor</th>
+        <th>Confirmado</th>
+        <th>Pago</th>
+      </tr>
+    </thead>
+    {% for object in object_list %}
+    <tr>
+      <td>
+        {% if agenda %}
+          <a href="{% url 'agenda_tarefa_edit' conta.id agenda.id object.pk %}">{{ object.titulo }}</a>
+        {% else %}
+          <a href="{% url 'tarefa_edit' conta.id object.pk %}">{{ object.titulo }}</a>
+        {% endif %}
+      </td>
+      {% if not agenda %}
+        <td>{{ object.servico.agenda|default:"--" }}</td>
+      {% endif %}
+        <td>{{ object.servico.nome|default:'--' }}</td>
+        <td>{{ object.nr_documento|default:'--' }}</td>
+        <td>{{ object.data_ini|date:"d/m/Y" }}</td>
+        <td>{{ object.hora_ini }}</td>
+        <td>{{ object.get_tipo_display|default:"" }} $ {{ object.valor|default:'--'  }}</td>
+        <td>{{ object.confirmado|yesno:"Sim,Não" }}</td>
+        <td>{{ object.pago|yesno:"Sim,Não" }}</td>
+    </tr>
+    {% empty %}
+      <tr><td colspan="100%">Nenhuma tarefa no período</td></tr>
+    {% endfor %}
+  </table>
+  <tfoot>
+  </tfoot>
+</div>
+
  {% bootstrap_pagination page_obj extra=request.GET.urlencode %}
+
 {% endblock content %}
 {% block extra_js %}
-    {{ form.media.js}}
-    <script type="text/javascript">
-        jQuery(document).ready( function() {
-            /*
-            Show / Hide qualquer div com a class="panel-showhide"
-            O objeto que recebe a funcao para show/hide deve ser um LINK com a mesma classe.
-            Ambos devem estar dentro de um container (fieldset, div ...)
-            */
-            jQuery('div.panel-showhide').hide();
-            jQuery('a.panel-showhide').click( function() {
-                jQuery(this).parent().parent().find('div.panel-showhide').toggle();
-            });
-
-            $('td a.enviar').not('.disabled').click(function (){
-                var pedido_pk = $(this).data('pedido');
-                $('#id_pedido_pk').val(pedido_pk);
-                $('#ModalEnviar').modal('show');
-            });
+  {{ form.media.js}}
+  <script type="text/javascript">
+    jQuery(document).ready( function() {
+        /*
+        Show / Hide qualquer div com a class="panel-showhide"
+        O objeto que recebe a funcao para show/hide deve ser um LINK com a mesma classe.
+        Ambos devem estar dentro de um container (fieldset, div ...)
+        */
+        jQuery('div.panel-showhide').hide();
+        jQuery('a.panel-showhide').click( function() {
+            jQuery(this).parent().parent().find('div.panel-showhide').toggle();
         });
-        </script>
+
+        $('td a.enviar').not('.disabled').click(function (){
+            var pedido_pk = $(this).data('pedido');
+            $('#id_pedido_pk').val(pedido_pk);
+            $('#ModalEnviar').modal('show');
+        });
+    });
+    </script>
 
 {% endblock extra_js %}
