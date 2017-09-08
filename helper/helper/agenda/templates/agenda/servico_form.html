@@ -1,26 +1,24 @@
 {% extends "base.html" %}
 
 {% load bootstrap_toolkit %}
+{% block page_title %}
+  <div class="page-header">
+  <!-- TODO erver esse br -->
+  <br>
+  Serviço
+  </div>
+{% endblock page_title %}
 
-{% block page_title %}Serviço{% endblock page_title %}
 {% block content %}
-
-<form method="POST" enctype="multipart/form-data">
+  <form method="POST" >
     {% csrf_token %}
-    <div class="row-fluid">
-        <div class="controls cwell">
-            <div class="row-fluid">
-                {{ form.nome|as_bootstrap }}
-                {{ form.agenda|as_bootstrap }}
-            </div>
-        </div>
-            <div class="form-actions">
-                <input type="submit" value="Salvar" class="btn btn-primary">
-                <a href="{% url 'servico_list' conta.id %}" class="btn btn-secondary">Voltar</a>
-            </div>
+    <div class="form-group">
+      {{ form.nome }}
+      {{ form.agenda }}
     </div>
-</form>
-
+    <input type="submit" value="Salvar" class="btn btn-primary">
+    <a href="{% url 'servico_list' conta.id %}" class="btn btn-default">Voltar</a>
+  </form>
 
 {% endblock content %}
 {% block extra_js %}
