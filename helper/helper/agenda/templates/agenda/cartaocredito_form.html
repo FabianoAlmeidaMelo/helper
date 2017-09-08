@@ -1,8 +1,5 @@
 {% extends "base.html" %}
 
-{% load bootstrap_toolkit %}
-
-
 {% block css %}
   <style type="text/css">
     #id_fechamento,
@@ -12,28 +9,31 @@
    </style>
 {% endblock css %}
 
-{% block page_title %}Cartão{% endblock page_title %}
+{% block page_title %}
+  <div class="page-header">
+  <!-- TODO erver esse br -->
+  <br>
+  Cartão
+  </div>
+{% endblock page_title %}
 {% block content %}
-
-<form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
+<div class="container-fluid">
+  <form method="POST" class="form-inline" >
+   {% csrf_token %}
     <div class="row-fluid">
-        <div class="controls cwell">
-            <div class="row-fluid">
-                {{ form.usuario|as_bootstrap }}
-                {{ form.bandeira|as_bootstrap }}
-                {{ form.vencimento|as_bootstrap }}
-                {{ form.fechamento|as_bootstrap }}
-                {{ form.ativo|as_bootstrap }}
-            </div>
-        </div>
-            <div class="form-actions">
-                <input type="submit" value="Salvar" class="btn btn-primary">
-                <a href="{% url 'cartao_list' conta.id %}" class="btn btn-secondary">Voltar</a>
-            </div>
+      {{ form.usuario }}
+      {{ form.bandeira }}
+      {{ form.vencimento }}
+      {{ form.fechamento }}
+      {{ form.ativo }}
     </div>
-</form>
-
+    <div class="form-actions">
+      <input type="submit" value="Salvar" class="btn btn-primary">
+      <a href="{% url 'cartao_list' conta.id %}" class="btn btn-default">Voltar</a>
+    </div>
+    </div>
+  </form>
+</div>
 
 {% endblock content %}
 {% block extra_js %}
