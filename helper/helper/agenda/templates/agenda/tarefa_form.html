@@ -1,6 +1,5 @@
 {% extends "base.html" %}
-
-{% load bootstrap_toolkit %}
+{% load bootstrap3 %}
 
 {% block css %}
   <style type="text/css">
@@ -37,26 +36,31 @@
 <form method="POST" >
   {% csrf_token %}
   <div class="form-group">
-    {{ form.servico|as_bootstrap }}
-    {{ form.titulo|as_bootstrap }}
-    {{ form.descricao|as_bootstrap }}
-
-    {{ form.data_ini|as_bootstrap }}
-    {{ form.hora_ini|as_bootstrap }}
-
-    {{ form.data_fim|as_bootstrap }}
-    {{ form.hora_fim|as_bootstrap }}
-
-    {{ form.confirmado|as_bootstrap }}
-    {{ form.tipo|as_bootstrap }}
+    {{ form.servico }}
+    {{ form.titulo }}
+  </div>
+  <div class="form-group">
+    {{ form.descricao }}
+  </div>
+  <div class="form-group">
+    {{ form.data_ini }}
+    {{ form.hora_ini }}
+  </div>
+  <div class="form-group">
+    {{ form.data_fim }}
+    {{ form.hora_fim }}
+  </div>
+  <div class="form-group">
+    {{ form.confirmado }}
+    {{ form.tipo }}
   </div>
   <div class="form-group" id="div_financeiro" {% if not form.instance.tipo %}style="display:none"{% endif %}>
     <div class="form-group">
-      {{ form.pago|as_bootstrap }}
-      {{ form.valor|as_bootstrap }}
-      {{ form.nr_documento|as_bootstrap }}
-      {{ form.cartao|as_bootstrap }}
-      {{ form.nr_parcela|as_bootstrap }}
+      {{ form.pago }}
+      {{ form.valor }}
+      {{ form.nr_documento }}
+      {{ form.cartao }}
+      {{ form.nr_parcela }}
     </div>
   </div>
 

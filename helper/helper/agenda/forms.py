@@ -13,7 +13,7 @@ from .models import (
     Tarefa,
 )
 from helper.core.forms import BaseSearchForm
-from bootstrap_toolkit.widgets import BootstrapDateInput
+from django.contrib.admin.widgets import AdminDateWidget
 
 
 class AgendaForm(forms.ModelForm):
@@ -107,13 +107,13 @@ class TarefaForm(forms.ModelForm):
     servico = forms.ModelChoiceField(label='Serviço', queryset=Servico)
     nr_parcela = forms.IntegerField(label='Nr de Parcelas', required=False)
     data_ini = forms.DateField(
+                                widget=AdminDateWidget,
                                 label='Data Inicial',
-                                widget=BootstrapDateInput,
                                 required=True
                             ) 
     data_fim = forms.DateField(
+                                widget=AdminDateWidget,
                                 label='Data Final',
-                                widget=BootstrapDateInput,
                                 required=False
                             ) 
 
@@ -199,13 +199,13 @@ class TarefaSearchForm(BaseSearchForm):
     titulo = forms.CharField(label=u'Título', required=False)
     descricao = forms.CharField(label=u'Descrição', required=False)
     data_ini = forms.DateField(
+                                widget=AdminDateWidget,
                                 label='Data Inicial',
-                                widget=BootstrapDateInput,
                                 required=False
                             )
     data_fim = forms.DateField(
+                                widget=AdminDateWidget,
                                 label='Data Final',
-                                widget=BootstrapDateInput,
                                 required=False
                             )
     confirmado = forms.BooleanField(label='Confirmado', required=False)

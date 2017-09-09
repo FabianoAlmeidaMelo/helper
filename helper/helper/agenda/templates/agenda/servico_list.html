@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load bootstrap_toolkit %}
+{% load bootstrap3 %}
 
 {% block page_title %}
   <div class="page-header">
@@ -13,8 +13,8 @@
 <h5>Filtro</h5>
 <form class="form-inline well" method="GET" action="#">
   <div class="row-fluid">
-    {{ form.nome|as_bootstrap:"inline" }}
-    {{ form.agenda|as_bootstrap:"inline" }}
+    {{ form.nome }}
+    {{ form.agenda }}
   </div>
     <button type="submit" class="btn btn-small btn-success" title="Filtrar"><i class="icon-search"></i></button>
     <a class="btn btn-small btn-info" href="." title="Apaga o filtro e listar todos"><i class="icon-remove-circle"></i></a>
