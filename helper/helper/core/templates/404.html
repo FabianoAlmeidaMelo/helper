@@ -2,8 +2,14 @@
 
 {% block title %}Page Not found.{% endblock title %}
 
-{% block page_title %}Page Not found{% endblock page_title %}
+{% block page_title %}
+  <div class="page-header">
+    <!-- TODO erver esse br -->
+    <br>
+      Página não encontrada
+  </div>
+{% endblock page_title %}
 
 {% block content %}
-<h1>This is not the page you were looking for.</h1>
+<h1>A página que você procura não existe</h1>
 {% endblock content %}
