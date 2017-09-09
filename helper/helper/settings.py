@@ -44,7 +44,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # 'test_without_migrations',
-    'bootstrap_toolkit',
+    'bootstrap3',
     'localbr',
     'municipios',
     'helper.core',
