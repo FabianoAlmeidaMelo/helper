@@ -202,7 +202,7 @@ class TarefaFormListView(SearchFormListView):
 tarefa_list = (login_required(TarefaFormListView.as_view(
                                 model=Tarefa,
                                 form_class=TarefaSearchForm,
-                                paginate_by=30,
+                                paginate_by=15,
                                 template_name='agenda/tarefa_list.html'
                                 )
                             )
@@ -255,7 +255,7 @@ class AgendaTarefaFormListView(SearchFormListView):
 agenda_tarefa_list = (login_required(AgendaTarefaFormListView.as_view(
                                 model=Tarefa,
                                 form_class=TarefaSearchForm,
-                                paginate_by=30,
+                                paginate_by=15,
                                 template_name='agenda/tarefa_list.html'
                                 )
                             )
