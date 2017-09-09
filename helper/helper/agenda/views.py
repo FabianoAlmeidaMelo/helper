@@ -72,6 +72,7 @@ def agenda_list(request, conta_pk):
     context = {}
     context['conta'] = conta
     context['object_list'] = object_list
+    context['menu_administracao'] = "active"
     return render(request, 'agenda/agenda_list.html', context)
 
 @login_required
@@ -118,6 +119,7 @@ def servico_list(request, conta_pk):
     context['conta'] = conta
     context['object_list'] = object_list
     context['form'] = form
+    context['menu_administracao'] = "active"
 
     return render(
         request, 'agenda/servico_list.html', context)
@@ -183,6 +185,8 @@ class TarefaFormListView(SearchFormListView):
         else:
             data_ini = self.form.ini
             data_fim = self.form.fim
+
+        menu_tarefas = "active"
       
         context = self.get_context_data(
             object_list=self.object_list,
@@ -190,7 +194,8 @@ class TarefaFormListView(SearchFormListView):
             url_params=request.GET.urlencode(),
             conta=conta,
             data_ini=data_ini,
-            data_fim=data_fim)
+            data_fim=data_fim,
+            menu_tarefas=menu_tarefas)
 
         return self.render_to_response(context)
 
@@ -233,6 +238,8 @@ class AgendaTarefaFormListView(SearchFormListView):
             data_ini = self.form.ini
             data_fim = self.form.fim
 
+        menu_tarefas_agenda = "active"
+
         context = self.get_context_data(
             object_list=self.object_list,
             form=self.form,
@@ -240,7 +247,8 @@ class AgendaTarefaFormListView(SearchFormListView):
             conta=conta,
             agenda=agenda,
             data_ini=data_ini,
-            data_fim=data_fim)
+            data_fim=data_fim,
+            menu_tarefas_agenda=menu_tarefas_agenda)
 
         return self.render_to_response(context)
 
@@ -309,7 +317,7 @@ def cartao_list(request, conta_pk):
     context['conta'] = conta
     context['object_list'] = object_list
     context['form'] = form
-
+    context['menu_administracao'] = "active"
 
     return render(
         request, 'agenda/cartaocredito_list.html', context)

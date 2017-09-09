@@ -45,10 +45,10 @@
       <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
-          <li><a href="/" title="{{ section.name }}"><i class="icon-home"></i>Home</a></li>
+          <li class="{{ menu_home }}"><a href="/" title="{{ section.name }}"><i class="icon-home"></i>Home</a></li>
           {% if user.is_authenticated and user.conta_set.count %}
             <!-- {# dropdown ADM INI #} -->
-            <li class="dropdown">
+            <li class="dropdown {{ menu_administracao }}">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Administração <span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li><a href="{% url 'agenda_list' conta.id %}" title="{{ section.name }}">Agendas</a></li>
@@ -58,7 +58,7 @@
             </li>
             <!-- {# dropdown ADM fim #} -->
             <!-- {# dropdown Agendas INI #} -->
-            <li class="dropdown">
+            <li class="dropdown {{ menu_tarefas_agenda }}">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Agendas <span class="caret"></span></a>
                 <ul class="dropdown-menu">
                   {% for agenda in conta.agenda_set.all %}
@@ -68,19 +68,18 @@
               </li>
             </li>
           <!-- {# dropdown Agendas fim #} -->
-            <li><a href="{% url 'tarefa_list' conta.id %}" title="{{ section.name }}">Tarefas</a></li>
+            <li class="{{ menu_tarefas }}"><a href="{% url 'tarefa_list' conta.id %}" title="{{ section.name }}">Tarefas</a></li>
             {%  if conta.contador %}<!-- {# Se não tem contador, não acessa #} -->
-              <li><a href="#" title="{{ section.name }}">Mensagens</a></li>
-              <li><a href="{% url 'contador_leitura' conta.id %}" title="{{ section.name }}">Contador</a></li>
+              <li class="{{ menu_mensagens }}"><a href="#" title="{{ section.name }}">Mensagens</a></li>
+              <li class="{{ menu_contador }}"><a href="{% url 'contador_leitura' conta.id %}" title="{{ section.name }}">Contador</a></li>
             {% endif %}
           {% endif %}
           <li class="{% if section.selected %}active{% endif %}"><a href="#"><i class="{{ section.icon }}"></i> {{ section.name }}</a></li>
-          <li class="active"><a href="#">Link 1 ativo <span class="sr-only">(current)</span></a></li>
         </ul>
           
         
         <ul class="nav navbar-nav navbar-right">
-          <li><a href="#">Link</a></li>
+          <!-- <li><a href="#">Link</a></li> -->
           {% if user.is_authenticated %}
             <li{% if active_perfil %} class="active"{% endif %}><a href="#"><i class="icon-user"></i> {{ request.user.email }}</a></li>
             <li><a href="{% url 'logout' %}"><i class="icon-off"></i> Sair </a></li>
