@@ -255,14 +255,15 @@ class Tarefa(models.Model):
         Destaca a tarefa na Data corrente
         '''
         hoje = date.today()
-        if self.data_ini == hoje:
-            if self.tipo == 1 and self.pago is True:
+        if self.data_ini == hoje and self.tipo == 1:
+            if self.pago is True:
                 return "success"
-            elif self.tipo == 1 and self.pago is None or self.pago is False:
+            elif self.pago is None or self.pago is False:
                 return "warning"
-            elif self.tipo == 2 and self.pago is True:
+        elif self.data_ini == hoje and self.tipo == 2:
+            if self.pago is True:
                 return "success"
-            elif self.tipo == 2 and self.pago is None or self.pago is False:
+            elif self.pago is None or self.pago is False:
                 return "danger"
         return ""
 
