@@ -49,7 +49,7 @@ class BaseSearchForm(forms.Form):
         fulltext_indexes = None
 
     class Media:
-        js = ('js/search_form.js',)
+        js = ('/js/search_form.js',)
 
     def __init__(self, *args, **kwargs):
         super(BaseSearchForm, self).__init__(*args, **kwargs)
