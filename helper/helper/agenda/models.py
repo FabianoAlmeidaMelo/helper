@@ -249,6 +249,23 @@ class Tarefa(models.Model):
             return True
         return False
 
+    def get_context_alert(self):
+        '''
+        ref #37
+        Destaca a tarefa na Data corrente
+        '''
+        hoje = date.today()
+        if self.data_ini == hoje:
+            if self.tipo == 1 and self.pago is True:
+                return "success"
+            elif self.tipo == 1 and self.pago is None or self.pago is False:
+                return "warning"
+            elif self.tipo == 2 and self.pago is True:
+                return "success"
+            elif self.tipo == 2 and self.pago is None or self.pago is False:
+                return "danger"
+        return ""
+
     def set_data_parcela_mae(self):
         '''
         ref #17

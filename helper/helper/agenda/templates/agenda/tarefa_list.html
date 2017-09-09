@@ -83,7 +83,7 @@
       </tr>
     </thead>
     {% for object in object_list %}
-    <tr>
+    <tr class="{{ object.get_context_alert }}">
       <td>
         {% if agenda %}
           <a href="{% url 'agenda_tarefa_edit' conta.id agenda.id object.pk %}">{{ object.titulo }}</a>
