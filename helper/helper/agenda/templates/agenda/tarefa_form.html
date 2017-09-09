@@ -34,43 +34,40 @@
 {% endblock page_title %}
 
 {% block content %}
-<div class="container-fluid">
-  <form method="POST" class="form-inline" >
-    {% csrf_token %}
+<form method="POST" >
+  {% csrf_token %}
+  <div class="form-group">
+    {{ form.servico|as_bootstrap }}
+    {{ form.titulo|as_bootstrap }}
+    {{ form.descricao|as_bootstrap }}
+
+    {{ form.data_ini|as_bootstrap }}
+    {{ form.hora_ini|as_bootstrap }}
+
+    {{ form.data_fim|as_bootstrap }}
+    {{ form.hora_fim|as_bootstrap }}
+
+    {{ form.confirmado|as_bootstrap }}
+    {{ form.tipo|as_bootstrap }}
+  </div>
+  <div class="form-group" id="div_financeiro" {% if not form.instance.tipo %}style="display:none"{% endif %}>
     <div class="form-group">
-        {{ form.servico|as_bootstrap }}
-        {{ form.titulo|as_bootstrap }}
-        {{ form.descricao|as_bootstrap }}
-
-        {{ form.data_ini|as_bootstrap }}
-        {{ form.hora_ini|as_bootstrap }}
-    
-        {{ form.data_fim|as_bootstrap }}
-        {{ form.hora_fim|as_bootstrap }}
-
-        {{ form.confirmado|as_bootstrap }}
-        {{ form.tipo|as_bootstrap }}
+      {{ form.pago|as_bootstrap }}
+      {{ form.valor|as_bootstrap }}
+      {{ form.nr_documento|as_bootstrap }}
+      {{ form.cartao|as_bootstrap }}
+      {{ form.nr_parcela|as_bootstrap }}
     </div>
-    <div class="form-group" id="div_financeiro" {% if not form.instance.tipo %}style="display:none"{% endif %}>
-      <div class="form-group">
-        {{ form.pago|as_bootstrap }}
-        {{ form.valor|as_bootstrap }}
-        {{ form.nr_documento|as_bootstrap }}
-        {{ form.cartao|as_bootstrap }}
-        {{ form.nr_parcela|as_bootstrap }}
-      </div>
-    </div>
+  </div>
 
-    <div class="form-actions">
-      <input type="submit" value="Salvar" class="btn btn-primary">
-        {% if agenda %}
-          <a href="{% url 'agenda_tarefa_list' conta.id agenda.id %}" class="btn btn-default">Voltar</a>
-        {% else %}
-          <a href="{% url 'tarefa_list' conta.id %}" class="btn btn-default">Voltar</a>
-        {% endif %}
-    </div>
-  </form>
-</div>
+    <input type="submit" value="Salvar" class="btn btn-primary">
+      {% if agenda %}
+        <a href="{% url 'agenda_tarefa_list' conta.id agenda.id %}" class="btn btn-default">Voltar</a>
+      {% else %}
+        <a href="{% url 'tarefa_list' conta.id %}" class="btn btn-default">Voltar</a>
+      {% endif %}
+
+</form>
 
 {% endblock content %}
 
