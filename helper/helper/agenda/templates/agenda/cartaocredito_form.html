@@ -1,12 +1,13 @@
 {% extends "base.html" %}
+{% load bootstrap3 %}
 
 {% block css %}
-  <style type="text/css">
+<!--   <style type="text/css">
     #id_fechamento,
     #id_vencimento{
         width: 35px;
     }
-   </style>
+   </style> -->
 {% endblock css %}
 
 {% block page_title %}
@@ -21,11 +22,11 @@
   <form method="POST">
    {% csrf_token %}
     <div class="form-group">
-      {{ form.usuario }}
-      {{ form.bandeira }}
-      {{ form.vencimento }}
-      {{ form.fechamento }}
-      {{ form.ativo }}
+      {% bootstrap_field form.usuario %}
+      {% bootstrap_field form.bandeira %}
+      {% bootstrap_field form.vencimento %}
+      {% bootstrap_field form.fechamento %}
+      {% bootstrap_field form.ativo %}
     </div>
     <input type="submit" value="Salvar" class="btn btn-primary">
       <a href="{% url 'cartao_list' conta.id %}" class="btn btn-default">Voltar</a>
