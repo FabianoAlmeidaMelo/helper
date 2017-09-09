@@ -2,12 +2,12 @@
 {% load bootstrap3 %}
 
 {% block css %}
-  <style type="text/css">
-    #id_observacao{
+<!--   <style type="text/css">
+    #id_observacao {
       width: 165px;
       height: 90px;
     }
-   </style>
+   </style> -->
 {% endblock css %}
 
 {% block page_title %}
@@ -21,20 +21,19 @@
 <form method="POST">
   {% csrf_token %}
   <div class="form-group">
-     {{ form.nome }}
+    {% bootstrap_field form.nome %}
   </div>
   <div class="form-group">
-    {{ form.observacao }}
+    {% bootstrap_field form.observacao %}
   </div>
   <div class="form-group">
-    {{ form.tipo }}
-    {{ form.instance.get_tipo_display }}
+    {% bootstrap_field form.tipo %}
   </div>
   <input type="submit" value="Salvar" class="btn btn-primary">
-  <a href="{% url 'agenda_list' conta.id %}" class="btn btn-secondary">Voltar</a>
+  <a href="{% url 'agenda_list' conta.id %}" class="btn btn-default">Voltar</a>
 </form>
-
 {% endblock content %}
+
 {% block extra_js %}
-    {{ form.media }}
+  {{ form.media }}
 {% endblock extra_js %}
