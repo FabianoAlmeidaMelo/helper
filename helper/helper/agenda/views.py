@@ -50,6 +50,7 @@ def agenda_form(request, conta_pk, pk=None):
     context = {}
     context['conta'] = conta
     context['form'] = form
+    context['menu_administracao'] = "active"
 
     if request.method == 'POST':
         if form.is_valid():
@@ -95,6 +96,7 @@ def servico_form(request, conta_pk, pk=None):
     context = {}
     context['conta'] = conta
     context['form'] = form
+    context['menu_administracao'] = "active"
     
     if request.method == 'POST':
         if form.is_valid():
@@ -147,6 +149,7 @@ def tarefa_form(request, conta_pk, agenda_pk=None, pk=None):
     context['conta'] = conta
     context['agenda'] = agenda
     context['form'] = form
+    context['menu_tarefas'] = "active"
     if request.method == 'POST':
         if form.is_valid():
             tarefa = form.save()
@@ -294,6 +297,7 @@ def cartao_form(request, conta_pk, pk=None):
 
     form = CartaoCreditoForm(request.POST or None, instance=cartao, conta=conta)
     context['form'] = form
+    context['menu_administracao'] = "active"
     if request.method == 'POST':
         if form.is_valid():
             cartao = form.save()
