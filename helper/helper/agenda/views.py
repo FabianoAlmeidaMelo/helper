@@ -86,10 +86,10 @@ def servico_form(request, conta_pk, pk=None):
         raise Http404
     if pk:
         servico = get_object_or_404(Servico, pk=pk)
-        msg = u'servico alterado com sucesso.'
+        msg = u'Serviço alterado com sucesso.'
     else:
         servico = None
-        msg = u'servico criado.'
+        msg = u'Serviço criado.'
 
     form = ServicoForm(request.POST or None, instance=servico, conta=conta)
 

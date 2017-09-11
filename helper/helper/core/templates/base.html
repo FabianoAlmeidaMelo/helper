@@ -81,35 +81,35 @@
         <ul class="nav navbar-nav navbar-right">
           <!-- <li><a href="#">Link</a></li> -->
           {% if user.is_authenticated %}
-            <li{% if active_perfil %} class="active"{% endif %}><a href="#"><i class="icon-user"></i> {{ request.user.email }}</a></li>
-            <li><a href="{% url 'logout' %}"><i class="icon-off"></i> Sair </a></li>
+            <li{% if active_perfil %} class="active"{% endif %}><a href="#"><i class="glyphicon glyphicon-user"></i> {{ request.user.email }}</a></li>
+            <li><a href="{% url 'logout' %}"><i class="glyphicon glyphicon-off"></i> Sair </a></li>
           {% else %}
-            <li><a href="{% url 'login' %}"><i class="icon-arrow-up"></i> Entrar </a></li>
+            <li><a href="{% url 'login' %}"><i class="glyphicon glyphicon-log-in"></i> Entrar </a></li>
             <!-- <li><a href="#"><i class="icon-arrow-right"></i> Cadastrar </a></li> -->
           {% endif %}
         </ul>
       </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
+    {% if messages %}
+      <div class="row-fluid">
+        <div class="span12" >
+          {% autoescape off %}
+            {% for message in messages %}
+              <div class="alert alert-{% if message.tags %}{{ message.tags }}{% endif %}" role="alert">
+                <button type="button" class="close" data-dismiss="alert">×</button>
+                {% if 'info' in message.tags %}<i class="glyphicon glyphicon-info-sign"></i>{% endif %}
+                {% if 'warning' in message.tags %}<i class="glyphicon glyphicon-warning-sign"></i>{% endif %}
+                {% if 'success' in message.tags %}<i class="glyphicon glyphicon-ok"></i>{% endif %}
+                {% if 'error' in message.tags %}<i class="glyphicon glyphicon-exclamation-sign"></i>{% endif %}
+                {{ message }}
+              </div>
+            {% endfor %}
+          {% endautoescape %}
+        </div>
+      </div>
+    {% endif %}
   </nav>
  
-  {% if messages %}
-    <div class="row-fluid">
-      <div class="span12">
-        {% autoescape off %}
-          {% for message in messages %}
-            <div class="alert{% if message.tags %} alert-{{ message.tags }}{% endif %}">
-              <button type="button" class="close" data-dismiss="alert">×</button>
-              {% if 'info' in message.tags %}<i class="icon-info-sign"></i>{% endif %}
-              {% if 'warning' in message.tags %}<i class="icon-warning-sign"></i>{% endif %}
-              {% if 'success' in message.tags %}<i class="icon-ok-sign"></i>{% endif %}
-              {% if 'error' in message.tags %}<i class="icon-exclamation-sign"></i>{% endif %}
-              {{ message }}
-            </div>
-          {% endfor %}
-        {% endautoescape %}
-      </div>
-    </div>
-  {% endif %}
 
   <div class="container-fluid">
   <!-- {# container-fluid: para conteúdo responsivo com largura fluída, isto é, toda a largura da janela. #} -->
