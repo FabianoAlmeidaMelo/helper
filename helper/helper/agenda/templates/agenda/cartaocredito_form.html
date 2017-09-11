@@ -19,18 +19,36 @@
 {% endblock page_title %}
 {% block content %}
 
-  <form method="POST">
+<form method="POST">
    {% csrf_token %}
-    <div class="form-group">
-      {% bootstrap_field form.usuario %}
-      {% bootstrap_field form.bandeira %}
-      {% bootstrap_field form.vencimento %}
-      {% bootstrap_field form.fechamento %}
-      {% bootstrap_field form.ativo %}
+  <div class="form-group">
+    <div class="row">
+      <div class="col-xs-4">
+        {% bootstrap_field form.usuario %}
+      </div>
     </div>
-    <input type="submit" value="Salvar" class="btn btn-primary">
+    <div class="row">
+      <div class="col-xs-4">
+        {% bootstrap_field form.bandeira %}
+      </div>
+    </div>
+    <div class="row">  
+      <div class="col-xs-4">  
+        {% bootstrap_field form.vencimento %}
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="row">
+      <div class="col-xs-4">
+        {% bootstrap_field form.fechamento %}
+        {% bootstrap_field form.ativo %}
+      </div>
+    </div>
+  </div>
+  <input type="submit" value="Salvar" class="btn btn-primary">
       <a href="{% url 'cartao_list' conta.id %}" class="btn btn-default">Voltar</a>
-  </form>
+</form>
 {% endblock content %}
 {% block extra_js %}
     {{ form.media }}

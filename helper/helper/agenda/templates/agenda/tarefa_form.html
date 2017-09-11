@@ -5,22 +5,28 @@
 {% bootstrap_javascript %}
 
 {% block css %}
-<!--   <style type="text/css">
+  <style type="text/css">
 
     #id_descricao{
-      width: 465px;
+      width: 780px;
       height: 70px;
     }
-    #id_data_ini,
-    #id_data_fim{
-        width: 75px;
+/*    #id_data_ini,
+    #id_data_fim,
+    #id_confirmado,
+    #id_tipo{
+        width: 95px;
+    }
+    #id_servico,
+    #id_titulo{
+       width: 465px;
     }
     #id_hora_ini,
     #id_hora_fim,
     #id_nr_parcela{
-        width: 35px;
+        width: 65px;*/
     }
-   </style> -->
+   </style>
 {% endblock css %}
 
 {% block page_title %}
@@ -39,41 +45,70 @@
 <form method="POST" >
   {% csrf_token %}
   <div class="form-group">
-    {% bootstrap_field form.servico %}
-    {% bootstrap_field form.titulo %}
+    <div class="row">
+      <div class="col-xs-3">
+        {% bootstrap_field form.servico %}
+      </div>
+      <div class="col-xs-3">
+        {% bootstrap_field form.titulo %}
+      </div>
+  </div>
   </div>
   <div class="form-group">
-    {% bootstrap_field form.descricao %}
-  </div>
-  <div class="form-group">
-    {% bootstrap_field form.data_ini %}
-    {% bootstrap_field form.hora_ini %}
-  </div>
-  <div class="form-group">
-    {% bootstrap_field form.data_fim %}
-    {% bootstrap_field form.hora_fim %}
-  </div>
-  <div class="form-group">
-    {% bootstrap_field form.confirmado %}
-    {% bootstrap_field form.tipo %}
-  </div>
-  <div class="form-group" id="div_financeiro" {% if not form.instance.tipo %}style="display:none"{% endif %}>
-    <div class="form-group">
-      {% bootstrap_field form.pago %}
-      {% bootstrap_field form.valor %}
-      {% bootstrap_field form.nr_documento %}
-      {% bootstrap_field form.cartao %}
-      {% bootstrap_field form.nr_parcela %}
+    <div class="row">
+      <div class="col-xs-4">
+        {% bootstrap_field form.descricao %}
+      </div>
     </div>
   </div>
+  <div class="form-group">
+    <div class="row">
+      <div class="col-xs-3">
+        {% bootstrap_field form.data_ini %}
+      </div>
+      <div class="col-xs-3">
+        {% bootstrap_field form.hora_ini %}
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="row">
+      <div class="col-xs-3">
+        {% bootstrap_field form.data_fim %}
+      </div>
+      <div class="col-xs-3">
+        {% bootstrap_field form.hora_fim %}
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="row">
+      <div class="col-xs-3">
+        {% bootstrap_field form.confirmado %}
+      </div>
+      <div class="col-xs-3">
+        {% bootstrap_field form.tipo %}
+      </div>
+    </div>
+  </div>
+  <div class="form-group" id="div_financeiro" {% if not form.instance.tipo %}style="display:none"{% endif %}>
+    <div class="row">
+      <div class="col-xs-3">
+        {% bootstrap_field form.pago %}
+        {% bootstrap_field form.valor %}
+        {% bootstrap_field form.nr_documento %}
+        {% bootstrap_field form.cartao %}
+        {% bootstrap_field form.nr_parcela %}
+      </div>
+    </div>  
+  </div>
 
-    <input type="submit" value="Salvar" class="btn btn-primary">
-      {% if agenda %}
-        <a href="{% url 'agenda_tarefa_list' conta.id agenda.id %}" class="btn btn-default">Voltar</a>
-      {% else %}
-        <a href="{% url 'tarefa_list' conta.id %}" class="btn btn-default">Voltar</a>
-      {% endif %}
-
+  <input type="submit" value="Salvar" class="btn btn-primary">
+    {% if agenda %}
+      <a href="{% url 'agenda_tarefa_list' conta.id agenda.id %}" class="btn btn-default">Voltar</a>
+    {% else %}
+      <a href="{% url 'tarefa_list' conta.id %}" class="btn btn-default">Voltar</a>
+    {% endif %}
 </form>
 
 {% endblock content %}
