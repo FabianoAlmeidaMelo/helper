@@ -5,13 +5,13 @@
 {% bootstrap_javascript %}
 
 {% block css %}
-  <style type="text/css">
+<!--   <style type="text/css">
 
     #id_descricao{
       width: 780px;
       height: 70px;
     }
-/*    #id_data_ini,
+    #id_data_ini,
     #id_data_fim,
     #id_confirmado,
     #id_tipo{
@@ -24,9 +24,9 @@
     #id_hora_ini,
     #id_hora_fim,
     #id_nr_parcela{
-        width: 65px;*/
+        width: 65px;
     }
-   </style>
+   </style> -->
 {% endblock css %}
 
 {% block page_title %}
@@ -46,58 +46,71 @@
   {% csrf_token %}
   <div class="form-group">
     <div class="row">
-      <div class="col-xs-3">
+      <!-- {# Celular, Tablet, Computador #} -->
+      <div class="col-xs-9 col-sm-6 col-md-3">
         {% bootstrap_field form.servico %}
       </div>
-      <div class="col-xs-3">
+      <div class="col-xs-9 col-sm-6 col-md-3">
         {% bootstrap_field form.titulo %}
       </div>
   </div>
   </div>
   <div class="form-group">
     <div class="row">
-      <div class="col-xs-4">
+      <div class="col-xs-9 col-sm-6 col-md-4">
         {% bootstrap_field form.descricao %}
       </div>
     </div>
   </div>
   <div class="form-group">
     <div class="row">
-      <div class="col-xs-3">
+      <div class="col-xs-9 col-sm-6 col-md-3">
         {% bootstrap_field form.data_ini %}
       </div>
-      <div class="col-xs-3">
+      <div class="col-xs-9 col-sm-6 col-md-3">
         {% bootstrap_field form.hora_ini %}
       </div>
     </div>
   </div>
   <div class="form-group">
     <div class="row">
-      <div class="col-xs-3">
+      <div class="col-xs-9 col-sm-6 col-md-3">
         {% bootstrap_field form.data_fim %}
       </div>
-      <div class="col-xs-3">
+      <div class="col-xs-9 col-sm-6 col-md-3">
         {% bootstrap_field form.hora_fim %}
       </div>
     </div>
   </div>
   <div class="form-group">
     <div class="row">
-      <div class="col-xs-3">
+      <div class="col-xs-9 col-sm-6 col-md-3">
         {% bootstrap_field form.confirmado %}
       </div>
-      <div class="col-xs-3">
+      <div class="col-xs-9 col-sm-6 col-md-3">
         {% bootstrap_field form.tipo %}
       </div>
     </div>
   </div>
   <div class="form-group" id="div_financeiro" {% if not form.instance.tipo %}style="display:none"{% endif %}>
     <div class="row">
-      <div class="col-xs-3">
+      <div class="col-xs-9 col-sm-6 col-md-3">
         {% bootstrap_field form.pago %}
+      </div>
+      <div class="col-xs-9 col-sm-6 col-md-3">
         {% bootstrap_field form.valor %}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-9 col-sm-6 col-md-3">
         {% bootstrap_field form.nr_documento %}
+      </div>
+      <div class="col-xs-9 col-sm-6 col-md-3">
         {% bootstrap_field form.cartao %}
+      </div>
+    </div>  
+    <div class="row">
+      <div class="col-xs-9 col-sm-6 col-md-3">
         {% bootstrap_field form.nr_parcela %}
       </div>
     </div>  

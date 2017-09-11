@@ -14,7 +14,8 @@
     {% csrf_token %}
     <div class="form-group">
       <div class="row">
-        <div class="col-xs-4">
+        <!-- {# Celular, Tablet, Computador #} -->
+        <div class="col-xs-9 col-sm-6 col-md-3">
           {% bootstrap_field form.nome %}
           {% bootstrap_field form.agenda %}
         </div>
