@@ -1,14 +1,19 @@
 {% extends "base.html" %}
-{% load bootstrap_toolkit %}
+{% load bootstrap3 %}
 
-
-{% block page_title %}Cartões{% endblock page_title %}
+{% block page_title %}
+  <div class="page-header">
+  <!-- TODO erver esse br -->
+  <br>
+  Cartões
+  </div>
+{% endblock page_title %}
 
 {% block content %}
 
 <div class="row-fluid">
   <a class="btn btn-success" href="{% url 'cartao_add' conta.id %}">Novo Cartão de Crédito</a>
-    <table class="table table-striped table-condensed table-hover">
+    <table class="table table-striped">
       <thead>
         <tr>
           <th>Bandeira</th>

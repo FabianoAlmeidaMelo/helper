@@ -14,4 +14,5 @@ def contador_leitura(request, conta_pk):
     context = {}
     context['contador'] = contador
     context['conta'] = conta
+    context['menu_contador'] = "active"
     return render(request, 'contador_leitura.html', context)

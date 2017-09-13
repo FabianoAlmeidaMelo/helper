@@ -1,77 +1,128 @@
 {% extends "base.html" %}
+{% load bootstrap3 %}
 
-{% load bootstrap_toolkit %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
 
 {% block css %}
-  <style type="text/css">
+<!--   <style type="text/css">
 
     #id_descricao{
-      width: 465px;
+      width: 780px;
       height: 70px;
     }
     #id_data_ini,
-    #id_data_fim{
-        width: 75px;
+    #id_data_fim,
+    #id_confirmado,
+    #id_tipo{
+        width: 95px;
+    }
+    #id_servico,
+    #id_titulo{
+       width: 465px;
     }
     #id_hora_ini,
     #id_hora_fim,
     #id_nr_parcela{
-        width: 35px;
+        width: 65px;
     }
-   </style>
+   </style> -->
 {% endblock css %}
 
 {% block page_title %}
-    {% if agenda %}
-        {{ agenda.nome }}
-    {% else %}Tarefa{% endif %}
+  <div class="page-header">
+  <!-- TODO erver esse br -->
+  <br>
+  {% if agenda %}
+    {{ agenda.nome }}
+  {% else %}
+    Tarefa
+  {% endif %}
+  </div>
 {% endblock page_title %}
 
 {% block content %}
-<div class="container">
-    <form method="POST" class="form-inline" >
-        {% csrf_token %}
-            <div class="controls cwell">
-                <div class="row-fluid">
-                    {{ form.servico|as_bootstrap }}
-                    {{ form.titulo|as_bootstrap }}
-                </div>
-                 <div class="row-fluid">
-                    {{ form.descricao|as_bootstrap }}
-                 </div>
-                <div class="row-fluid">
-                    {{ form.data_ini|as_bootstrap }}
-                    {{ form.hora_ini|as_bootstrap }}
-                </div>
-                 <div class="row-fluid">
-                    {{ form.data_fim|as_bootstrap }}
-                    {{ form.hora_fim|as_bootstrap }}
-                </div>
-                <div class="row-fluid">
-                    {{ form.confirmado|as_bootstrap }}
-                    {{ form.tipo|as_bootstrap }}
-                </div>
-                <div class="form-line" id="div_financeiro" {% if not form.instance.tipo %}style="display:none"{% endif %}>
-                    <div class="row-fluid">
-                        {{ form.pago|as_bootstrap }}
-                        {{ form.valor|as_bootstrap }}
-                        {{ form.nr_documento|as_bootstrap }}
-                        {{ form.cartao|as_bootstrap }}
-                        {{ form.nr_parcela|as_bootstrap }}
-                    </div>
-                </div>
-            </div>
-            <div class="form-actions">
-                <input type="submit" value="Salvar" class="btn btn-primary">
-                {% if agenda %}
-                    <a href="{% url 'agenda_tarefa_list' conta.id agenda.id %}" class="btn btn-secondary">Voltar</a>
-                {% else %}
-                    <a href="{% url 'tarefa_list' conta.id %}" class="btn btn-secondary">Voltar</a>
-                {% endif %}
-            </div>
+<form method="POST" >
+  {% csrf_token %}
+  <div class="form-group">
+    <div class="row">
+      <!-- {# Celular, Tablet, Computador #} -->
+      <div class="col-xs-9 col-sm-6 col-md-3">
+        {% bootstrap_field form.servico %}
+      </div>
+      <div class="col-xs-9 col-sm-6 col-md-3">
+        {% bootstrap_field form.titulo %}
+      </div>
+  </div>
+  </div>
+  <div class="form-group">
+    <div class="row">
+      <div class="col-xs-9 col-sm-6 col-md-4">
+        {% bootstrap_field form.descricao %}
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="row">
+      <div class="col-xs-9 col-sm-6 col-md-3">
+        {% bootstrap_field form.data_ini %}
+      </div>
+      <div class="col-xs-9 col-sm-6 col-md-3">
+        {% bootstrap_field form.hora_ini %}
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="row">
+      <div class="col-xs-9 col-sm-6 col-md-3">
+        {% bootstrap_field form.data_fim %}
+      </div>
+      <div class="col-xs-9 col-sm-6 col-md-3">
+        {% bootstrap_field form.hora_fim %}
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="row">
+      <div class="col-xs-9 col-sm-6 col-md-3">
+        {% bootstrap_field form.confirmado %}
+      </div>
+      <div class="col-xs-9 col-sm-6 col-md-3">
+        {% bootstrap_field form.tipo %}
+      </div>
+    </div>
+  </div>
+  <div class="form-group" id="div_financeiro" {% if not form.instance.tipo %}style="display:none"{% endif %}>
+    <div class="row">
+      <div class="col-xs-9 col-sm-6 col-md-3">
+        {% bootstrap_field form.pago %}
+      </div>
+      <div class="col-xs-9 col-sm-6 col-md-3">
+        {% bootstrap_field form.valor %}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-9 col-sm-6 col-md-3">
+        {% bootstrap_field form.nr_documento %}
+      </div>
+      <div class="col-xs-9 col-sm-6 col-md-3">
+        {% bootstrap_field form.cartao %}
+      </div>
+    </div>  
+    <div class="row">
+      <div class="col-xs-9 col-sm-6 col-md-3">
+        {% bootstrap_field form.nr_parcela %}
+      </div>
+    </div>  
+  </div>
 
-    </form>
-</div>
+  <input type="submit" value="Salvar" class="btn btn-primary">
+    {% if agenda %}
+      <a href="{% url 'agenda_tarefa_list' conta.id agenda.id %}" class="btn btn-default">Voltar</a>
+    {% else %}
+      <a href="{% url 'tarefa_list' conta.id %}" class="btn btn-default">Voltar</a>
+    {% endif %}
+</form>
 
 {% endblock content %}
 

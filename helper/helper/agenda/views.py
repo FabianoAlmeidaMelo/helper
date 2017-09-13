@@ -50,6 +50,7 @@ def agenda_form(request, conta_pk, pk=None):
     context = {}
     context['conta'] = conta
     context['form'] = form
+    context['menu_administracao'] = "active"
 
     if request.method == 'POST':
         if form.is_valid():
@@ -72,6 +73,7 @@ def agenda_list(request, conta_pk):
     context = {}
     context['conta'] = conta
     context['object_list'] = object_list
+    context['menu_administracao'] = "active"
     return render(request, 'agenda/agenda_list.html', context)
 
 @login_required
@@ -84,16 +86,17 @@ def servico_form(request, conta_pk, pk=None):
         raise Http404
     if pk:
         servico = get_object_or_404(Servico, pk=pk)
-        msg = u'servico alterado com sucesso.'
+        msg = u'Serviço alterado com sucesso.'
     else:
         servico = None
-        msg = u'servico criado.'
+        msg = u'Serviço criado.'
 
     form = ServicoForm(request.POST or None, instance=servico, conta=conta)
 
     context = {}
     context['conta'] = conta
     context['form'] = form
+    context['menu_administracao'] = "active"
     
     if request.method == 'POST':
         if form.is_valid():
@@ -118,6 +121,7 @@ def servico_list(request, conta_pk):
     context['conta'] = conta
     context['object_list'] = object_list
     context['form'] = form
+    context['menu_administracao'] = "active"
 
     return render(
         request, 'agenda/servico_list.html', context)
@@ -145,6 +149,7 @@ def tarefa_form(request, conta_pk, agenda_pk=None, pk=None):
     context['conta'] = conta
     context['agenda'] = agenda
     context['form'] = form
+    context['menu_tarefas'] = "active"
     if request.method == 'POST':
         if form.is_valid():
             tarefa = form.save()
@@ -183,6 +188,8 @@ class TarefaFormListView(SearchFormListView):
         else:
             data_ini = self.form.ini
             data_fim = self.form.fim
+
+        menu_tarefas = "active"
       
         context = self.get_context_data(
             object_list=self.object_list,
@@ -190,14 +197,15 @@ class TarefaFormListView(SearchFormListView):
             url_params=request.GET.urlencode(),
             conta=conta,
             data_ini=data_ini,
-            data_fim=data_fim)
+            data_fim=data_fim,
+            menu_tarefas=menu_tarefas)
 
         return self.render_to_response(context)
 
 tarefa_list = (login_required(TarefaFormListView.as_view(
                                 model=Tarefa,
                                 form_class=TarefaSearchForm,
-                                paginate_by=30,
+                                paginate_by=15,
                                 template_name='agenda/tarefa_list.html'
                                 )
                             )
@@ -233,6 +241,8 @@ class AgendaTarefaFormListView(SearchFormListView):
             data_ini = self.form.ini
             data_fim = self.form.fim
 
+        menu_tarefas_agenda = "active"
+
         context = self.get_context_data(
             object_list=self.object_list,
             form=self.form,
@@ -240,14 +250,15 @@ class AgendaTarefaFormListView(SearchFormListView):
             conta=conta,
             agenda=agenda,
             data_ini=data_ini,
-            data_fim=data_fim)
+            data_fim=data_fim,
+            menu_tarefas_agenda=menu_tarefas_agenda)
 
         return self.render_to_response(context)
 
 agenda_tarefa_list = (login_required(AgendaTarefaFormListView.as_view(
                                 model=Tarefa,
                                 form_class=TarefaSearchForm,
-                                paginate_by=30,
+                                paginate_by=15,
                                 template_name='agenda/tarefa_list.html'
                                 )
                             )
@@ -286,6 +297,7 @@ def cartao_form(request, conta_pk, pk=None):
 
     form = CartaoCreditoForm(request.POST or None, instance=cartao, conta=conta)
     context['form'] = form
+    context['menu_administracao'] = "active"
     if request.method == 'POST':
         if form.is_valid():
             cartao = form.save()
@@ -309,7 +321,7 @@ def cartao_list(request, conta_pk):
     context['conta'] = conta
     context['object_list'] = object_list
     context['form'] = form
-
+    context['menu_administracao'] = "active"
 
     return render(
         request, 'agenda/cartaocredito_list.html', context)

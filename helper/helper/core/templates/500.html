@@ -2,7 +2,13 @@
 
 {% block title %}Erro no servidor{% endblock title %}
 
-{% block page_title %}Erro Interno do Servidor{% endblock page_title %}
+{% block page_title %}
+  <div class="page-header">
+    <!-- TODO erver esse br -->
+    <br>
+      Um erro no servidor acaba de ocorrer
+  </div>
+{% endblock page_title %}
 
 {% block content %}
 <h1>Um email automático foi enviado para a equipe de suporte.</h1>
