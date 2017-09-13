@@ -139,6 +139,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 MEDIA_URL= '/media/'
 UPLOAD_PATH = os.path.join(BASE_DIR, 'media')
+# Ex:
+# Local: /home/fabiano/projetos/helper/helper/media
 
 # SECURITY_SETTINGS
 ## python manage.py check --deploy
