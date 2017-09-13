@@ -27,12 +27,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG', default=False, cast=bool)
+DEBUG = False  #config('DEBUG', default=False, cast=bool)
 
 ADMINS = (
     ('Admin Control H', 'falmeidamelo@uol.com.br'),
 )
 
+# Para fazer algum teste que precise de DEBUG = False, ALLOWED_HOSTS não pode ser vazio
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default=[], cast=Csv())
 
 DEFAULT_FROM_EMAIL = u'contato@controlh.online'
