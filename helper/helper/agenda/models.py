@@ -186,6 +186,8 @@ class Servico(models.Model):
 
     class Meta:
         ordering = ('agenda__nome', 'id',)
+        verbose_name = u'Serviço'
+        verbose_name_plural = u'Serviços'
 
 
 class Tarefa(models.Model):

@@ -1,19 +1,6 @@
 {% extends "base.html" %}
 {% load bootstrap3 %}
-<!-- {# Load CSS and JavaScript #} -->
-{% bootstrap_css %}
-{% bootstrap_javascript %}
 
-{% block css %}
-  <style type="text/css">
-    #id_valor,
-    #id_data_ini,
-    #id_data_fim{
-        width: 95px;
-    }
-
-   </style>
-{% endblock css %}
 {% block page_title %}
   <div class="page-header">
   <!-- TODO erver esse br -->
@@ -27,11 +14,9 @@
   </div>
 {% endblock page_title %}
 
-
 {% block content %}
- <form class="form-inline well" method="GET" action="#">
-  <fieldset style="margin:0; padding-bottom:0;">
-   <div class="form-group">
+<form class="form-inline well" method="GET" action="#">
+  <div class="form-group">
       {% bootstrap_field form.titulo %}
       {% bootstrap_field form.servico %}
       {% bootstrap_field form.descricao %}
@@ -39,20 +24,19 @@
       {% bootstrap_field form.data_fim %}
     </div>
     <br>
-    <fieldset style="margin:0; padding-bottom:0;">
-      <legend style="font-size:12px;">
-         <a href="#" class="panel-showhide"><i class="icon-plus-sign"></i>Opções de Filtro</a></legend>
-          <div class="panel-showhide">
-            <div class="form-group">
-              {{ form.hoje }}
-              {{ form.confirmado }}
-              {{ form.pago }}
-              {{ form.not_pago }}
-              {{ form.tipo }}
-              {{ form.valor }}
-            </div>
-          </div>
-    </fieldset>
+
+  <legend style="font-size:12px;">
+     <a href="#" class="panel-showhide"><i class="icon-plus-sign"></i>Opções de Filtro</a></legend>
+      <div class="panel-showhide">
+        <div class="form-group">
+          {% bootstrap_field form.confirmado %}
+          {% bootstrap_field form.pago %}
+          {{ form.not_pago.label }} {{ form.not_pago }}
+          {% bootstrap_field form.tipo %}
+          {% bootstrap_field form.valor %}
+        </div>
+      </div>
+
     <button type="submit" class="btn btn-primary" title="Filtrar"><i class="glyphicon glyphicon-search"></i></button>
     {% if agenda %}
       <a class="btn btn-small btn-info" href="{% url 'agenda_tarefa_list' conta.id  agenda.id%}" title="Apaga o filtro e listar todos"><i class="glyphicon glyphicon-remove-circle"></i></a>
@@ -64,7 +48,7 @@
     {% else %}
       <a class="btn btn-success" href="{% url 'tarefa_add' conta.id %}">Nova Tarefa</a>
     {% endif %}
-  </fieldset>
+
 </form>
 
 <div class="row-fluid">

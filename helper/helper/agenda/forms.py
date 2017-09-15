@@ -195,9 +195,9 @@ class TarefaSearchForm(BaseSearchForm):
     '''
     #12
     '''
-    servico = forms.CharField(label=u'Servico', required=False)
-    titulo = forms.CharField(label=u'Título', required=False)
-    descricao = forms.CharField(label=u'Descrição', required=False)
+    servico = forms.CharField(label=u'Serviço ', required=False)
+    titulo = forms.CharField(label=u'Título ', required=False)
+    descricao = forms.CharField(label=u'Descrição ', required=False)
     data_ini = forms.DateField(
                                 widget=AdminDateWidget,
                                 label='Data Inicial',
@@ -205,7 +205,7 @@ class TarefaSearchForm(BaseSearchForm):
                             )
     data_fim = forms.DateField(
                                 widget=AdminDateWidget,
-                                label='Data Final',
+                                label='Data Final ',
                                 required=False
                             )
     confirmado = forms.BooleanField(label='Confirmado', required=False)
