@@ -89,7 +89,7 @@
         <td>{{ object.confirmado|yesno:"Sim,Não" }}</td>
         <td>
           {% if object.pago %}
-            {{ object.pago|yesno:"Sim,Não" }}
+            <span class="glyphicon glyphicon-ok-circle" style="color:green"></span>
           {% else %}
             <label>
               <input type="checkbox"
