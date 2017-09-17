@@ -89,18 +89,25 @@
         <td>{{ object.confirmado|yesno:"Sim,Não" }}</td>
         <td>
           {% if object.pago %}
-            {{ object.pago|yesno:"Sim,Não" }}
+            <a href="{% url 'set_tarefa_status' conta.pk object.pk %}">
+              <button type="button" class="btn btn-success" name="button_unset_pago" id="btn_unset_pago_{{ object.pk}}">
+                <i class="glyphicon glyphicon-ok icon-white"></i>
+              </button>
+              <button type="button"
+                          class="btn btn-success"
+                          name="button_unset_pago"
+                          id="btn_unset_pago_{{ object.pk}}"
+                          onclick="unset_tarefa_status(this)"> 
+                    <i class="glyphicon glyphicon-ok icon-white"></i>
+                  </button>
+            </a>
           {% else %}
-            <label>
-              <input type="checkbox"
-                     id="{{ object.id }}"
-                     value="tarefa_{{ object.id }}"
-                     name="set_status"
-                     onchange="set_tarefa_status(this)" 
-                     > Pagar
-            </label>
+            <a href="{% url 'set_tarefa_status' conta.pk object.pk %}">
+              <button type="button" class="btn btn-danger"  name="button_set_pago" id="btn_set_pago_{{ object.pk}}">
+                <i class="glyphicon glyphicon-star-empty"></i>
+              </button>
+            </a>
           {% endif %}
-
         </td>
     </tr>
     {% empty %}
@@ -117,7 +124,7 @@
 {% block extra_js %}
   {{ form.media.js}}
   <script type="text/javascript">
-      jQuery(document).ready( function() {
+    jQuery(document).ready( function() {
         /*
         Show / Hide qualquer div com a class="panel-showhide"
         O objeto que recebe a funcao para show/hide deve ser um LINK com a mesma classe.
@@ -128,30 +135,41 @@
             jQuery(this).parent().parent().find('div.panel-showhide').toggle();
         });
 
+        $('td a.enviar').not('.disabled').click(function (){
+            var pedido_pk = $(this).data('pedido');
+            $('#id_pedido_pk').val(pedido_pk);
+            $('#ModalEnviar').modal('show');
+        });
     });
-  </script>
+  
+  function set_tarefa_status(field)
+  {
+      if($(field).is(':checked'))
+      {
+        $(field).attr('disabled', 'true');
+        $(field).attr('checked', 'checked');
+        
+        $.get("#", function(data){
+         
+        });
+        ajax_init_list('projeto-projetopagamentogestao');
+        $('#btn_desvalida').html('<button onclick="unset_pago(this)">Desvalidar</div>');
+        $('#projeto-projetopagamentogestao-bt').hide();          
+      }      
+  }
+  
+  function unset_tarefa_status(field){
+      if($('#pago').is(':checked')){
+        $("#pago").attr('disabled', false);
+        $("#pago").attr('checked', false);
+        $.get("#");
+        $('#btn_desvalida').html('');
+        ajax_init_list('projeto-projetopagamentogestao'); 
+        $('#projeto-projetopagamentogestao-bt').show();          
+      }      
+  }
 
- 
-  <script type="text/javascript">
-    function set_tarefa_status(field){
-      if($(field).is(':checked')){
-        var tarefa_id = $(field).attr('id')
-        //alert(tarefa_id)
-        // Zero: 0, é um id válido
-        // não quebra a url ao carregar a página
-        $.get("{% url 'set_tarefa_status' 0 %}".replace('0', tarefa_id), function(){
-          location.reload();
-          });
-        }      
-      }
-  </script>
+    </script>
 
-  <script type="text/javascript">
-    function unset_tarefa_status(field){
-    {
-        $.get("{% url 'set_tarefa_status' 832 %}", function(){location.reload();});
-   
-    }
-    </script>  
 
 {% endblock extra_js %}

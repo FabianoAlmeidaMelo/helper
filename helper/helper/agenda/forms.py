@@ -350,3 +350,11 @@ class TarefaSearchForm(BaseSearchForm):
             if tipo:
                 q = q & Q(tipo=tipo)
         return Tarefa.objects.filter(q)
+
+
+class TarefaStatusForm(forms.Form):
+    pag_efetuado = forms.BooleanField(required=False)
+
+    def __init__(self, *args, **kwargs):
+        self.instance = kwargs.pop('instance', None)
+        super(TarefaStatusForm, self).__init__(*args, **kwargs)

@@ -3,12 +3,12 @@ from django.db.models import Q, Sum
 from datetime import date
 
 from django.core.urlresolvers import reverse_lazy
-from django.views.generic import CreateView, UpdateView  #, ListView # DeleteView
-from django.core.urlresolvers import reverse
+from django.views.generic import CreateView, UpdateView, DeleteView  #, ListView # DeleteView
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 # from django.contrib.contenttypes.models import ContentType
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .models import (
@@ -23,6 +23,7 @@ from .forms import (
     AgendaForm,
     CartaoCreditoForm,
     CartaoCreditoBaseSearchForm,
+    TarefaStatusForm,
     ServicoForm,
     ServicoSearchForm,
     TarefaForm,
@@ -263,20 +264,24 @@ agenda_tarefa_list = (login_required(AgendaTarefaFormListView.as_view(
                                 )
                             )
                         )
-#login_required(TemplateView.as_view(template_name='foo_index.html'))
 
-# @login_required
-# def tarefa_list(request, conta_pk):
-#     conta = get_object_or_404(Conta, id=conta_pk)
-#     object_list = Tarefa.objects.filter(servico__agenda__conta__id=conta_pk)
+@login_required
+def set_tarefa_status(request, tarefa_pk):
+    '''
+    ref #38 - ajax
+    altera tarefa.pago
+        para: True ou False
+    '''
+    tarefa = get_object_or_404(Tarefa, id=tarefa_pk)
+    # if not conta.can_acess(request.user):
+    #     raise Http404
+    if tarefa.pago is True:
+        tarefa.pago = False
+    else:
+        tarefa.pago = True
+    tarefa.save()
 
-#     context = {}
-#     context['conta'] = conta
-#     context['object_list'] = object_list
-
-#     return render(
-#         request, 'agenda/tarefa_list.html', context)
-
+    return HttpResponse('Ok')
 
 @login_required
 def cartao_form(request, conta_pk, pk=None):
