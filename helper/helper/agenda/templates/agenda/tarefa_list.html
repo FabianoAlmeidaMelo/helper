@@ -1,56 +1,72 @@
 {% extends "base.html" %}
 {% load bootstrap3 %}
 
+{% block css %}
+  <style type="text/css">
+    #filtro.off {
+        display: none;
+    }
+    #filtro {
+        padding: 1.2em;
+    }
+  </style>
+{% endblock css %}
+
 {% block page_title %}
   <div class="page-header">
   <!-- TODO erver esse br -->
     <br>
-    {% if agenda %}
-      {{ agenda.nome }}
-    {% else %}
-      Tarefas
-    {% endif %}
-    <h5>{{ data_ini|date:"d/m/Y" }} a {{ data_fim|date:"d/m/Y" }}</h5> 
+    <h3>
+      {% if agenda %}
+        {{ agenda.nome }}
+      {% else %}
+        Tarefas
+      {% endif %}
+      <small>
+        {{ data_ini|date:"d/m/Y" }} a {{ data_fim|date:"d/m/Y" }}
+        <a class="btn btn-default btn-xs" id="filtro_button_id" href="#!" onclick="show_filter_fields(this)"></span>Esconder filtro</a>
+        {% if agenda %}
+          <a class="btn btn-success btn-xs" href="{% url 'agenda_tarefa_add' conta.id agenda.id %}">Nova Tarefa</a>
+        {% else %}
+          <a class="btn btn-success btn-xs" href="{% url 'tarefa_add' conta.id %}">Nova Tarefa</a>
+        {% endif %}
+      </small>
+    </h3>
   </div>
 {% endblock page_title %}
 
 {% block content %}
-<form class="form-inline well" method="GET" action="#">
-  <div class="form-group">
-      {% bootstrap_field form.titulo %}
-      {% bootstrap_field form.servico %}
-      {% bootstrap_field form.descricao %}
-      {% bootstrap_field form.data_ini %}
-      {% bootstrap_field form.data_fim %}
-    </div>
-    <br>
-
-  <legend style="font-size:12px;">
-     <a href="#" class="panel-showhide"><i class="icon-plus-sign"></i>Opções de Filtro</a></legend>
-      <div class="panel-showhide">
-        <div class="form-group">
-          {% bootstrap_field form.confirmado %}
-          {% bootstrap_field form.pago %}
-          {{ form.not_pago.label }} {{ form.not_pago }}
-          {% bootstrap_field form.tipo %}
-          {% bootstrap_field form.valor %}
-        </div>
+<div  id="filtro">
+  <form class="form-inline well" method="GET" action="#">
+    <div class="form-group">
+        {% bootstrap_field form.titulo %}
+        {% bootstrap_field form.servico %}
+        {% bootstrap_field form.descricao %}
+        {% bootstrap_field form.data_ini %}
+        {% bootstrap_field form.data_fim %}
       </div>
+      <br>
 
-    <button type="submit" class="btn btn-primary" title="Filtrar"><i class="glyphicon glyphicon-search"></i></button>
-    {% if agenda %}
-      <a class="btn btn-small btn-info" href="{% url 'agenda_tarefa_list' conta.id  agenda.id%}" title="Apaga o filtro e listar todos"><i class="glyphicon glyphicon-remove-circle"></i></a>
-    {% else %}
-      <a class="btn btn-small btn-info" href="{% url 'tarefa_list' conta.id %}" title="Apaga o filtro e listar todos"><i class="glyphicon glyphicon-remove-circle"></i></a>
-    {% endif %}
-    {% if agenda %}
-      <a class="btn btn-success" href="{% url 'agenda_tarefa_add' conta.id agenda.id %}">Nova Tarefa</a>
-    {% else %}
-      <a class="btn btn-success" href="{% url 'tarefa_add' conta.id %}">Nova Tarefa</a>
-    {% endif %}
+    <legend style="font-size:12px;">
+       <a href="#" class="panel-showhide"><i class="icon-plus-sign"></i>Opções de Filtro</a></legend>
+        <div class="panel-showhide">
+          <div class="form-group">
+            {% bootstrap_field form.confirmado %}
+            {% bootstrap_field form.pago %}
+            {{ form.not_pago.label }} {{ form.not_pago }}
+            {% bootstrap_field form.tipo %}
+            {% bootstrap_field form.valor %}
+          </div>
+        </div>
 
-</form>
-
+      <button type="submit" class="btn btn-primary" title="Filtrar"><i class="glyphicon glyphicon-search"></i></button>
+      {% if agenda %}
+        <a class="btn btn-small btn-info" href="{% url 'agenda_tarefa_list' conta.id  agenda.id%}" title="Apaga o filtro e listar todos"><i class="glyphicon glyphicon-remove-circle"></i></a>
+      {% else %}
+        <a class="btn btn-small btn-info" href="{% url 'tarefa_list' conta.id %}" title="Apaga o filtro e listar todos"><i class="glyphicon glyphicon-remove-circle"></i></a>
+      {% endif %}
+  </form>
+</div>
 <div class="row-fluid">
 
   <table class="table table-striped">
@@ -131,8 +147,7 @@
     });
   </script>
 
- 
-  <script type="text/javascript">
+   <script type="text/javascript">
     function set_tarefa_status(field){
       if($(field).is(':checked')){
         var tarefa_id = $(field).attr('id')
@@ -147,11 +162,18 @@
   </script>
 
   <script type="text/javascript">
-    function unset_tarefa_status(field){
-    {
-        $.get("{% url 'set_tarefa_status' 832 %}", function(){location.reload();});
-   
-    }
-    </script>  
+    var show_filter_fields = function() {
+      $('#filtro').slideToggle('slow', function() {
+          $('#filtro').toggleClass('off');
+          if ($('#filtro').is('.off')) {
+              //$('#filtro-label').text('Ver filtro');
+              document.getElementById('filtro_button_id').innerHTML = "Ver filtro";
+          } else {
+             // $('#filtro-label').text('Esconder filtro');
+              document.getElementById('filtro_button_id').innerHTML = "Esconder filtro";
+          }
+      });
+    };
+  </script>  
 
 {% endblock extra_js %}

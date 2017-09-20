@@ -1,25 +1,55 @@
 {% extends "base.html" %}
 {% load bootstrap3 %}
 
+{% block css %}
+  <style type="text/css">
+    #filtro.off {
+        display: none;
+    }
+    #filtro {
+        padding: 1.2em;
+    }
+  </style>
+{% endblock css %}
+{% block extra_js %}
+  <script type="text/javascript">
+    var show_filter_fields = function() {
+      $('#filtro').slideToggle('slow', function() {
+          $('#filtro').toggleClass('off');
+          if ($('#filtro').is('.off')) {
+              //$('#filtro-label').text('Ver filtro');
+              document.getElementById('filtro_button_id').innerHTML = "Ver filtro";
+          } else {
+             // $('#filtro-label').text('Esconder filtro');
+              document.getElementById('filtro_button_id').innerHTML = "Esconder filtro";
+          }
+      });
+  };
+  </script>  
+{% endblock extra_js %}
+
+
 {% block page_title %}
   <div class="page-header">
-  <!-- TODO erver esse br -->
-  <br>
-  Serviços
+    <br>
+    <h3>Serviços <small>ou categorias dos movimentos de suas Agendas.   
+    <a class="btn btn-default btn-xs" id="filtro_button_id" href="#!" onclick="show_filter_fields(this)"></span>Esconder filtro</a>
+    <a class="btn btn-success btn-xs" href="{% url 'servico_add' conta.id %}">Novo Serviço</a></small></h3>
   </div>
 {% endblock page_title %}
 
 {% block content %}
-<form class="form-inline well" method="GET" action="#">
-  <div class="form-group">
-    {% bootstrap_field form.nome %}
-    {% bootstrap_field form.agenda %}
-  </div>
-    <button type="submit" class="btn btn-primary" title="Filtrar"><i class="glyphicon glyphicon-search"></i></button>
-    <a class="btn btn-small btn-info" href="." title="Apaga o filtro e listar todos"><i class="glyphicon glyphicon-remove-circle"></i></a>
-    <a class="btn btn-success" href="{% url 'servico_add' conta.id %}">Novo Serviço</a>
-  </div>
-</form>
+<div  id="filtro">
+  <form class="form-inline well" method="GET" action="#">
+      <div class="form-group">
+        {% bootstrap_field form.nome %}
+        {% bootstrap_field form.agenda %}
+      </div>
+        <button type="submit" class="btn btn-primary" title="Filtrar"><i class="glyphicon glyphicon-search"></i></button>
+        <a class="btn btn-small btn-info" href="." title="Apaga o filtro e listar todos"><i class="glyphicon glyphicon-remove-circle"></i></a>
+      </div>
+  </form>
+</div>
 <div class="row-fluid">
     <table class="table table-striped">
       <thead>
@@ -40,4 +70,3 @@
 </div>
 
 {% endblock content %}
-

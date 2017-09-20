@@ -68,7 +68,7 @@
               </li>
             </li>
           <!-- {# dropdown Agendas fim #} -->
-            <li class="{{ menu_tarefas }}"><a href="{% url 'tarefa_list' conta.id %}" title="{{ section.name }}">Tarefas</a></li>
+            <li class="{{ menu_tarefas }}"><a href="{% url 'tarefa_list' conta.id %}{{ get_ }}" title="{{ section.name }}">Tarefas</a></li>
             {%  if conta.contador %}<!-- {# Se não tem contador, não acessa #} -->
               <li class="{{ menu_mensagens }}"><a href="#" title="{{ section.name }}">Mensagens</a></li>
               <li class="{{ menu_contador }}"><a href="{% url 'contador_leitura' conta.id %}" title="{{ section.name }}">Contador</a></li>

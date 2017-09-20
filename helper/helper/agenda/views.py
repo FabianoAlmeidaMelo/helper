@@ -179,17 +179,26 @@ class TarefaFormListView(SearchFormListView):
             if not conta.can_acess(request.user):
                 raise Http404
 
+        data_ini = self.form.ini
+        data_fim = self.form.fim
         if self.form.is_valid():
             self.object_list = self.form.get_result_queryset().filter(servico__agenda__conta=conta)
         else:
             self.object_list = []
-        if self.object_list:
-            data_ini = self.object_list.first().data_ini
-            data_fim = self.object_list.last().data_ini
-        else:
-            data_ini = self.form.ini
-            data_fim = self.form.fim
 
+        # if self.object_list:
+        #     data_ini = self.object_list.first().data_ini
+        #     data_fim = self.object_list.last().data_ini
+        # else:
+        
+
+        get_ = "?data_ini=%s&data_fim=%s" % (
+            request.GET.get('data_ini', data_ini),
+            request.GET.get('data_fim', data_fim),
+            )
+
+        # Marca o Menu 'Tarefas'
+        # Nav BAR
         menu_tarefas = "active"
       
         context = self.get_context_data(
@@ -199,7 +208,8 @@ class TarefaFormListView(SearchFormListView):
             conta=conta,
             data_ini=data_ini,
             data_fim=data_fim,
-            menu_tarefas=menu_tarefas)
+            menu_tarefas=menu_tarefas,
+            get_=get_)
 
         return self.render_to_response(context)
 

@@ -222,8 +222,10 @@ class TarefaSearchForm(BaseSearchForm):
         self.fields['q'].widget.attrs['placeholder'] = u'Nome do serviço, Título, Descrição'
         self.data_hoje = date.today()
         self.last_day = calendar.monthrange(self.data_hoje.year, self.data_hoje.month)[1]
+        
         self.ini = date(self.data_hoje.year, self.data_hoje.month, 1)
         self.fim = date(self.data_hoje.year, self.data_hoje.month, int(self.last_day))
+        
         self.fields['data_ini'].initial = self.ini
         self.fields['data_fim'].initial = self.fim
 
@@ -262,13 +264,13 @@ class TarefaSearchForm(BaseSearchForm):
         data_ini = self.cleaned_data['data_ini']  # or date.today()
         if data_ini:
             return Q(data_ini__gte=data_ini)
-        return Q(data_ini__gte=self.ini)
+        return  Q(data_ini__gte=self.ini)
 
     def prepare_data_fim(self):
         data_fim = self.cleaned_data['data_fim']
         if data_fim:
             return Q(data_ini__lte=data_fim)
-        return Q(data_ini__gte=self.fim)
+        return  # Q(data_ini__gte=self.fim)
 
     def prepare_confirmado(self):
         confirmado = self.cleaned_data['confirmado']
@@ -322,7 +324,7 @@ class TarefaSearchForm(BaseSearchForm):
             descricao = self.cleaned_data['descricao']
             if descricao:
                 q = q & Q(descricao__icontains=descricao)
-            data_ini = self.cleaned_data['data_ini'] or self.ini
+            data_ini = self.cleaned_data['data_ini']  # or self.ini
             # ini DEFAULT é o mês corrente
             if data_ini:
                 q = q & Q(data_ini__gte=data_ini)
