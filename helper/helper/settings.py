@@ -140,9 +140,9 @@ USE_TZ = True
 # STATICFILES_STORAGE = config('STATICFILES_STORAGE')  # css, js
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfile')
 # Ex:
-# Local: /home/fabiano/projetos/helper/helper/staticfiles
+# Local: /home/fabiano/projetos/helper/helper/staticfile
 
 MEDIA_URL= '/media/'
 UPLOAD_PATH = os.path.join(BASE_DIR, 'media')
