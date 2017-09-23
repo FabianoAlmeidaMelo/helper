@@ -31,13 +31,18 @@
 
 {% block page_title %}
   <div class="page-header">
-  <!-- TODO erver esse br -->
-  <br>
-  {% if agenda %}
-    {{ agenda.nome }}
-  {% else %}
-    Tarefa
-  {% endif %}
+    <!-- TODO erver esse br -->
+    <br>
+    <h3>
+      {% if agenda %}
+        {{ agenda.nome }}
+      {% else %}
+        Tarefa
+      {% endif %}
+      <small>
+        {% if form.instance.pk %}Edição{% else%}Cadastro{% endif%}.
+      </small>
+    </h3>
   </div>
 {% endblock page_title %}
 
