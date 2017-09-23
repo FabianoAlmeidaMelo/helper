@@ -158,5 +158,5 @@ EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
 
-# if DEBUG is False:
-#     INSTALLED_APPS += ('storages',)
+if DEBUG is False:
+    INSTALLED_APPS += ('storages',)
