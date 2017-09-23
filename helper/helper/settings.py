@@ -133,6 +133,12 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
+# DEFAULT_FILE_STORAGE = config('DEFAULT_FILE_STORAGE')  # media file
+# AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
+# AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
+# AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME')
+# STATICFILES_STORAGE = config('STATICFILES_STORAGE')  # css, js
+
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # Ex:
@@ -160,3 +166,11 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
 if DEBUG is False:
     INSTALLED_APPS += ('storages',)
+    DEFAULT_FILE_STORAGE = config('DEFAULT_FILE_STORAGE')  # media file
+    AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
+    AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME')
+    STATICFILES_STORAGE = config('STATICFILES_STORAGE')  # css, js
+    AWS_S3_DOMAIN = "%s.s3.amazonaws.com" % AWS_STORAGE_BUCKET_NAME
+    STATIC_URL = "https://%s/staticfile/"  % AWS_S3_DOMAIN
+    MEDIA_URL= "https://%s/media/"  % AWS_S3_DOMAIN
