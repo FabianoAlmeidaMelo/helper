@@ -24,7 +24,7 @@
       {% endif %}
       <small>
         {{ data_ini|date:"d/m/Y" }} a {{ data_fim|date:"d/m/Y" }}
-        <a class="btn btn-default btn-xs" id="filtro_button_id" href="#!" onclick="show_filter_fields(this)"></span>Esconder filtro</a>
+        <a class="btn btn-default btn-xs" id="filtro_button_id" href="#!" onclick="show_filter_fields(this)"></span>Ver filtro</a>
         {% if agenda %}
           <a class="btn btn-success btn-xs" href="{% url 'agenda_tarefa_add' conta.id agenda.id %}">Nova Tarefa</a>
         {% else %}
@@ -36,7 +36,7 @@
 {% endblock page_title %}
 
 {% block content %}
-<div  id="filtro">
+<div  class='off' id="filtro">
   <form class="form-inline well" method="GET" action="#">
     <div class="form-group">
         {% bootstrap_field form.titulo %}
