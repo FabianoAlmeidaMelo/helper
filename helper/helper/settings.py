@@ -171,6 +171,6 @@ if DEBUG is False:
     AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
     AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME')
     STATICFILES_STORAGE = config('STATICFILES_STORAGE')  # css, js
-    AWS_S3_DOMAIN = "%s.s3.amazonaws.com" % AWS_STORAGE_BUCKET_NAME
-    STATIC_URL = "https://%s/staticfile/"  % AWS_S3_DOMAIN
-    MEDIA_URL= "https://%s/media/"  % AWS_S3_DOMAIN
+    AWS_S3_CUSTON_DOMAIN = "d12ngo9oha73hw.cloudfront.net"  # CDN
+    STATIC_URL = "https://%s/staticfile/"  % AWS_S3_CUSTON_DOMAIN
+    MEDIA_URL= "https://%s/media/"  % AWS_S3_CUSTON_DOMAIN
