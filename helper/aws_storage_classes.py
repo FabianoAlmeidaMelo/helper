@@ -12,7 +12,7 @@ from storages.backends.s3boto3 import S3Boto3Storage
 
 
 class StaticStorage(S3BotoStorage):
-"""uploads to 'mybucket/staticfile/', serves from 'cloudfront.net/staticfile/'"""
+	"""uploads to 'mybucket/staticfile/', serves from 'cloudfront.net/staticfile/'"""
     location = settings.STATICFILES_LOCATION
 
     def __init__(self, *args, **kwargs):
@@ -20,7 +20,7 @@ class StaticStorage(S3BotoStorage):
         super(StaticStorage, self).__init__(*args, **kwargs)
 
 class MediaStorage(S3BotoStorage):
-"""uploads to 'mybucket/media/', serves from 'cloudfront.net/media/'"""
+	"""uploads to 'mybucket/media/', serves from 'cloudfront.net/media/'"""
     location = settings.MEDIAFILES_LOCATION
 
     def __init__(self, *args, **kwargs):
