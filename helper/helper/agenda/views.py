@@ -247,7 +247,7 @@ class AgendaTarefaFormListView(SearchFormListView):
         data_ini = self.form.ini
         data_fim = self.form.fim
         if self.form.is_valid():
-            self.object_list = self.form.get_result_queryset().filter(servico__agenda__conta=conta)
+            self.object_list = self.form.get_result_queryset().filter(servico__agenda=agenda)
             if self.form.__dict__['cleaned_data']['data_ini'] is None:
                 self.form.__dict__['cleaned_data']['data_ini'] = data_ini
             else:
