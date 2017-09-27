@@ -85,6 +85,20 @@
         <th>Pago</th>
       </tr>
     </thead>
+    <tfoot>
+      <tr>
+      {% if not agenda %}
+        <td></td>
+      {% endif %}
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td span="4">{{ total }}</td>
+      </tr>
+  </tfoot>
+    <tbody>
     {% for object in object_list %}
     <tr class="{{ object.get_context_alert }}">
       <td>
@@ -122,9 +136,8 @@
     {% empty %}
       <tr><td colspan="100%">Nenhuma tarefa no período</td></tr>
     {% endfor %}
+    </tbody>
   </table>
-  <tfoot>
-  </tfoot>
 </div>
 
  {% bootstrap_pagination page_obj extra=request.GET.urlencode %}

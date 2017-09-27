@@ -180,10 +180,14 @@ class TarefaFormListView(SearchFormListView):
             if not conta.can_acess(request.user):
                 raise Http404
 
+        total = 0
         data_ini = self.form.ini
         data_fim = self.form.fim
         if self.form.is_valid():
             self.object_list = self.form.get_result_queryset().filter(servico__agenda__conta=conta)
+            total_pos = sum(self.object_list.filter(tipo=1).values_list('valor', flat=True))
+            total_neg = sum(self.object_list.filter(tipo=2).values_list('valor', flat=True))
+            total = total_pos - total_neg
             if self.form.__dict__['cleaned_data']['data_ini'] is None:
                 self.form.__dict__['cleaned_data']['data_ini'] = data_ini
             else:
@@ -212,6 +216,7 @@ class TarefaFormListView(SearchFormListView):
             data_ini=data_ini,
             data_fim=data_fim,
             menu_tarefas=menu_tarefas,
+            total=total,
             get_=get_)
 
         return self.render_to_response(context)
@@ -246,8 +251,12 @@ class AgendaTarefaFormListView(SearchFormListView):
         
         data_ini = self.form.ini
         data_fim = self.form.fim
+        total = 0
         if self.form.is_valid():
             self.object_list = self.form.get_result_queryset().filter(servico__agenda=agenda)
+            total_pos = sum(self.object_list.filter(tipo=1).values_list('valor', flat=True))
+            total_neg = sum(self.object_list.filter(tipo=2).values_list('valor', flat=True))
+            total = total_pos - total_neg
             if self.form.__dict__['cleaned_data']['data_ini'] is None:
                 self.form.__dict__['cleaned_data']['data_ini'] = data_ini
             else:
@@ -276,6 +285,7 @@ class AgendaTarefaFormListView(SearchFormListView):
             data_ini=data_ini,
             data_fim=data_fim,
             menu_tarefas_agenda=menu_tarefas_agenda,
+            total=total,
             get_=get_)
 
         return self.render_to_response(context)
