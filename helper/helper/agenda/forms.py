@@ -238,9 +238,8 @@ class TarefaSearchForm(BaseSearchForm):
         if cleaned_data.get('data_ini') and cleaned_data.get('data_fim'):
             if cleaned_data.get('data_ini') > cleaned_data.get('data_fim'):
                 self._errors['data_fim'] = ErrorList(['Informe uma data final maior que a Data Inicial'])
-
+        
         return cleaned_data
-
 
     def prepare_servico(self):
         servico = self.cleaned_data['servico']

@@ -10,6 +10,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 # from django.contrib.contenttypes.models import ContentType
 from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.template.context import RequestContext
 
 from .models import (
     Agenda,
@@ -183,14 +184,16 @@ class TarefaFormListView(SearchFormListView):
         data_fim = self.form.fim
         if self.form.is_valid():
             self.object_list = self.form.get_result_queryset().filter(servico__agenda__conta=conta)
+            if self.form.__dict__['cleaned_data']['data_ini'] is None:
+                self.form.__dict__['cleaned_data']['data_ini'] = data_ini
+            else:
+                data_ini = self.form.__dict__['cleaned_data']['data_ini']
+            if self.form.__dict__['cleaned_data']['data_fim'] is None:
+                self.form.__dict__['cleaned_data']['data_fim'] = data_fim
+            else:
+                data_fim = self.form.__dict__['cleaned_data']['data_fim']
         else:
             self.object_list = []
-
-        # if self.object_list:
-        #     data_ini = self.object_list.first().data_ini
-        #     data_fim = self.object_list.last().data_ini
-        # else:
-        
 
         get_ = "?data_ini=%s&data_fim=%s" % (
             request.GET.get('data_ini', data_ini),
@@ -240,17 +243,27 @@ class AgendaTarefaFormListView(SearchFormListView):
         if 'agenda_pk' in self.kwargs:
             agenda_pk = self.kwargs['agenda_pk']
             agenda = get_object_or_404(Agenda, id=agenda_pk)
+        
+        data_ini = self.form.ini
+        data_fim = self.form.fim
         if self.form.is_valid():
-            self.object_list = self.form.get_result_queryset().filter(servico__agenda=agenda)
+            self.object_list = self.form.get_result_queryset().filter(servico__agenda__conta=conta)
+            if self.form.__dict__['cleaned_data']['data_ini'] is None:
+                self.form.__dict__['cleaned_data']['data_ini'] = data_ini
+            else:
+                data_ini = self.form.__dict__['cleaned_data']['data_ini']
+            if self.form.__dict__['cleaned_data']['data_fim'] is None:
+                self.form.__dict__['cleaned_data']['data_fim'] = data_fim
+            else:
+                data_fim = self.form.__dict__['cleaned_data']['data_fim']
         else:
             self.object_list = []
 
-        if self.object_list:
-            data_ini = self.object_list.first().data_ini
-            data_fim = self.object_list.last().data_ini
-        else:
-            data_ini = self.form.ini
-            data_fim = self.form.fim
+        get_ = "?data_ini=%s&data_fim=%s" % (
+            request.GET.get('data_ini', data_ini),
+            request.GET.get('data_fim', data_fim),
+            )
+
 
         menu_tarefas_agenda = "active"
 
@@ -262,7 +275,8 @@ class AgendaTarefaFormListView(SearchFormListView):
             agenda=agenda,
             data_ini=data_ini,
             data_fim=data_fim,
-            menu_tarefas_agenda=menu_tarefas_agenda)
+            menu_tarefas_agenda=menu_tarefas_agenda,
+            get_=get_)
 
         return self.render_to_response(context)
 
