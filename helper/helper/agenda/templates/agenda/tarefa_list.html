@@ -142,16 +142,41 @@
   </table>
 </div>
 
-
-  <body>
-    <div id="piechart" style="width: 900px; height: 500px;"></div>
-  </body>
-
  {% bootstrap_pagination page_obj extra=request.GET.urlencode %}
+
+  <<!-- th><div id="piechart" style="width: 810px; height: 450px;"></div></th> -->
+  <th><div id="piechart_3d" style="width: 810px; height: 450px;"></div></th>
+
+
+</table>
+
 
 {% endblock content %}
 {% block extra_js %}
   {{ form.media.js}}
+<!-- pie 3D -->
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load("current", {packages:["corechart"]});
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Task', 'Hours per Day'],
+          ['Entradas',  {{ entradas }}],
+          ['Saídas',  {{ saidas }}],
+        ]);
+
+        var options = {
+          title: 'Entradas x Saídas',
+          is3D: true,
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+        chart.draw(data, options);
+      }
+    </script>
+
+  <!-- pie -->
    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
       google.charts.load('current', {'packages':['corechart']});
@@ -161,8 +186,8 @@
 
         var data = google.visualization.arrayToDataTable([
           ['Task', 'Hours per Day'],
-          ['Entradas',     {{ entradas }}],
-          ['Saídas',      {{ saidas }}],
+          ['Entradas', {{ entradas }}],
+          ['Saídas',  {{ saidas }}],
         ]);
 
         var options = {
