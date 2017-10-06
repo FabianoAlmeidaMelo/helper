@@ -1,0 +1,44 @@
+     <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">Control H</a>
+      </div>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          <li class="{{ menu_home }}"><a href="/" title="{{ section.name }}"><i class="icon-home"></i>Home</a></li>
+          {% if user.is_authenticated and user.conta_set.count %}
+            <!-- {# dropdown ADM INI #} -->
+            <li class="dropdown {{ menu_administracao }}">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Administração <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="#" title="{{ section.name }}">Cadastro</a></li>
+                <li><a href="#" title="{{ section.name }}">Usuários</a></li>
+                <li><a href="#" title="{{ section.name }}">Setores</a></li>
+              </ul>
+            </li>
+            <!-- {# dropdown ADM fim #} -->
+            <li class="{{ menu_mensagens }}"><a href="#" title="{{ section.name }}">Mensagens</a></li>
+            <li class="{{ menu_clientes }}"><a href="#" title="{{ section.name }}">Clientes</a></li>
+            <li class="{{ menu_suporte }}"><a href="#" title="{{ section.name }}">Suporte</a></li>
+          {% endif %}
+          <li class="{% if section.selected %}active{% endif %}"><a href="#"><i class="{{ section.icon }}"></i> {{ section.name }}</a></li>
+        </ul>
+        
+        <ul class="nav navbar-nav navbar-right">
+          <!-- <li><a href="#">Link</a></li> -->
+          {% if user.is_authenticated %}
+            <li{% if active_perfil %} class="active"{% endif %}><a href="#"><i class="glyphicon glyphicon-user"></i> {{ request.user.email }}</a></li>
+            <li><a href="{% url 'logout' %}"><i class="glyphicon glyphicon-off"></i> Sair </a></li>
+          {% else %}
+            <li><a href="{% url 'login' %}"><i class="glyphicon glyphicon-log-in"></i> Entrar </a></li>
+            <!-- <li><a href="#"><i class="icon-arrow-right"></i> Cadastrar </a></li> -->
+          {% endif %}
+        </ul>
+      </div><!-- /.navbar-collapse -->

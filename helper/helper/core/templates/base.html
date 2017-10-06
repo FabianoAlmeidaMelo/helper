@@ -31,82 +31,27 @@
 <body>
   <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
-      <!-- Brand and toggle get grouped for better mobile display -->
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="#">Control H</a>
-      </div>
-
-      <!-- Collect the nav links, forms, and other content for toggling -->
-      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        <ul class="nav navbar-nav">
-          <li class="{{ menu_home }}"><a href="/" title="{{ section.name }}"><i class="icon-home"></i>Home</a></li>
-          {% if user.is_authenticated and user.conta_set.count %}
-            <!-- {# dropdown ADM INI #} -->
-            <li class="dropdown {{ menu_administracao }}">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Administração <span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                <li><a href="{% url 'agenda_list' conta.id %}" title="{{ section.name }}">Agendas</a></li>
-                <li><a href="{% url 'servico_list' conta.id %}" title="{{ section.name }}">Serviços</a></li>
-                <li><a href="{% url 'cartao_list' conta.id %}" title="{{ section.name }}">Cartões</a></li>
-              </ul>
-            </li>
-            <!-- {# dropdown ADM fim #} -->
-            <!-- {# dropdown Agendas INI #} -->
-            <li class="dropdown {{ menu_tarefas_agenda }}">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Agendas <span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                  {% for agenda in conta.agenda_set.all %}
-                    <li><a href="{% url 'agenda_tarefa_list' conta.id agenda.id %}{{ get_ }}" title="{{ section.name }}">{{ agenda.nome }}</a></li>
-                  {% endfor %}
-                </ul>
-              </li>
-            </li>
-          <!-- {# dropdown Agendas fim #} -->
-            <li class="{{ menu_tarefas }}"><a href="{% url 'tarefa_list' conta.id %}{{ get_ }}" title="{{ section.name }}">Tarefas</a></li>
-            {%  if conta.contador %}<!-- {# Se não tem contador, não acessa #} -->
-              <li class="{{ menu_mensagens }}"><a href="#" title="{{ section.name }}">Mensagens</a></li>
-              <li class="{{ menu_contador }}"><a href="{% url 'contador_leitura' conta.id %}" title="{{ section.name }}">Contador</a></li>
-            {% endif %}
-          {% endif %}
-          <li class="{% if section.selected %}active{% endif %}"><a href="#"><i class="{{ section.icon }}"></i> {{ section.name }}</a></li>
-        </ul>
-          
-        
-        <ul class="nav navbar-nav navbar-right">
-          <!-- <li><a href="#">Link</a></li> -->
-          {% if user.is_authenticated %}
-            <li{% if active_perfil %} class="active"{% endif %}><a href="#"><i class="glyphicon glyphicon-user"></i> {{ request.user.email }}</a></li>
-            <li><a href="{% url 'logout' %}"><i class="glyphicon glyphicon-off"></i> Sair </a></li>
-          {% else %}
-            <li><a href="{% url 'login' %}"><i class="glyphicon glyphicon-log-in"></i> Entrar </a></li>
-            <!-- <li><a href="#"><i class="icon-arrow-right"></i> Cadastrar </a></li> -->
-          {% endif %}
-        </ul>
-      </div><!-- /.navbar-collapse -->
-    </div><!-- /.container-fluid -->
+      {% if user.is_authenticated and user.get_group_name == 'Contador' %}
+        {% include 'nav_contador.html' %}
+      {% else %}
+        {% include 'nav_cliente.html' %}
+      {% endif%}
+    </div>
     {% if messages %}
-      <div class="row-fluid">
-        <div class="span12" >
-          {% autoescape off %}
-            {% for message in messages %}
-              <div class="alert alert-{% if message.tags %}{{ message.tags }}{% endif %}" role="alert">
-                <button type="button" class="close" data-dismiss="alert">×</button>
-                {% if 'info' in message.tags %}<i class="glyphicon glyphicon-info-sign"></i>{% endif %}
-                {% if 'warning' in message.tags %}<i class="glyphicon glyphicon-warning-sign"></i>{% endif %}
-                {% if 'success' in message.tags %}<i class="glyphicon glyphicon-ok"></i>{% endif %}
-                {% if 'error' in message.tags %}<i class="glyphicon glyphicon-exclamation-sign"></i>{% endif %}
-                {{ message }}
-              </div>
-            {% endfor %}
-          {% endautoescape %}
-        </div>
-      </div>
+
+      {% autoescape off %}
+        {% for message in messages %}
+          <div class="alert alert-{% if message.tags %}{{ message.tags }}{% endif %}" role="alert">
+            <button type="button" class="close" data-dismiss="alert">×</button>
+            {% if 'info' in message.tags %}<i class="glyphicon glyphicon-info-sign"></i>{% endif %}
+            {% if 'warning' in message.tags %}<i class="glyphicon glyphicon-warning-sign"></i>{% endif %}
+            {% if 'success' in message.tags %}<i class="glyphicon glyphicon-ok"></i>{% endif %}
+            {% if 'error' in message.tags %}<i class="glyphicon glyphicon-exclamation-sign"></i>{% endif %}
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endautoescape %}
+
     {% endif %}
   </nav>
  

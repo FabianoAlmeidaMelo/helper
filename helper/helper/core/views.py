@@ -62,4 +62,4 @@ def home(request):
         conta = get_object_or_404(Conta, dono=request.user)
     context['conta'] = conta
     context['menu_home'] = "active"
-    return render(request, 'base.html', context)
+    return render(request, 'home.html', context)
