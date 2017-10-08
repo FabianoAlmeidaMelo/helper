@@ -15,8 +15,8 @@ class Command(BaseCommand):
         contas_agenda = ContaAgenda.objects.all()
         for conta in contas_agenda:  # depois da 0006
             self.popula_core(conta)
-        # for conta_core in ContaCore.objects.all():  # depois da 0007
-        #     self.setar_conta_core_na_agenda(conta_core)
+        for conta_core in ContaCore.objects.all():  # depois da 0007
+            self.setar_conta_core_na_agenda(conta_core)
 
 
     def popula_core(self, conta):
@@ -35,11 +35,11 @@ class Command(BaseCommand):
         except Exception as e:
             raise CommandError("Error: {}".format(e))
 
-    # def setar_conta_core_na_agenda(self, conta_core):
-    #     agendas = Agenda.objects.filter(conta__id=conta_core.id)
-    #     for agenda in agendas:  # uma conta pode ter varias agendas
-    #         agenda.conta_core = conta_core
-    #         agenda.save()
+    def setar_conta_core_na_agenda(self, conta_core):
+        agendas = Agenda.objects.filter(conta__id=conta_core.id)
+        for agenda in agendas:  # uma conta pode ter varias agendas
+            agenda.conta_core = conta_core
+            agenda.save()
 
 
         
