@@ -15,7 +15,6 @@ from django.template.context import RequestContext
 from .models import (
     Agenda,
     CartaoCredito,
-    # Conta,
     Servico,
     Tarefa,
     )
