@@ -156,11 +156,11 @@ class Agenda(models.Model):
       Pessoa Jurídica ** essa o Contador tem algum acesso.
       Pessoa Física
     '''
-    conta = models.ForeignKey(Conta)
+    conta = models.ForeignKey('core.Conta', related_name='core', null=True)
+    conta_core =models.ForeignKey('core.Conta', null=True)
     nome = models.CharField(u'Nome', max_length=200)
     observacao = models.TextField('observação', null=True, blank=True)
     tipo = models.SmallIntegerField(u'Tipo', choices=TIPO_AGENDA, default=2)
-    # agenda_usuario = models.ManyToManyField(User, through='AgendaUsuario')
 
     class Meta:
         verbose_name = u'Agenda'

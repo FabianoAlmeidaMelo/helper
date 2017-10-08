@@ -15,10 +15,12 @@ from django.template.context import RequestContext
 from .models import (
     Agenda,
     CartaoCredito,
-    Conta,
+    # Conta,
     Servico,
     Tarefa,
     )
+
+from helper.core.models import Conta
 
 from .forms import (
     AgendaForm,
