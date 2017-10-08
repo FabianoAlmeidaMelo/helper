@@ -2,7 +2,7 @@
 from django.conf import settings
 from django.db import models
 from helper.core.models import Endereco
-
+# from helper.agenda.models import Conta
 
 class Contador(models.Model):
     nome = models.CharField(max_length=100)
@@ -15,7 +15,7 @@ class Contador(models.Model):
     email = models.EmailField(u'email', max_length=50, null=True, blank=True)
     # Contato
     nome_contato = models.CharField(u'Nome do Contato', max_length=200)
-    #siet = models.(User, through='ContadorUsuario')
+    models.ForeignKey('agenda.Conta')
 
     def __unicode__(self):
         return self.nome    
