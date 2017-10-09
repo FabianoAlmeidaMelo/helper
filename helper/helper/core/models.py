@@ -119,8 +119,6 @@ class Conta(models.Model):
     cada Conta pode ter N agendas
     as contas devem ter mais ou menos benefícios, de
     acordo com o Tipo.
-    TODO:
-        Levar para app core ?
     """
     dono = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='conta_core')
     tipo = models.SmallIntegerField(u'tipo', choices=TIPO)

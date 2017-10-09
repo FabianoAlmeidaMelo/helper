@@ -48,7 +48,7 @@ class Conta(models.Model):
     as contas devem ter mais ou menos benefícios, de
     acordo com o Tipo.
     TODO:
-        Levar para app core ?
+        APAGAR
     """
     dono = models.ForeignKey(settings.AUTH_USER_MODEL)
     tipo = models.SmallIntegerField(u'tipo', choices=TIPO)
