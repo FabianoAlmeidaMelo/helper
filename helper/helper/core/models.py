@@ -45,6 +45,35 @@ class UserManager(BaseUserManager):
         return user
 
 
+class Conta(models.Model):
+    """
+    Um user só pode estar vinculado a 1 conta
+    cada Conta pode ter N agendas
+    as contas devem ter mais ou menos benefícios, de
+    acordo com o Tipo.
+    """
+    dono = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='dono_conta_core')
+    tipo = models.SmallIntegerField(u'tipo', choices=TIPO)
+    valor = models.DecimalField(u'Valor',
+                                max_digits=7,
+                                decimal_places=2,
+                                blank=True,
+                                null=True
+                            )
+    validade = models.DateTimeField(u'Data')
+    contador = models.ForeignKey('contabil.Contador', null=True, blank=True, related_name='conta_core')
+
+    class Meta:
+        verbose_name = u'Conta'
+        verbose_name_plural = u'Contas'
+
+    def __unicode__(self):
+        return self.dono.nome
+
+    def can_acess(self, user):
+        return user in self.user_set.all()
+
+
 class User(AbstractBaseUser, PermissionsMixin):
     '''
         Usuário do sistema
@@ -73,6 +102,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         u'Profissão', max_length=100, null=True, blank=True
     )
     sexo = models.IntegerField(u'Sexo', choices=SEXO, null=True, blank=True)
+    conta = models.ForeignKey(Conta, null=True)
 
     objects = UserManager()
 
@@ -112,31 +142,3 @@ class Endereco(models.Model):
     class Meta:
         verbose_name = u'Endereço'
 
-
-class Conta(models.Model):
-    """
-    Um user só pode estar vinculado a 1 conta
-    cada Conta pode ter N agendas
-    as contas devem ter mais ou menos benefícios, de
-    acordo com o Tipo.
-    """
-    dono = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='conta_core')
-    tipo = models.SmallIntegerField(u'tipo', choices=TIPO)
-    valor = models.DecimalField(u'Valor',
-                                max_digits=7,
-                                decimal_places=2,
-                                blank=True,
-                                null=True
-                            )
-    validade = models.DateTimeField(u'Data')
-    contador = models.ForeignKey('contabil.Contador', null=True, blank=True, related_name='conta_core')
-
-    class Meta:
-        verbose_name = u'Conta'
-        verbose_name_plural = u'Contas'
-
-    def __unicode__(self):
-        return self.dono.nome
-
-    def can_acess(self, user):
-        return user == self.dono

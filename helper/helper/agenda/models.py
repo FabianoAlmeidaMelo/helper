@@ -43,6 +43,7 @@ def validate_fechamento(value):
 
 class Conta(models.Model):
     """
+    APAGAR
     Uma pessoa física ou jurídica pode ter N Contas
     cada Conta pode ter N agendas
     as contas devem ter mais ou menos benefícios, de
@@ -50,7 +51,7 @@ class Conta(models.Model):
     TODO:
         APAGAR
     """
-    dono = models.ForeignKey(settings.AUTH_USER_MODEL)
+    dono = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='dono_conta_agenda')
     tipo = models.SmallIntegerField(u'tipo', choices=TIPO)
     valor = models.DecimalField(
         u'Valor',
