@@ -71,6 +71,11 @@ class Conta(models.Model):
         return self.dono.nome
 
     def can_acess(self, user):
+        """
+        ref #44
+        Se user está em self.user_set.all():
+            True
+        """
         return user in self.user_set.all()
 
 
