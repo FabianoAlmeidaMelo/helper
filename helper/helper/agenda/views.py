@@ -7,7 +7,7 @@ from django.views.generic import CreateView, UpdateView, DeleteView  #, ListView
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
-# from django.contrib.contenttypes.models import ContentType
+
 from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.context import RequestContext
@@ -40,8 +40,8 @@ def agenda_form(request, conta_pk, pk=None):
         #12
     '''
     conta = get_object_or_404(Conta, id=conta_pk)
-    if not conta.can_acess(request.user):
-        raise Http404
+    # if not conta.can_acess(request.user):
+    #     raise Http404
     if pk:
         agenda = get_object_or_404(Agenda, pk=pk)
         msg = u'agenda alterada com sucesso.'
@@ -69,8 +69,8 @@ def agenda_form(request, conta_pk, pk=None):
 @login_required
 def agenda_list(request, conta_pk):
     conta = get_object_or_404(Conta, id=conta_pk)
-    if not conta.can_acess(request.user):
-        raise Http404
+    # if not conta.can_acess(request.user):
+    #     raise Http404
     object_list = Agenda.objects.filter(conta=conta)
 
     context = {}
@@ -85,8 +85,8 @@ def servico_form(request, conta_pk, pk=None):
         #12
     '''
     conta = get_object_or_404(Conta, id=conta_pk)
-    if not conta.can_acess(request.user):
-        raise Http404
+    # if not conta.can_acess(request.user):
+    #     raise Http404
     if pk:
         servico = get_object_or_404(Servico, pk=pk)
         msg = u'Serviço alterado com sucesso.'
@@ -116,8 +116,8 @@ def servico_form(request, conta_pk, pk=None):
 @login_required
 def servico_list(request, conta_pk):
     conta = get_object_or_404(Conta, id=conta_pk)
-    if not conta.can_acess(request.user):
-        raise Http404
+    # if not conta.can_acess(request.user):
+    #     raise Http404
     form = ServicoSearchForm(request.GET or None, conta=conta)
     object_list = form.get_result_queryset()
     context = {}
@@ -135,8 +135,8 @@ def tarefa_form(request, conta_pk, agenda_pk=None, pk=None):
         #12
     '''
     conta = get_object_or_404(Conta, id=conta_pk)
-    if not conta.can_acess(request.user):
-        raise Http404
+    # if not conta.can_acess(request.user):
+    #     raise Http404
     agenda = None
     if agenda_pk:
         agenda = get_object_or_404(Agenda, id=agenda_pk)
@@ -178,8 +178,8 @@ class TarefaFormListView(SearchFormListView):
         if 'conta_pk' in self.kwargs:
             conta_pk = self.kwargs['conta_pk']
             conta = get_object_or_404(Conta, id=conta_pk)
-            if not conta.can_acess(request.user):
-                raise Http404
+            # if not conta.can_acess(request.user):
+            #     raise Http404
 
         total_pos = total_neg = total = 0
         data_ini = self.form.ini
@@ -246,8 +246,8 @@ class AgendaTarefaFormListView(SearchFormListView):
         if 'conta_pk' in self.kwargs:
             conta_pk = self.kwargs['conta_pk']
             conta = get_object_or_404(Conta, id=conta_pk)
-            if not conta.can_acess(request.user):
-                raise Http404
+            # if not conta.can_acess(request.user):
+            #     raise Http404
         if 'agenda_pk' in self.kwargs:
             agenda_pk = self.kwargs['agenda_pk']
             agenda = get_object_or_404(Agenda, id=agenda_pk)
@@ -328,8 +328,8 @@ def cartao_form(request, conta_pk, pk=None):
     o cartao é o do dono da conta (um user)
     '''
     conta = get_object_or_404(Conta, id=conta_pk)
-    if not conta.can_acess(request.user):
-        raise Http404
+    # if not conta.can_acess(request.user):
+    #     raise Http404
     context = {}
     context['conta'] = conta
     if pk:
@@ -357,8 +357,8 @@ def cartao_form(request, conta_pk, pk=None):
 @login_required
 def cartao_list(request, conta_pk):
     conta = get_object_or_404(Conta, id=conta_pk)
-    if not conta.can_acess(request.user):
-        raise Http404
+    # if not conta.can_acess(request.user):
+    #     raise Http404
     object_list = CartaoCredito.objects.filter(usuario=conta.dono) # não tem relação: TODO vincular a conta e ou agenda
     form = CartaoCreditoBaseSearchForm(request.POST or None)
     context = {}
