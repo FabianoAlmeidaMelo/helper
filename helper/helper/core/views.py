@@ -10,7 +10,7 @@ from django.views.generic.edit import FormMixin
 from django.views.generic.list import ListView
 from django.views.generic import TemplateView
 
-from helper.agenda.models import (
+from helper.core.models import (
     Conta,
 )
 
