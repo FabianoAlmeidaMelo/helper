@@ -10,7 +10,7 @@ from django.views.generic.edit import FormMixin
 from django.views.generic.list import ListView
 from django.views.generic import TemplateView
 
-from helper.agenda.models import (
+from helper.core.models import (
     Conta,
 )
 
@@ -58,8 +58,8 @@ def home(request):
     user = request.user
     conta = None
     context = {}
-    if user.is_authenticated() and user.conta_set.count():
-        conta = get_object_or_404(Conta, dono=request.user)
+    if user.is_authenticated():
+        conta = user.conta
     context['conta'] = conta
     context['menu_home'] = "active"
     return render(request, 'home.html', context)

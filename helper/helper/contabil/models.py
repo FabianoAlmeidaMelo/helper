@@ -2,9 +2,12 @@
 from django.conf import settings
 from django.db import models
 from helper.core.models import Endereco
-# from helper.agenda.models import Conta
+
 
 class Contador(models.Model):
+    """
+    é o perfil jurídico do cliente contador
+    """
     nome = models.CharField(max_length=100)
     cnpj = models.CharField(u'CNPJ', max_length=18)
     # Comunicação
@@ -15,7 +18,7 @@ class Contador(models.Model):
     email = models.EmailField(u'email', max_length=50, null=True, blank=True)
     # Contato
     nome_contato = models.CharField(u'Nome do Contato', max_length=200)
-    models.ForeignKey('agenda.Conta')
+    # conta = models.ForeignKey('core.Conta')
 
     def __unicode__(self):
         return self.nome    
