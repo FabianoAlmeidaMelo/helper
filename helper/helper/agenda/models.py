@@ -41,39 +41,6 @@ def validate_fechamento(value):
         raise ValidationError(u'%s Não está entre 1 e 31' % value)
 
 
-class Conta(models.Model):
-    """
-    APAGAR
-    Uma pessoa física ou jurídica pode ter N Contas
-    cada Conta pode ter N agendas
-    as contas devem ter mais ou menos benefícios, de
-    acordo com o Tipo.
-    TODO:
-        APAGAR
-    """
-    dono = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='dono_conta_agenda')
-    tipo = models.SmallIntegerField(u'tipo', choices=TIPO)
-    valor = models.DecimalField(
-        u'Valor',
-        max_digits=7,
-        decimal_places=2,
-        blank=True,
-        null=True
-    )
-    validade = models.DateTimeField(u'Data')
-    contador = models.ForeignKey(Contador, null=True, blank=True)
-
-    class Meta:
-        verbose_name = u'Conta'
-        verbose_name_plural = u'Contas'
-
-    def __unicode__(self):
-        return self.dono.nome
-
-    def can_acess(self, user):
-        return user == self.dono
-
-
 class CartaoCredito(models.Model):
     '''
     ref #14
@@ -222,7 +189,7 @@ class Tarefa(models.Model):
         null=True,
         blank=True
     )
-    parcela = models.ForeignKey(
+    parcela = models.ForeignKey( # ID da Tarefa 'Mãe'
         'Tarefa',
         null=True,
         blank=True
