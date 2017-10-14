@@ -3,6 +3,26 @@ from helper.core.forms import BaseSearchForm
 from django.db.models import Q
 from django.views.generic.list import ListView
 from helper.core.models import User
+from helper.contabil.models import Contador
+
+
+class ContadorForm(forms.ModelForm):
+
+    def __init__(self, *args, **kargs):
+        self.conta = kargs.pop('conta', None)
+        super(ContadorForm, self).__init__(*args, **kargs)
+
+    class Meta:
+        model = Contador
+        fields = ('nome',
+                  'cnpj',
+                  'endereco',
+                  'telefone',
+                  'telefone2',
+                  'celular',
+                  'email',
+                  'nome_contato')
+
 
 class ClienteUserSearchForm(forms.Form):
     '''

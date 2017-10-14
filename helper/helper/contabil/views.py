@@ -1,11 +1,17 @@
+# coding: utf-8
 from django.shortcuts import render
 from helper.core.models import Conta
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+
 from django.shortcuts import get_object_or_404, redirect, render
 from django.http import Http404
 
-from helper.contabil.forms import ClienteUserSearchForm
+from helper.contabil.forms import (
+    ClienteUserSearchForm,
+    ContadorForm,
+)
 from helper.core.views import SearchFormListView
 
 
@@ -21,6 +27,31 @@ def contador_leitura(request, conta_pk):
     context['conta'] = conta
     context['menu_contador'] = "active"
     return render(request, 'contabil/contador_leitura.html', context)
+
+
+@login_required
+def contador_form(request):
+    conta = request.user.conta
+    if not conta.contador:
+        raise Http404
+    contador = conta.contador
+    form = ContadorForm(request.POST or None, instance=contador, conta=conta)
+
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            msg = u'cadastro alterado com sucesso.'
+            messages.success(request, msg)
+        else:
+            msg = u'Falha na edição do cadastro: %s ' % form.errors
+            messages.warning(request, msg)
+
+    context = {}
+    context['form'] = form
+    context['contador'] = contador
+    context['conta'] = conta
+    context['menu_cadastro'] = "active"
+    return render(request, 'contabil/contador_form.html', context)
 
 
 @login_required
