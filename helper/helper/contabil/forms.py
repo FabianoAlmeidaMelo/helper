@@ -19,12 +19,12 @@ class ClienteUserSearchForm(BaseSearchForm):
         self.fields['user'].queryset = User.objects.filter(conta__in=self.contas_ids)
 
     def get_queryset(self):
-        q = Q(conta=self.conta)
+        q = Q(conta__in=self.contas_ids)
         if self.is_valid():
-            user = self.cleaned_data['user']
-            if user:
-                q = q & Q(agenda=agenda)
+            # user = self.cleaned_data['user']
+            # if user:
+            #     q = q & Q(agenda=agenda)
             nome = self.cleaned_data['nome']
             if nome:
                 q = q & Q(nome__icontains=nome)
-        return User.objects.all()
+        return User.objects.filter(q)

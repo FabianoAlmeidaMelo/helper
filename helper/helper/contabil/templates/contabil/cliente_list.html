@@ -1,22 +1,31 @@
 {% extends "base.html" %}
+{% load bootstrap3 %}
 
 {% block page_title %}
   <div class="page-header">
-  <!-- TODO erver esse br -->
-  <br>
-  Clientes
+    <br>
+    <h3>Clientes<small> listagem de usuários.</small>
+    <a class="btn btn-default btn-xs" id="filtro_button_id" href="#!" onclick="show_filter_fields(this)"></span>Ver filtro</a>
+    <a class="btn btn-success btn-xs" href="{% url 'servico_add' conta.id %}">Novo Cliente</a></small></h3>
   </div>
 {% endblock page_title %}
 
 {% block content %}
-<div class="row-fluid">
-<!-- {# ref #34  como o user vai ter mais de 2 agendas, ainda não foi definido $$ #} -->
-<!-- {#<a class="btn btn-success" href="{% url 'agenda_add' conta.id %}">Nova Agenda</a> #}-->
+<div class="off" id="filtro">
+  <form class="form-inline well" method="GET" action="#">
+      <div class="form-group">
+        {% bootstrap_field form.nome %}
+      </div>
+        <button type="submit" class="btn btn-primary" title="Filtrar"><i class="glyphicon glyphicon-search"></i></button>
+        <a class="btn btn-small btn-info" href="." title="Apaga o filtro e listar todos"><i class="glyphicon glyphicon-remove-circle"></i></a>
+      </div>
+  </form>
+</div>
   <table class="table table-striped">
     <thead>
       <tr>
         <th>Nome</th>
-        <th>Observação</th>
+        <th></th>
       </tr>
     </thead>
     {% for object in object_list %}
@@ -32,3 +41,19 @@
   </table>
 </div>
 {% endblock content %}
+{% block extra_js %}
+  <script type="text/javascript">
+    var show_filter_fields = function() {
+      $('#filtro').slideToggle('slow', function() {
+          $('#filtro').toggleClass('off');
+          if ($('#filtro').is('.off')) {
+              //$('#filtro-label').text('Ver filtro');
+              document.getElementById('filtro_button_id').innerHTML = "Ver filtro";
+          } else {
+             // $('#filtro-label').text('Esconder filtro');
+              document.getElementById('filtro_button_id').innerHTML = "Esconder filtro";
+          }
+      });
+  };
+  </script>  
+{% endblock extra_js %}
