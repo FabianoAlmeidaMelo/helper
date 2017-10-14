@@ -25,7 +25,7 @@
             </li>
             <!-- {# dropdown ADM fim #} -->
             <li class="{{ menu_mensagens }}"><a href="#" title="{{ section.name }}">Mensagens</a></li>
-            <li class="{{ menu_clientes }}"><a href="#" title="{{ section.name }}">Clientes</a></li>
+            <li class="{{ menu_clientes }}"><a href="{% url 'cliente_list' conta.id %}" title="{{ section.name }}">Clientes</a></li>
             <li class="{{ menu_suporte }}"><a href="#" title="{{ section.name }}">Suporte</a></li>
           {% endif %}
           <li class="{% if section.selected %}active{% endif %}"><a href="#"><i class="{{ section.icon }}"></i> {{ section.name }}</a></li>

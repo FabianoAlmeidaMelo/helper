@@ -68,7 +68,13 @@ class Conta(models.Model):
         verbose_name_plural = u'Contas'
 
     def __unicode__(self):
-        return self.dono.nome
+        return self.get_dono().nome
+
+    def get_dono(self):
+        """
+        Dono é o 1º user vinculado à conta
+        """
+        return self.user_set.first()
 
     def can_acess(self, user):
         """
@@ -83,16 +89,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     '''
         Usuário do sistema
         is_superuser == usuário Administrador
-    'email': u'',
-    'first_name': u'',
-    'id': None,
-    'is_active': True,
-    'is_staff': False,
-    'is_superuser': False,
-    'last_login': None,
-    'last_name': u'',
-    'password': u'',
-    'username': u''
     '''
     email = models.EmailField('e-mail', unique=True)
     nome = models.CharField(verbose_name=u'Nome', max_length=100)
