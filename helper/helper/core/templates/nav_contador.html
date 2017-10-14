@@ -18,7 +18,7 @@
             <li class="dropdown {{ menu_administracao }}">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Administração <span class="caret"></span></a>
               <ul class="dropdown-menu">
-                <li><a href="#" title="{{ section.name }}">Cadastro</a></li>
+                <li><a href="{% url 'contador_read' %}" title="{{ section.name }}">Cadastro</a></li>
                 <li><a href="#" title="{{ section.name }}">Setores</a></li>
                 <li><a href="#" title="{{ section.name }}">Usuários</a></li>
               </ul>

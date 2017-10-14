@@ -1,18 +1,17 @@
 # coding: utf-8
-from django.shortcuts import render
-from helper.core.models import Conta
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-
-from django.shortcuts import get_object_or_404, redirect, render
+from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import Http404
+from django.shortcuts import get_object_or_404, redirect, render
+
+from helper.core.models import Conta
 
 from helper.contabil.forms import (
     ClienteUserSearchForm,
     ContadorForm,
 )
-from helper.core.views import SearchFormListView
 
 
 @login_required
@@ -51,13 +50,32 @@ def contador_form(request):
         else:
             msg = u'Falha na edição do cadastro: %s ' % form.errors
             messages.warning(request, msg)
+        return redirect(reverse('contador_read'))
 
     context = {}
     context['form'] = form
     context['contador'] = contador
     context['conta'] = conta
-    context['menu_cadastro'] = "active"
+    context['menu_administracao'] = "active"
     return render(request, 'contabil/contador_form.html', context)
+
+
+@login_required
+def contador_read(request):
+    """
+    acesso do contador
+    """
+    conta = request.user.conta
+    contador = conta.contador
+    if not contador.can_acess(request.user):
+        raise Http404
+
+
+    context = {}
+    context['contador'] = contador
+    context['conta'] = conta
+    context['menu_administracao'] = "active"
+    return render(request, 'contabil/contador_read.html', context)
 
 
 @login_required
