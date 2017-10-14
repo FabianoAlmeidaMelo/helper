@@ -17,6 +17,9 @@ from helper.core.views import SearchFormListView
 
 @login_required
 def contador_leitura(request, conta_pk):
+    """
+    acesso do cliente
+    """
     conta = get_object_or_404(Conta, id=conta_pk)
     if not conta.contador:
         raise Http404
@@ -31,10 +34,13 @@ def contador_leitura(request, conta_pk):
 
 @login_required
 def contador_form(request):
+    """
+    acesso do contador
+    """
     conta = request.user.conta
-    if not conta.contador:
-        raise Http404
     contador = conta.contador
+    if not contador.can_acess(request.user):
+        raise Http404
     form = ContadorForm(request.POST or None, instance=contador, conta=conta)
 
     if request.method == 'POST':

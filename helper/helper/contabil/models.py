@@ -23,6 +23,14 @@ class Contador(models.Model):
     def __unicode__(self):
         return self.nome    
 
+    def can_acess(self, user):
+        """
+        Contador em várias contas;
+        os users vinculados ao Contador só tem uma Conta
+        essa conta ou é tipo = 1: Contador
+        ou tipo 2 : Empresarial
+        """
+        return user.conta in self.conta_core.filter(tipo=1)
 
 class Setor(models.Model):
     contador = models.ForeignKey(Contador)
