@@ -319,6 +319,7 @@ def set_tarefa_status(request, tarefa_pk):
     altera tarefa.pago
         para: True ou False
     '''
+    conta = request.user.conta
     tarefa = get_object_or_404(Tarefa, id=tarefa_pk)
     if not conta.can_acess(request.user):
         raise Http404
