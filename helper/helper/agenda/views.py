@@ -1,10 +1,10 @@
 # coding: utf-8
 from django.db.models import Q, Sum
 from datetime import date
-
-from django.core.urlresolvers import reverse_lazy
-from django.views.generic import CreateView, UpdateView, DeleteView  #, ListView # DeleteView
 from django.core.urlresolvers import reverse, reverse_lazy
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
+# from django.views.generic import CreateView, UpdateView, DeleteView  #, ListView # DeleteView
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 
@@ -116,13 +116,21 @@ def servico_form(request, conta_pk, pk=None):
 @login_required
 def servico_list(request, conta_pk):
     conta = get_object_or_404(Conta, id=conta_pk)
+    page = request.GET.get('page', 1)
     if not conta.can_acess(request.user):
         raise Http404
     form = ServicoSearchForm(request.GET or None, conta=conta)
     object_list = form.get_result_queryset()
+    paginator = Paginator(object_list, 10)
+    try:
+        servicos = paginator.page(page)
+    except PageNotAnInteger:
+        servicos = paginator.page(1)
+    except EmptyPage:
+        servicos = paginator.page(paginator.num_pages)
     context = {}
     context['conta'] = conta
-    context['object_list'] = object_list
+    context['object_list'] = servicos
     context['form'] = form
     context['menu_administracao'] = "active"
 

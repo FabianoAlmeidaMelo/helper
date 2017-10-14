@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from helper.core.models import Conta
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from django.http import Http404
@@ -25,16 +26,25 @@ def contador_leitura(request, conta_pk):
 @login_required
 def cliente_list(request, conta_pk):
     conta = get_object_or_404(Conta, id=conta_pk)
+    page = request.GET.get('page', 1)
     if not conta.can_acess(request.user):
         raise Http404
-    # form = PrestacaoContasItensSearchForm(request.GET or None, prestacoes_conta=prestacoes_conta)
+
     form = ClienteUserSearchForm(request.GET or None, conta=conta)
     object_list = form.get_queryset()
+   
+    paginator = Paginator(object_list, 15)
+    try:
+        clientes_users = paginator.page(page)
+    except PageNotAnInteger:
+        clientes_users = paginator.page(1)
+    except EmptyPage:
+        clientes_users = paginator.page(paginator.num_pages)
+
     context = {}
     context['conta'] = conta
-    context['object_list'] = object_list
+    context['object_list'] = clientes_users
     context['form'] = form
     context['menu_clientes'] = "active"
 
-    return render(
-        request, 'contabil/cliente_list.html', context)
+    return render(request, 'contabil/cliente_list.html', context)
