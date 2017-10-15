@@ -3,7 +3,10 @@ from helper.core.forms import BaseSearchForm
 from django.db.models import Q
 from django.views.generic.list import ListView
 from helper.core.models import User
-from helper.contabil.models import Contador
+from helper.contabil.models import (
+	Contador,
+	Setor,
+)
 
 
 class ContadorForm(forms.ModelForm):
@@ -47,3 +50,22 @@ class ClienteUserSearchForm(forms.Form):
             if nome:
                 q = q & Q(nome__icontains=nome)
         return User.objects.filter(q)
+
+
+class SetorListSearchForm(forms.Form):
+    '''
+    Busca Setores do Contador 
+    '''
+    nome = forms.CharField(label=u'Nome', required=False)
+    
+    def __init__(self, *args, **kargs):
+        self.contador = kargs.pop('contador', None)
+        super(SetorListSearchForm, self).__init__(*args, **kargs)
+
+    def get_queryset(self):
+        q = Q(contador=self.contador)
+        if self.is_valid():
+            nome = self.cleaned_data['nome']
+            if nome:
+                q = q & Q(nome__icontains=nome)
+        return Setor.objects.filter(q)
