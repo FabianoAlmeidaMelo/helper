@@ -32,12 +32,14 @@ class SetorForm(forms.ModelForm):
         super(SetorForm, self).__init__(*args, **kargs)
 
     class Meta:
-        model = Contador
+        model = Setor
         fields = ('nome',)
 
-    def save(self):
+    def save(self, *args, **kargs):
         self.instance.contador = self.contador
-        self.instance.save()
+    	instance = super(SetorForm, self).save(*args, **kargs)
+        instance.save()
+        return instance
 
 
 class ClienteUserSearchForm(forms.Form):
