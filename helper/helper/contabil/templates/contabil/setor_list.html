@@ -41,7 +41,7 @@
     {% for object in object_list %}
       <tr>
         <td>
-          <a href="#">{{ object.nome }}</a>
+          <a href="{% url 'setor_edit' object.pk %}">{{ object.nome }}</a>
         </td>
       </tr>
     {% empty %}

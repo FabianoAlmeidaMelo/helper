@@ -8,9 +8,12 @@ from django.shortcuts import get_object_or_404, redirect, render
 
 from helper.core.models import Conta
 
+from helper.contabil.models import Setor
+
 from helper.contabil.forms import (
     ClienteUserSearchForm,
     ContadorForm,
+    SetorForm,
     SetorListSearchForm,
 )
 
@@ -105,6 +108,37 @@ def setor_list(request):
 
     return render(request, 'contabil/setor_list.html', context)
 
+
+@login_required
+def setor_form(request, setor_pk=None):
+    """
+    acesso do contador
+    """
+    conta = request.user.conta
+    contador = conta.contador
+    setor = None
+    if setor_pk:
+        setor = get_object_or_404(Setor, pk=setor_pk)
+    if not contador.can_acess(request.user):
+        raise Http404
+    form = SetorForm(request.POST or None, instance=setor, contador=contador)
+
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            msg = u'Setor salvo com sucesso.'
+            messages.success(request, msg)
+        else:
+            msg = u'Falha na edição do setor: %s ' % form.errors
+            messages.warning(request, msg)
+        return redirect(reverse('setor_list'))
+
+    context = {}
+    context['form'] = form
+    context['contador'] = contador
+    context['conta'] = conta
+    context['menu_administracao'] = "active"
+    return render(request, 'contabil/setor_form.html', context)
 
 
 @login_required

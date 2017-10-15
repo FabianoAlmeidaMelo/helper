@@ -5,7 +5,7 @@
   <div class="page-header center_div">
   <!-- TODO erver esse br -->
   <br>
-  <h3>Contador <small> dados da empresa: {% if form.instance.pk %}Edição{% else%}Cadastro{% endif%}. </span>
+  <h3>Setor / Departamento <small> {% if form.instance.pk %}Edição{% else%}Cadastro{% endif%}. </span>
   </div>
 {% endblock page_title %}
 
@@ -16,19 +16,13 @@
       <div class="row">
         <!-- {# Celular, Tablet, Computador #} -->
         <div class="col-xs-9 col-sm-6 col-md-3">
-          CNPJ <br>{{ contador.cnpj }}<br>
           {% bootstrap_field form.nome %}
-          {% bootstrap_field form.telefone %}
-          {% bootstrap_field form.telefone2 %}
-          {% bootstrap_field form.celular %}
-          {% bootstrap_field form.email %}
-          {% bootstrap_field form.nome_contato %}
         </div>
       </div>
     </div>
     <div class="form-group center_div">
       <input type="submit" value="Salvar" class="btn btn-primary ">
-      <a href="{% url 'contador_read' %}" class="btn btn-default">Voltar</a>
+      <a href="{% url 'setor_list' %}" class="btn btn-default">Voltar</a>
     </div>
   </form>
 

@@ -18,13 +18,26 @@ class ContadorForm(forms.ModelForm):
     class Meta:
         model = Contador
         fields = ('nome',
-                  'cnpj',
                   'endereco',
                   'telefone',
                   'telefone2',
                   'celular',
                   'email',
                   'nome_contato')
+
+class SetorForm(forms.ModelForm):
+
+    def __init__(self, *args, **kargs):
+        self.contador = kargs.pop('contador', None)
+        super(SetorForm, self).__init__(*args, **kargs)
+
+    class Meta:
+        model = Contador
+        fields = ('nome',)
+
+    def save(self):
+        self.instance.contador = self.contador
+        self.instance.save()
 
 
 class ClienteUserSearchForm(forms.Form):
