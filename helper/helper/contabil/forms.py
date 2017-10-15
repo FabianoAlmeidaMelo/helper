@@ -67,6 +67,31 @@ class ClienteUserSearchForm(forms.Form):
         return User.objects.filter(q)
 
 
+class ContadorUserSearchForm(forms.Form):
+    '''
+    Busca Users do Contador 
+    '''
+    nome = forms.CharField(label=u'Nome', required=False)
+    email = forms.CharField(label=u'email', required=False)
+    
+
+    def __init__(self, *args, **kargs):
+        self.conta = kargs.pop('conta', None) # conta do contador
+        super(ContadorUserSearchForm, self).__init__(*args, **kargs)
+        self.contas_ids = self.conta.contador.conta_core.filter(tipo=1).values_list('id', flat=True)
+
+    def get_queryset(self):
+        q = Q(conta__in=self.contas_ids)
+        if self.is_valid():
+            email = self.cleaned_data['email']
+            if email:
+                q = q & Q(email__icontains=email)
+            nome = self.cleaned_data['nome']
+            if nome:
+                q = q & Q(nome__icontains=nome)
+        return User.objects.filter(q)
+
+
 class SetorListSearchForm(forms.Form):
     '''
     Busca Setores do Contador 

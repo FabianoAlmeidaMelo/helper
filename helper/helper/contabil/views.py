@@ -13,6 +13,7 @@ from helper.contabil.models import Setor
 from helper.contabil.forms import (
     ClienteUserSearchForm,
     ContadorForm,
+    ContadorUserSearchForm,
     SetorForm,
     SetorListSearchForm,
 )
@@ -139,6 +140,37 @@ def setor_form(request, setor_pk=None):
     context['conta'] = conta
     context['menu_administracao'] = "active"
     return render(request, 'contabil/setor_form.html', context)
+
+
+@login_required
+def contador_users_list(request, conta_pk):
+    """
+    Lista os users DO contador
+    tipo 1
+    """
+    conta = get_object_or_404(Conta, id=conta_pk)
+    page = request.GET.get('page', 1)
+    if not conta.can_acess(request.user):
+        raise Http404
+
+    form = ContadorUserSearchForm(request.GET or None, conta=conta)
+    object_list = form.get_queryset()
+   
+    paginator = Paginator(object_list, 15)
+    try:
+        clientes_users = paginator.page(page)
+    except PageNotAnInteger:
+        clientes_users = paginator.page(1)
+    except EmptyPage:
+        clientes_users = paginator.page(paginator.num_pages)
+
+    context = {}
+    context['conta'] = conta
+    context['object_list'] = clientes_users
+    context['form'] = form
+    context['menu_administracao'] = "active"
+
+    return render(request, 'contabil/contador_user_list.html', context)
 
 
 @login_required
