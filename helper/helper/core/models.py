@@ -126,6 +126,9 @@ class User(AbstractBaseUser, PermissionsMixin):
             return group.name
         return 'Cliente'
 
+    def is_admin(self):
+        return self == self.conta.user_set.filter(is_active=True).first()
+
 class Endereco(models.Model):
     '''
     #26

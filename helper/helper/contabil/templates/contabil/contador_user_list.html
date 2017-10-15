@@ -38,6 +38,7 @@
     <thead>
       <tr>
         <th>Nome</th>
+        <th>Admin</th>
         <th>Email</th>
         <th>Nascimento</th>
         <th>sexo</th>
@@ -49,6 +50,7 @@
         <td>
           <a href="#">{{ object.nome }}</a>
         </td>
+        <td>{{ object.is_admin|yesno:"Sim,Não"}}</td>
         <td>{{ object.email|default:'--' }}</td>
         <td>{{ object.nascimento|date:"d/m/Y"|default:'--' }}</td>
         <td>{{ object.get_sexo_display|default:'--' }}</td>
