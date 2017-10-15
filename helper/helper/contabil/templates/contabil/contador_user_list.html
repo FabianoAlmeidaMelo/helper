@@ -16,9 +16,9 @@
 {% block page_title %}
   <div class="page-header">
     <br>
-    <h3>Clientes<small> listagem de usuários.</small>
+    <h3>Usuários<small> listagem de usuários internos, da sua empresa.</small>
     <a class="btn btn-default btn-xs" id="filtro_button_id" href="#!" onclick="show_filter_fields(this)"></span>Ver filtro</a>
-    <a class="btn btn-success btn-xs" href="#">Novo Cliente</a></small></h3>
+    <a class="btn btn-success btn-xs" href="#">Novo Usuário</a></small></h3>
   </div>
 {% endblock page_title %}
 
@@ -41,7 +41,7 @@
         <th>Email</th>
         <th>Nascimento</th>
         <th>sexo</th>
-        <th>Validade Conta</th>
+        <th>status</th>
       </tr>
     </thead>
     {% for object in object_list %}
@@ -52,7 +52,7 @@
         <td>{{ object.email|default:'--' }}</td>
         <td>{{ object.nascimento|date:"d/m/Y"|default:'--' }}</td>
         <td>{{ object.get_sexo_display|default:'--' }}</td>
-        <td>{{ object.conta.validade|date:"d/m/Y"|default:'--' }}</td>
+        <td>{{ object.is_active|yesno:"ativo,inativo" }}</td>
       </tr>
     {% empty %}
       <tr><td colspan="100%">Nenhum item disponível</td></tr>
