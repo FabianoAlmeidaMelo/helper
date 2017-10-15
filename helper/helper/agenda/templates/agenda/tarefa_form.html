@@ -5,12 +5,14 @@
 {% bootstrap_javascript %}
 
 {% block css %}
-<!--   <style type="text/css">
+  <style type="text/css">
 
     #id_descricao{
-      width: 780px;
+      width: 620px;
       height: 70px;
     }
+  </style>
+<!--   <style type="text/css">
     #id_data_ini,
     #id_data_fim,
     #id_confirmado,
@@ -30,7 +32,7 @@
 {% endblock css %}
 
 {% block page_title %}
-  <div class="page-header">
+  <div class="page-header center_div">
     <!-- TODO erver esse br -->
     <br>
     <h3>
@@ -47,7 +49,7 @@
 {% endblock page_title %}
 
 {% block content %}
-<form method="POST" >
+<form method="POST" class="center_div" >
   {% csrf_token %}
   <div class="form-group">
     <div class="row">

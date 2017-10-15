@@ -2,7 +2,7 @@
 {% load bootstrap3 %}
 
 {% block page_title %}
-  <div class="page-header">
+  <div class="page-header center_div">
   <!-- TODO erver esse br -->
   <br>
   <h3>Contador <small> dados da empresa: {% if form.instance.pk %}Edição{% else%}Cadastro{% endif%}. </span>
@@ -12,7 +12,7 @@
 {% block content %}
   <form method="POST" >
     {% csrf_token %}
-    <div class="form-group">
+    <div class="form-group center_div">
       <div class="row">
         <!-- {# Celular, Tablet, Computador #} -->
         <div class="col-xs-9 col-sm-6 col-md-3">
@@ -26,10 +26,10 @@
         </div>
       </div>
     </div>
-    <div class="form-group">
+    <div class="form-group center_div">
+      <input type="submit" value="Salvar" class="btn btn-primary ">
+      <a href="{% url 'contador_read' %}" class="btn btn-default">Voltar</a>
     </div>
-    <input type="submit" value="Salvar" class="btn btn-primary">
-    <a href="{% url 'contador_read' %}" class="btn btn-default">Voltar</a>
   </form>
 
 {% endblock content %}

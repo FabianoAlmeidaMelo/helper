@@ -5,11 +5,17 @@
 {% block css %}
 {% endblock css %}
 
-{% block page_title %}Contador{% endblock page_title %}
+{% block page_title %}
+  <div class="page-header center_div">
+  <!-- TODO erver esse br -->
+  <br>
+  <h3>Contador <small> dados da empresa </span>
+  </div>
+{% endblock page_title %}
 {% block content %}
 
 
-<div class="row-fluid">
+<div class="row-fluid center_div">
     <div class="controls cwell">
         <div class="row-fluid">
             Nome: {{ contador.nome|default:"--"  }}</div>
@@ -23,7 +29,7 @@
             Email: {{ contador.email|default:"--"  }}</div>
     </div>
 </div>
-<div class="row-fluid">
+<div class="row-fluid center_div">
     {% if contador.setor_set.count %}
         {% for setor in contador.setor_set.all %}
         <div class="row-fluid">
