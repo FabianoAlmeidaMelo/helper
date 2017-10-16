@@ -187,6 +187,7 @@ def contador_user_form(request, user_pk=None):
     if not contador.can_acess(user):
         raise Http404
 
+    usuario_contador = None
     if user_pk:
         usuario_contador = get_object_or_404(User, pk=user_pk)
     form = ContadorUserForm(request.POST or None, instance=usuario_contador, conta=conta)
