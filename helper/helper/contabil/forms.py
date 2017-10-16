@@ -1,12 +1,40 @@
+# coding: utf-8
 from django import forms
 from helper.core.forms import BaseSearchForm
 from django.db.models import Q
 from django.views.generic.list import ListView
 from helper.core.models import User
 from helper.contabil.models import (
-	Contador,
-	Setor,
+    Contador,
+    Setor,
 )
+
+class ContadorUserForm(forms.ModelForm):
+    """
+    Formulário de cadastro e edição
+    de usuários do Contador (sócios e funcionarios do escritório)
+    """
+
+    def __init__(self, *args, **kargs):
+        self.conta = kargs.pop('conta', None)
+        super(ContadorUserForm, self).__init__(*args, **kargs)
+        if not self.instance.pk:
+            self.fields['is_active'].widget = forms.HiddenInput()
+
+    class Meta:
+        model = User
+        fields = ( 'email',
+                   'nome',
+                   'nascimento',
+                   'profissao',
+                   'sexo',
+                   'is_active')
+
+    def save(self, *args, **kargs):
+        self.instance.conta = self.conta
+        instance = super(ContadorUserForm, self).save(*args, **kargs)
+        # instance.save()
+        return instance
 
 
 class ContadorForm(forms.ModelForm):
@@ -37,7 +65,7 @@ class SetorForm(forms.ModelForm):
 
     def save(self, *args, **kargs):
         self.instance.contador = self.contador
-    	instance = super(SetorForm, self).save(*args, **kargs)
+        instance = super(SetorForm, self).save(*args, **kargs)
         instance.save()
         return instance
 

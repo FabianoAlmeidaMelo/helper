@@ -25,6 +25,8 @@ class AuthenticationForm(AuthAuthenticationForm):
                                         )
 
 
+
+
 class BaseSearchForm(forms.Form):
     """See http://gregbrown.co.nz/code/django-simple-search/ for details"""
 

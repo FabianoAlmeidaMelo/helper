@@ -6,13 +6,14 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
 
-from helper.core.models import Conta
+from helper.core.models import Conta, User
 
 from helper.contabil.models import Setor
 
 from helper.contabil.forms import (
     ClienteUserSearchForm,
     ContadorForm,
+    ContadorUserForm,
     ContadorUserSearchForm,
     SetorForm,
     SetorListSearchForm,
@@ -171,6 +172,42 @@ def contador_users_list(request, conta_pk):
     context['menu_administracao'] = "active"
 
     return render(request, 'contabil/contador_user_list.html', context)
+
+
+@login_required
+def contador_user_form(request, user_pk=None):
+    """
+    acesso do contador
+    cadastro e edição dos Users
+    do Contador (funcionários e sócios)
+    """
+    user = request.user
+    conta = user.conta
+    contador = conta.contador
+    if not contador.can_acess(user):
+        raise Http404
+
+    if user_pk:
+        usuario_contador = get_object_or_404(User, pk=user_pk)
+    form = ContadorUserForm(request.POST or None, instance=usuario_contador, conta=conta)
+
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            msg = u'Usuário salvo com sucesso.'
+            messages.success(request, msg)
+        else:
+            msg = u'Falha na edição do usuário: %s ' % form.errors
+            messages.warning(request, msg)
+        return redirect(reverse('contador_users_list', kwargs={'conta_pk': conta.pk}))
+
+
+    context = {}
+    context['form'] = form
+    context['contador'] = contador
+    context['conta'] = conta
+    context['menu_administracao'] = "active"
+    return render(request, 'contabil/usuario_contador_form.html', context)
 
 
 @login_required
