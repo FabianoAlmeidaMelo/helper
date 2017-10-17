@@ -10,7 +10,7 @@ from helper.contabil.models import (
 )
 
 class ContadorUserForm(forms.ModelForm):
-    """
+    """ClienteUserForm
     Formulário de cadastro e edição
     de usuários do Contador (sócios e funcionarios do escritório)
     """
@@ -33,7 +33,34 @@ class ContadorUserForm(forms.ModelForm):
     def save(self, *args, **kargs):
         self.instance.conta = self.conta
         instance = super(ContadorUserForm, self).save(*args, **kargs)
-        # instance.save()
+
+        return instance
+
+
+class ClienteUserForm(forms.ModelForm):
+    """
+    Formulário de cadastro e edição
+    de usuários Clientes do Contador
+    """
+
+    def __init__(self, *args, **kargs):
+        self.contador = kargs.pop('contador', None)
+        super(ClienteUserForm, self).__init__(*args, **kargs)
+
+    class Meta:
+        model = User
+        fields = ( 'email', # TODO: enviar email com a senha; depois do 1º acesso, email, deixa de ser editável
+                   'nome',
+                   'nascimento',
+                   'profissao',
+                   'sexo')
+
+    def save(self, *args, **kargs):
+        # TODO:
+        # se user Novo, criar a Conta, conta.tipo = 2
+        # self.instance.conta = self.conta
+        instance = super(ClienteUserForm, self).save(*args, **kargs)
+
         return instance
 
 

@@ -11,6 +11,7 @@ from helper.core.models import Conta, User
 from helper.contabil.models import Setor
 
 from helper.contabil.forms import (
+    ClienteUserForm,
     ClienteUserSearchForm,
     ContadorForm,
     ContadorUserForm,
@@ -202,7 +203,6 @@ def contador_user_form(request, user_pk=None):
             messages.warning(request, msg)
         return redirect(reverse('contador_users_list', kwargs={'conta_pk': conta.pk}))
 
-
     context = {}
     context['form'] = form
     context['contador'] = contador
@@ -213,6 +213,9 @@ def contador_user_form(request, user_pk=None):
 
 @login_required
 def cliente_list(request, conta_pk):
+    """
+    Lista usuários Clientes do Contador
+    """
     conta = get_object_or_404(Conta, id=conta_pk)
     page = request.GET.get('page', 1)
     if not conta.can_acess(request.user):
@@ -236,3 +239,40 @@ def cliente_list(request, conta_pk):
     context['menu_clientes'] = "active"
 
     return render(request, 'contabil/cliente_list.html', context)
+
+
+
+@login_required
+def cliente_user_form(request, user_pk=None):
+    """
+    acesso do contador
+    cadastro e edição dos Users Clientes
+    do Contador 
+    """
+    user_contador = request.user
+    conta_contador = user_contador.conta
+    contador = conta_contador.contador
+    if not contador.can_acess(user_contador):
+        raise Http404
+
+    usuario_cliente = None
+    if user_pk:
+        usuario_cliente = get_object_or_404(User, pk=user_pk)
+    form = ClienteUserForm(request.POST or None, instance=usuario_cliente, contador=contador)
+
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            msg = u'Usuário salvo com sucesso.'
+            messages.success(request, msg)
+        else:
+            msg = u'Falha na edição do usuário: %s ' % form.errors
+            messages.warning(request, msg)
+        return redirect(reverse('cliente_list', kwargs={'conta_pk': conta_contador.pk}))
+
+    context = {}
+    context['form'] = form
+    context['contador'] = contador
+    context['conta'] = conta_contador
+    context['menu_administracao'] = "active"
+    return render(request, 'contabil/usuario_cliente_form.html', context)
