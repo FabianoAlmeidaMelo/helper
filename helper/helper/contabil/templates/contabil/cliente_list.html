@@ -58,7 +58,7 @@
     {% endfor %}
   </table>
 
-
+       {% if object_list.has_other_pages %}
         <ul class="pagination">
           {% if object_list.has_previous %}
             <li><a href="?page={{ object_list.previous_page_number }}">&laquo;</a></li>
@@ -78,6 +78,7 @@
             <li class="disabled"><span>&raquo;</span></li>
           {% endif %}
         </ul>
+        {% endif %}
 
 </div>
 {% endblock content %}
