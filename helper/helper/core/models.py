@@ -7,7 +7,6 @@ from django.contrib.auth.models import (
     AbstractBaseUser,
     BaseUserManager,
 )
-
 from municipios.models import Municipio
 
 
@@ -61,14 +60,17 @@ class Conta(models.Model):
                                 null=True
                             )
     validade = models.DateTimeField(u'Data')
-    contador = models.ForeignKey('contabil.Contador', null=True, blank=True, related_name='conta_core')
+    contador = models.ForeignKey('contabil.Contador',
+                                  null=True,
+                                  blank=True,
+                                  related_name='conta_core')
 
     class Meta:
         verbose_name = u'Conta'
         verbose_name_plural = u'Contas'
 
     def __unicode__(self):
-        return self.get_dono().nome
+        return self.get_dono().nome or ''
 
     def get_dono(self):
         """
@@ -116,6 +118,27 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __unicode__(self):
         return self.email
+
+
+    def set_conta(self, contador=None):
+        """
+        ref #50
+        ao criar o user cliente, passa o contador e cria conta
+        chamado no form.save() / contabil.form.ClienteUserForm()
+        """
+        ano = timezone.now().year + 1
+        created = False
+        if self.conta is None:
+            conta = Conta.objects.create(dono=self,
+                                         tipo=2,
+                                         #TODO: conta.valor = ?
+                                         validade=timezone.datetime(ano, 12, 31), # TODO: definir isso
+                                         contador=contador)
+            self.conta = conta
+            self.set_password('1') #TODO aleatorio 8 dig
+            self.save()
+            created = True
+        return created
 
     def get_short_name(self):
         return self.nome

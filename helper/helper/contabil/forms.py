@@ -60,6 +60,11 @@ class ClienteUserForm(forms.ModelForm):
         # se user Novo, criar a Conta, conta.tipo = 2
         # self.instance.conta = self.conta
         instance = super(ClienteUserForm, self).save(*args, **kargs)
+        created = instance.set_conta(self.contador)
+        if created:
+            print "\n: CRIADO - TODO: send mail com a senha provisória"
+        else:
+            print "\nNÂO CRIADO"
 
         return instance
 
