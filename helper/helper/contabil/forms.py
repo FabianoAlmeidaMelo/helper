@@ -1,8 +1,12 @@
 # coding: utf-8
 from django import forms
-from helper.core.forms import BaseSearchForm
 from django.db.models import Q
 from django.views.generic.list import ListView
+
+from localbr.widgets import BRJsDateWidget #, SelectMunicipioWidget
+#from localbr.formfields import PointField, BRDecimalField
+
+from helper.core.forms import BaseSearchForm
 from helper.core.models import User
 from helper.contabil.models import (
     Contador,
@@ -42,6 +46,7 @@ class ClienteUserForm(forms.ModelForm):
     Formulário de cadastro e edição
     de usuários Clientes do Contador
     """
+    # nascimento = forms.DateField(input_formats=['%d/%m/%Y'], widget=BRJsDateWidget(), required=False)
 
     def __init__(self, *args, **kargs):
         self.contador = kargs.pop('contador', None)

@@ -49,6 +49,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     # 'test_without_migrations',
     'bootstrap3',
+    'localflavor',
     'localbr',
     'municipios',
     'helper.core',

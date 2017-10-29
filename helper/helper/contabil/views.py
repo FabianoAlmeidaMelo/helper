@@ -274,5 +274,6 @@ def cliente_user_form(request, user_pk=None):
     context['form'] = form
     context['contador'] = contador
     context['conta'] = conta_contador
-    context['menu_administracao'] = "active"
+    context['menu_clientes'] = "active"
+    context['tab_cliente_cadastro'] = "active"
     return render(request, 'contabil/usuario_cliente_form.html', context)

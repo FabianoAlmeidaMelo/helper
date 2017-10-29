@@ -3,13 +3,19 @@
 
 {% block page_title %}
   <div class="page-header center_div">
-  <!-- TODO erver esse br -->
-  <br>
-  <h3>Cliente Usuário<small> usuaŕios de clientes da empresa: {% if form.instance.pk %}Edição{% else%}Cadastro{% endif%}. </span>
+    <!-- TODO erver esse br -->
+    <br>
+    {% if form.instance.pk %}
+      <h3><small>Cliente: </small>{{ form.instance.nome }}</h3>
+    {% else %}
+      <h3>Cadastro<small> de Cliente</small></h3>
+    {% endif%}. 
+
   </div>
 {% endblock page_title %}
 
 {% block content %}
+    {% include "contabil/tab_clientes.html" %}
   <form method="POST" >
     {% csrf_token %}
     <div class="form-group center_div">
