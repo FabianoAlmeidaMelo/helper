@@ -2,7 +2,7 @@
 from django.conf import settings
 from django.db import models
 from helper.core.models import Endereco
-
+from helper.core.models import UserAdd, UserUpd, Conta
 
 class Contador(models.Model):
     """
@@ -54,3 +54,20 @@ class SetorUser(models.Model):
 
     def __unicode__(self):
         return '%s - %s' % (self.usuario.nome, self.setor.nome) 
+
+
+class Mensagem(UserAdd, UserUpd):
+    '''
+    Mensagem de Usuário Contador -> para 1 ou mais Clientes
+    Mensagem Interna de Usuário Contador -> para todos os Seus Users
+    mensagem de usuário cliente -> para setor do contador
+    '''
+    texto = models.TextField(verbose_name=u'Texto')
+    setor = models.ForeignKey(Setor) # Origem ou Destino
+    # conta_origem  = models.ForeignKey(Conta, related_name='orgigem') Origem é a conta do user que criou
+    conta_destino = models.ManyToManyField(Conta) # 1 msg pode ir para 1 ou 'n' users    
+    # filename = models.FileField(u'Anexo', upload_to=file_anexo_msg_contrato, max_length=300, null=True, blank=True)
+
+    # do "Lado" do cliente, só users com acesso à agenda PJ podem ver as msg
+    # do "Lado" do contador, só users do setor podem ver as msg, ou user com permissão p vert todas msg
+    # destinatario = models.ManyToManyField(settings.AUTH_USER_MODEL) # 1 msg pode ir para 1 ou 'n' users    

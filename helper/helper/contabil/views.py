@@ -16,6 +16,7 @@ from helper.contabil.forms import (
     ContadorForm,
     ContadorUserForm,
     ContadorUserSearchForm,
+    MensagensSearchForm,
     SetorForm,
     SetorListSearchForm,
 )
@@ -273,7 +274,40 @@ def cliente_user_form(request, user_pk=None):
     context = {}
     context['form'] = form
     context['contador'] = contador
-    context['conta'] = conta_contador
+    if usuario_cliente:
+        context['conta'] = usuario_cliente.conta
     context['menu_clientes'] = "active"
     context['tab_cliente_cadastro'] = "active"
     return render(request, 'contabil/usuario_cliente_form.html', context)
+
+
+@login_required
+def mensagens_list(request, conta_pk):
+    """
+    Lista as menmsagens enviadas e recebidas de um Contador
+    para um cliente específico
+    """
+    conta = get_object_or_404(Conta, id=conta_pk)
+    page = request.GET.get('page', 1)
+    if not conta.can_acess(request.user):
+        raise Http404
+
+    form = MensagensSearchForm(request.GET or None, conta=conta)
+    object_list = form.get_queryset()
+   
+    paginator = Paginator(object_list, 15)
+    try:
+        mensagens = paginator.page(page)
+    except PageNotAnInteger:
+        mensagens = paginator.page(1)
+    except EmptyPage:
+        mensagens = paginator.page(paginator.num_pages)
+
+    context = {}
+    context['conta'] = conta
+    context['object_list'] = mensagens
+    context['form'] = form
+    context['menu_clientes'] = "active"
+    context['tab_mensagens'] = "active"
+
+    return render(request, 'contabil/mensagens_list.html', context)

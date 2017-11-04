@@ -10,6 +10,7 @@ from helper.core.forms import BaseSearchForm
 from helper.core.models import User
 from helper.contabil.models import (
     Contador,
+    Mensagem,
     Setor,
 )
 
@@ -174,3 +175,28 @@ class SetorListSearchForm(forms.Form):
             if nome:
                 q = q & Q(nome__icontains=nome)
         return Setor.objects.filter(q)
+
+
+class MensagensSearchForm(forms.Form):
+    '''
+    Filtra mensagnes do contadpor
+    '''
+    texto = forms.CharField(label=u'Texto', required=False)
+    setor = forms.CharField(label=u'Setor', required=False)
+    
+
+    def __init__(self, *args, **kargs):
+        self.conta = kargs.pop('conta', None) # conta do contador
+        super(MensagensSearchForm, self).__init__(*args, **kargs)
+        self.contas_ids = self.conta.contador.conta_core.filter().values_list('id', flat=True)
+
+    def get_queryset(self):
+        q = Q(conta_destino=self.conta)
+        if self.is_valid():
+            texto = self.cleaned_data['texto']
+            if texto:
+                q = q & Q(texto__icontains=texto)
+            nome = self.cleaned_data['nome']
+            if nome:
+                q = q & Q(setor__icontains=setor)
+        return Mensagem.objects.filter(q)
