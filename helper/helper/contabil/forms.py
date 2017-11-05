@@ -7,7 +7,7 @@ from localbr.widgets import BRJsDateWidget #, SelectMunicipioWidget
 #from localbr.formfields import PointField, BRDecimalField
 
 from helper.core.forms import BaseSearchForm
-from helper.core.models import User
+from helper.core.models import Conta, User
 from helper.contabil.models import (
     Contador,
     Mensagem,
@@ -200,3 +200,33 @@ class MensagensSearchForm(forms.Form):
             if setor:
                 q = q & Q(setor__nome__icontains=setor)
         return Mensagem.objects.filter(q)
+
+
+class MensagemForm(forms.ModelForm):
+    """
+    #51
+    """
+    contas = forms.ModelMultipleChoiceField(queryset=Conta.objects.filter())
+    
+    def __init__(self, *args, **kargs):
+        self.conta = kargs.pop('conta', None)
+        super(MensagemForm, self).__init__(*args, **kargs)
+
+    class Meta:
+        model = Mensagem
+        fields = ( 'texto', # TODO: enviar email com a senha; depois do 1º acesso, email, deixa de ser editável
+                   'setor',
+                   'contas')
+
+    # def save(self, *args, **kargs):
+    #     # TODO:
+    #     # se user Novo, criar a Conta, conta.tipo = 2
+    #     # self.instance.conta = self.conta
+    #     instance = super(MensagemForm, self).save(*args, **kargs)
+    #     created = instance.set_conta(self.contador)
+    #     if created:
+    #         print "\n: CRIADO - TODO: send mail com a senha provisória"
+    #     else:
+    #         print "\nNÂO CRIADO"
+
+    #     return instance

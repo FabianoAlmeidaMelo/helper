@@ -17,7 +17,7 @@
     <br>
     <h3>Mensagens<small></small>
     <a class="btn btn-default btn-xs" id="filtro_button_id" href="#!" onclick="show_filter_fields(this)"></span>Ver filtro</a>
-    <a class="btn btn-success btn-xs" href="{% url 'cliente_user_form' %}">Nova Mensagem</a></small></h3>
+    <a class="btn btn-success btn-xs" href="{% url 'mensagem_form' %}">Nova Mensagem</a></small></h3>
   </div>
 {% endblock page_title %}
 
@@ -48,7 +48,7 @@
     {% for object in object_list %}
       <tr>
         <td>
-          <a href="">{{ object.texto|default:'--' }}</a>
+          <a href="{% url 'mensagem_edit' object.id %}">{{ object.texto|default:'--' }}</a>
         </td>
         <td>{{ object.user_upd.nome|default:'--' }}</td>
         <td>{{ object.date_upd|date:"d/m/Y"|default:'--' }}</td>

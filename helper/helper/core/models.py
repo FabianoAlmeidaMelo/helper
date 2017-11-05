@@ -69,13 +69,17 @@ class Conta(models.Model):
         verbose_name_plural = u'Contas'
 
     def __unicode__(self):
-        return self.get_dono().nome or ''
+        return self.get_dono()
+
 
     def get_dono(self):
         """
         Dono é o 1º user vinculado à conta
         """
-        return self.user_set.first()
+        dono = self.user_set.first()
+        if dono:
+            return dono.nome 
+        return 'sem dono'
 
     def can_acess(self, user):
         """

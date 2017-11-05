@@ -21,6 +21,6 @@ urlpatterns = patterns(
     url(r'^contador/cliente/(?P<user_pk>\d+)/$', 'helper.contabil.views.cliente_user_form', name='cliente_user_edit'),
     # Mensagens do cliente do Contador:
     url(r'^contador/conta/(?P<conta_pk>\d+)/mensagens/$', 'helper.contabil.views.mensagens_list', name='mensagens_list'),
-    # url(r'^contador/usuario/novo/$', 'helper.contabil.views.cliente_user_form', name='cliente_user_form'),
-    # url(r'^contador/cliente/(?P<user_pk>\d+)/$', 'helper.contabil.views.cliente_user_form', name='cliente_user_edit'),
+    url(r'^contador/mensagem/nova/$', 'helper.contabil.views.mensagem_form', name='mensagem_form'),
+    url(r'^contador/mensagem/(?P<mensagem_pk>\d+)/$', 'helper.contabil.views.mensagem_form', name='mensagem_edit'),
 )

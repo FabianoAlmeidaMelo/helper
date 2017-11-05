@@ -8,7 +8,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 
 from helper.core.models import Conta, User
 
-from helper.contabil.models import Setor
+from helper.contabil.models import Mensagem, Setor
 
 from helper.contabil.forms import (
     ClienteUserForm,
@@ -16,6 +16,7 @@ from helper.contabil.forms import (
     ContadorForm,
     ContadorUserForm,
     ContadorUserSearchForm,
+    MensagemForm,
     MensagensSearchForm,
     SetorForm,
     SetorListSearchForm,
@@ -307,7 +308,43 @@ def mensagens_list(request, conta_pk):
     context['conta'] = conta
     context['object_list'] = mensagens
     context['form'] = form
-    context['menu_clientes'] = "active"
+    context['menu_clientes'] = "active"  # usado no acesso do contador
     context['tab_mensagens'] = "active"
 
     return render(request, 'contabil/mensagens_list.html', context)
+
+
+@login_required
+def mensagem_form(request, mensagem_pk=None):
+    """
+    #51
+    cadastro e edição de mensagem
+    """
+    user = request.user
+    conta = user.conta
+    contador = conta.contador
+    if not conta.can_acess(user):
+        raise Http404
+
+    mensagem = None
+    if mensagem_pk:
+        mensagem = get_object_or_404(Mensagem, pk=mensagem_pk)
+    form = MensagemForm(request.POST or None, instance=mensagem, conta=conta)
+
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            msg = u'Mensagem salva com sucesso.'
+            messages.success(request, msg)
+        else:
+            msg = u'Falha na edição da mensagem: %s ' % form.errors
+            messages.warning(request, msg)
+        return redirect(reverse('mensagens_list', kwargs={'conta_pk': conta.pk}))
+
+    context = {}
+    context['form'] = form
+    context['contador'] = contador
+    context['conta'] = conta
+    context['menu_clientes'] = "active"  # usado no acesso do contador
+    context['tab_mensagens'] = "active"
+    return render(request, 'contabil/mensagem_form.html', context)
