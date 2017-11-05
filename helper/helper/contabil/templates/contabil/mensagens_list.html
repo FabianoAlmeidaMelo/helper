@@ -22,7 +22,7 @@
 {% endblock page_title %}
 
 {% block content %}
-{% if request.user.conta == 1%}
+{% if request.user.conta.tipo == 1 %}
   {% include "contabil/tab_clientes.html" %}
 {% endif %}
 <div class="off" id="filtro">
