@@ -196,7 +196,7 @@ class MensagensSearchForm(forms.Form):
             texto = self.cleaned_data['texto']
             if texto:
                 q = q & Q(texto__icontains=texto)
-            nome = self.cleaned_data['nome']
-            if nome:
-                q = q & Q(setor__icontains=setor)
+            setor = self.cleaned_data['setor']
+            if setor:
+                q = q & Q(setor__nome__icontains=setor)
         return Mensagem.objects.filter(q)
