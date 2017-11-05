@@ -58,6 +58,7 @@ class SetorUser(models.Model):
 
 class Mensagem(UserAdd, UserUpd):
     '''
+    #51
     Mensagem de Usuário Contador -> para 1 ou mais Clientes
     Mensagem Interna de Usuário Contador -> para todos os Seus Users
     mensagem de usuário cliente -> para setor do contador
@@ -67,14 +68,20 @@ class Mensagem(UserAdd, UserUpd):
     '''
     texto = models.TextField(verbose_name=u'Texto')
     setor = models.ForeignKey(Setor) # Origem ou Destino
-    conta_destino = models.ManyToManyField(Conta) # 1 msg pode ir para 1 ou 'n' users
+    contas = models.ManyToManyField(Conta, through='ContaMensagem') # 1 msg pode ir para 1 ou 'n' contas
     # filename = models.FileField(u'Anexo', upload_to=file_anexo_msg_contrato, max_length=300, null=True, blank=True)
 
 
-# class ContaMensagem(models.Model):
-#   '''
-#    through='ContaMensagem'
-#   '''
-#     mensagem = models.ForeignKey(Mensagem)
-#     conta = models.ForeignKey(Conta)
-#     visto = models.BooleanField(default=False)
+class ContaMensagem(models.Model):
+    '''
+    #51
+    registra:
+        as contas destinatárias das Mensagens
+        a data hora que o destinatário abriu a mensagem
+    '''
+    mensagem = models.ForeignKey(Mensagem)
+    conta = models.ForeignKey(Conta)
+    # data que o destinatário 'Leu':
+    data = models.DateTimeField(null=True, blank=True)
+    # user que 'Leu': abriu a msg:
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True)

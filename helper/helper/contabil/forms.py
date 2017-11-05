@@ -191,7 +191,7 @@ class MensagensSearchForm(forms.Form):
         self.contas_ids = self.conta.contador.conta_core.filter().values_list('id', flat=True)
 
     def get_queryset(self):
-        q = Q(conta_destino=self.conta)
+        q = Q(contas=self.conta)
         if self.is_valid():
             texto = self.cleaned_data['texto']
             if texto:
