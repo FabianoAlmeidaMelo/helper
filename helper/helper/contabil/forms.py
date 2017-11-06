@@ -2,7 +2,7 @@
 from django import forms
 from django.db.models import Q
 from django.views.generic.list import ListView
-
+from django.utils import timezone
 from localbr.widgets import BRJsDateWidget #, SelectMunicipioWidget
 #from localbr.formfields import PointField, BRDecimalField
 
@@ -191,7 +191,7 @@ class MensagensSearchForm(forms.Form):
         self.contas_ids = self.conta.contador.conta_core.filter().values_list('id', flat=True)
 
     def get_queryset(self):
-        q = Q(contas=self.conta)
+        q = Q(contas=self.conta) | Q(user_add__id__in=self.conta.user_set.values_list('id', flat=True))
         if self.is_valid():
             texto = self.cleaned_data['texto']
             if texto:
@@ -206,27 +206,35 @@ class MensagemForm(forms.ModelForm):
     """
     #51
     """
-    contas = forms.ModelMultipleChoiceField(queryset=Conta.objects.filter())
+    # contas = forms.ModelMultipleChoiceField(queryset=Conta.objects.filter())
     
     def __init__(self, *args, **kargs):
         self.conta = kargs.pop('conta', None)
+        self.user = kargs.pop('user', None)
         super(MensagemForm, self).__init__(*args, **kargs)
 
     class Meta:
         model = Mensagem
         fields = ( 'texto', # TODO: enviar email com a senha; depois do 1º acesso, email, deixa de ser editável
-                   'setor',
-                   'contas')
+                   'setor')
+                   # 'contas')
 
-    # def save(self, *args, **kargs):
-    #     # TODO:
-    #     # se user Novo, criar a Conta, conta.tipo = 2
-    #     # self.instance.conta = self.conta
-    #     instance = super(MensagemForm, self).save(*args, **kargs)
-    #     created = instance.set_conta(self.contador)
-    #     if created:
-    #         print "\n: CRIADO - TODO: send mail com a senha provisória"
-    #     else:
-    #         print "\nNÂO CRIADO"
+    def save(self, *args, **kargs):
+        # TODO:
+        # se user Novo, criar a Conta, conta.tipo = 2
+        # self.instance.conta = self.conta
+        new = False
+        if self.instance.pk:
+            self.instance.user_upd = self.user
+            self.instance.date_upd = timezone.now()
+        else:
+            new = True
+            self.instance.user_add = self.instance.user_upd = self.user
+            self.instance.date_add = self.instance.date_upd = timezone.now()
+        instance = super(MensagemForm, self).save(*args, **kargs)
+        if new:
+            ContaMensagem.objects.create(mensagem=instance, conta=self.conta)
+        
+        instance.save()
 
-    #     return instance
+        return instance

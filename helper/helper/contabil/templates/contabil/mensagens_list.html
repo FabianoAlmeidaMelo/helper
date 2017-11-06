@@ -48,7 +48,7 @@
     {% for object in object_list %}
       <tr>
         <td>
-          <a href="{% url 'mensagem_edit' object.id %}">{{ object.texto|default:'--' }}</a>
+          <a href="{% url 'mensagem_edit' object.id %}">{{ object.texto|truncatechars:20|default:'--' }}</a>
         </td>
         <td>{{ object.user_upd.nome|default:'--' }}</td>
         <td>{{ object.date_upd|date:"d/m/Y"|default:'--' }}</td>

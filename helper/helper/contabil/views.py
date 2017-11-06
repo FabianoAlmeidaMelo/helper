@@ -321,15 +321,17 @@ def mensagem_form(request, mensagem_pk=None):
     cadastro e edição de mensagem
     """
     user = request.user
-    conta = user.conta
+    # if user.conta.tipo == 2:
+    conta = user.conta #.contador.conta_core.filter(tipo=1)[0]
     contador = conta.contador
-    if not conta.can_acess(user):
-        raise Http404
-
+    # if not conta.can_acess(user):
+    #     raise Http404
+    can_edit = True
     mensagem = None
     if mensagem_pk:
         mensagem = get_object_or_404(Mensagem, pk=mensagem_pk)
-    form = MensagemForm(request.POST or None, instance=mensagem, conta=conta)
+        can_edit = mensagem.can_edit(user)
+    form = MensagemForm(request.POST or None, instance=mensagem, conta=conta, user=user)
 
     if request.method == 'POST':
         if form.is_valid():
@@ -343,6 +345,7 @@ def mensagem_form(request, mensagem_pk=None):
 
     context = {}
     context['form'] = form
+    context['can_edit'] = can_edit
     context['contador'] = contador
     context['conta'] = conta
     context['menu_clientes'] = "active"  # usado no acesso do contador

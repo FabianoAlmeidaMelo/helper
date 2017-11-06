@@ -71,6 +71,22 @@ class Mensagem(UserAdd, UserUpd):
     contas = models.ManyToManyField(Conta, through='ContaMensagem') # 1 msg pode ir para 1 ou 'n' contas
     # filename = models.FileField(u'Anexo', upload_to=file_anexo_msg_contrato, max_length=300, null=True, blank=True)
 
+    class Meta:
+        ordering = ('-date_add',)
+
+    def __unicode__(self):
+        return 'MSG de :%s ; em: %s' % (self.user_add.nome, self.date_add.date()) 
+
+    def can_edit(self, user):
+        '''
+        Se ainda não foi 'lida'
+        pode editar
+        '''
+        if not self.pk:
+            return True
+        return all([self.contamensagem_set.filter(user__isnull=False).count() < 1,
+                    self.user_add.conta == user.conta])
+
 
 class ContaMensagem(models.Model):
     '''
