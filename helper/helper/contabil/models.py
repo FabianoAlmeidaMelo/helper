@@ -88,6 +88,7 @@ class Mensagem(UserAdd, UserUpd):
                     self.user_add.conta == user.conta])
 
 
+
 class ContaMensagem(models.Model):
     '''
     #51

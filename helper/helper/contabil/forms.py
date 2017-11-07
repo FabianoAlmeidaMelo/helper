@@ -10,6 +10,7 @@ from helper.core.forms import BaseSearchForm
 from helper.core.models import Conta, User
 from helper.contabil.models import (
     Contador,
+    ContaMensagem,
     Mensagem,
     Setor,
 )

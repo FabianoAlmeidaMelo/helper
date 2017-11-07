@@ -315,17 +315,21 @@ def mensagens_list(request, conta_pk):
 
 
 @login_required
-def mensagem_form(request, mensagem_pk=None):
+def mensagem_form(request, conta_pk, mensagem_pk=None):
     """
     #51
     cadastro e edição de mensagem
     """
+    conta_redirect = get_object_or_404(Conta, pk=conta_pk)
+    contador = conta_redirect.contador
+
     user = request.user
-    # if user.conta.tipo == 2:
-    conta = user.conta #.contador.conta_core.filter(tipo=1)[0]
-    contador = conta.contador
-    # if not conta.can_acess(user):
-    #     raise Http404
+    if user.conta.tipo == 1:
+        conta = conta_redirect # conta do user 'Cliente'
+        contador = conta.contador
+    else:
+        conta = user.conta.contador.conta_core.filter(tipo=1).first()  # conta do 'contador'
+
     can_edit = True
     mensagem = None
     if mensagem_pk:
@@ -335,19 +339,19 @@ def mensagem_form(request, mensagem_pk=None):
 
     if request.method == 'POST':
         if form.is_valid():
-            form.save()
+            mensagem = form.save()
             msg = u'Mensagem salva com sucesso.'
             messages.success(request, msg)
         else:
             msg = u'Falha na edição da mensagem: %s ' % form.errors
             messages.warning(request, msg)
-        return redirect(reverse('mensagens_list', kwargs={'conta_pk': conta.pk}))
+        return redirect(reverse('mensagens_list', kwargs={'conta_pk': conta_redirect.pk}))
 
     context = {}
     context['form'] = form
     context['can_edit'] = can_edit
     context['contador'] = contador
-    context['conta'] = conta
+    context['conta'] = conta_redirect
     context['menu_clientes'] = "active"  # usado no acesso do contador
     context['tab_mensagens'] = "active"
     return render(request, 'contabil/mensagem_form.html', context)
