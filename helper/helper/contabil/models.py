@@ -72,7 +72,7 @@ class Mensagem(UserAdd, UserUpd):
     # filename = models.FileField(u'Anexo', upload_to=file_anexo_msg_contrato, max_length=300, null=True, blank=True)
 
     class Meta:
-        ordering = ('-date_add',)
+        ordering = ('-date_upd',)
 
     def __unicode__(self):
         return 'MSG de :%s ; em: %s' % (self.user_add.nome, self.date_add.date()) 
