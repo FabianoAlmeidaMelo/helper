@@ -3,12 +3,13 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.utils import timezone
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
 
 from helper.core.models import Conta, User
 
-from helper.contabil.models import Mensagem, Setor
+from helper.contabil.models import ContaMensagem, Mensagem, Setor
 
 from helper.contabil.forms import (
     ClienteUserForm,
@@ -322,12 +323,14 @@ def mensagem_form(request, conta_pk, mensagem_pk=None):
     """
     conta_redirect = get_object_or_404(Conta, pk=conta_pk)
     contador = conta_redirect.contador
-
     user = request.user
+
     if user.conta.tipo == 1:
         conta = conta_redirect # conta do user 'Cliente'
         contador = conta.contador
+        conta_mensagem_conta = user.conta
     else:
+        conta_mensagem_conta = conta_redirect
         conta = user.conta.contador.conta_core.filter(tipo=1).first()  # conta do 'contador'
 
     can_edit = True
@@ -346,6 +349,14 @@ def mensagem_form(request, conta_pk, mensagem_pk=None):
             msg = u'Falha na edição da mensagem: %s ' % form.errors
             messages.warning(request, msg)
         return redirect(reverse('mensagens_list', kwargs={'conta_pk': conta_redirect.pk}))
+
+    elif request.method == 'GET' and not can_edit and mensagem and mensagem.user_add.conta != user.conta:
+        conta_mensagem = ContaMensagem.objects.get(mensagem=mensagem, conta=conta_mensagem_conta) #, conta=conta_redirect.pk)
+        # TODO: transformar em método do model
+        if conta_mensagem.can_edit():
+            conta_mensagem.data = timezone.now()
+            conta_mensagem.user = user
+            conta_mensagem.save()
 
     context = {}
     context['form'] = form

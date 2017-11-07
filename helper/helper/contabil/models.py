@@ -102,3 +102,12 @@ class ContaMensagem(models.Model):
     data = models.DateTimeField(null=True, blank=True)
     # user que 'Leu': abriu a msg:
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True)
+
+    def can_edit(self):
+        '''
+        Se Não tem user,
+        pode editar
+        '''
+        if not self.pk:
+            return True
+        return self.user is None

@@ -43,6 +43,7 @@
         <th>Autor</th>
         <th>Data</th>
         <th>Setor</th>
+        <th></th>
       </tr>
     </thead>
     {% for object in object_list %}
@@ -53,6 +54,7 @@
         <td>{{ object.user_upd.nome|default:'--' }}</td>
         <td>{{ object.date_upd|date:"d/m/Y"|default:'--' }}</td>
         <td>{{ object.setor|default:'--' }}</td>
+        <td>{{ object.contamensagem_set.first.user|default:'' }} {{ object.contamensagem_set.first.data|date:'d/m/Y H:H'|default:'' }}</td>
       </tr>
     {% empty %}
       <tr><td colspan="100%">Nenhum item disponível</td></tr>
