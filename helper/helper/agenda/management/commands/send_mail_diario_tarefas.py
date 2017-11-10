@@ -3,7 +3,8 @@ from django.core.mail import EmailMessage
 from django.core.management.base import BaseCommand
 from django.core.mail import send_mail
 from helper.settings import DEFAULT_FROM_EMAIL
-from helper.agenda.models import Tarefa, Conta, Agenda, Servico
+from helper.agenda.models import Tarefa, Agenda, Servico
+from helper.core.models import Conta
 from datetime import date
 from django.db.models import Q
 
