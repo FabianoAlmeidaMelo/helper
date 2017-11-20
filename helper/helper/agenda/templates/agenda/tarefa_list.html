@@ -95,7 +95,11 @@
         <td></td>
         <td></td>
         <td></td>
-        <td span="4">{{ total }}</td>
+        {% if total > 0 %}
+          <td span="4" align="right"><font color="blue">$ {{ total }}</font></td>
+        {% else %}
+          <td span="4" align="right"><font color="red">$ {{ total }}</font></td>
+        {% endif %}
         <td></td>
         <td></td>
       </tr>
@@ -117,7 +121,11 @@
         <td>{{ object.nr_documento|default:'--' }}</td>
         <td>{{ object.data_ini|date:"d/m/Y" }}</td>
         <td>{{ object.hora_ini }}</td>
-        <td>{{ object.get_tipo_display|default:"" }} $ {{ object.valor|default:'--'  }}</td>
+        {% if object.tipo == 1 %}
+          <td align="right"><font color="blue">$ {{ object.valor|default:'--'  }} {{ object.get_tipo_display|default:"" }}</font></td>
+        {% else %}
+          <td align="right"><font color="red">$ {{ object.valor|default:'--'  }} {{ object.get_tipo_display|default:"" }}</font></td>
+        {% endif %}
         <td>{{ object.confirmado|yesno:"Sim,Não" }}</td>
         <td>
           {% if object.pago %}
@@ -146,8 +154,6 @@
 
   <!-- th><div id="piechart" style="width: 810px; height: 450px;"></div></th> -->
   <th><div id="piechart_3d" style="width: 810px; height: 450px;"></div></th>
-
-
 </table>
 
 
