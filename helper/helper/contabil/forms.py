@@ -216,8 +216,9 @@ class MensagemForm(forms.ModelForm):
 
     class Meta:
         model = Mensagem
-        fields = ( 'texto', # TODO: enviar email com a senha; depois do 1º acesso, email, deixa de ser editável
-                   'setor')
+        fields = ( 'texto',
+                   'setor',
+                   'filename',)
                    # 'contas')
 
     def save(self, *args, **kargs):

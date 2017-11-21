@@ -43,6 +43,7 @@
         <th>Autor</th>
         <th>Data</th>
         <th>Setor</th>
+        <th>Anexo</th>
         <th></th>
       </tr>
     </thead>
@@ -54,6 +55,11 @@
         <td>{{ object.user_upd.nome|default:'--' }}</td>
         <td>{{ object.date_upd|date:"d/m/Y"|default:'--' }}</td>
         <td>{{ object.setor|default:'--' }}</td>
+        <td>
+          {% if object.filename %}
+            <a href="{{ object.filename.url }}">{{ object.get_file_name|default:'--' }}</a>
+          {% endif %}
+        </td>
         <td>{{ object.contamensagem_set.first.user|default:'' }} {{ object.contamensagem_set.first.data|date:'d/m/Y H:H'|default:'' }}</td>
       </tr>
     {% empty %}

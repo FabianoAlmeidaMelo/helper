@@ -56,6 +56,14 @@ class SetorUser(models.Model):
         return '%s - %s' % (self.usuario.nome, self.setor.nome) 
 
 
+def user_directory_path(instance, filename):
+    '''
+    conta que fez o upload do arquivo
+    file will be uploaded to MEDIA_ROOT/conta_<id>/<filename>
+    '''
+    return 'conta_{0}/{1}'.format(instance.user_add.conta.id, filename)
+
+
 class Mensagem(UserAdd, UserUpd):
     '''
     #51
@@ -69,7 +77,7 @@ class Mensagem(UserAdd, UserUpd):
     texto = models.TextField(verbose_name=u'Texto')
     setor = models.ForeignKey(Setor) # Origem ou Destino
     contas = models.ManyToManyField(Conta, through='ContaMensagem') # 1 msg pode ir para 1 ou 'n' contas
-    # filename = models.FileField(u'Anexo', upload_to=file_anexo_msg_contrato, max_length=300, null=True, blank=True)
+    filename = models.FileField(u'Anexo', upload_to=user_directory_path, max_length=300, null=True, blank=True)
 
     class Meta:
         ordering = ('-date_upd',)
@@ -86,6 +94,11 @@ class Mensagem(UserAdd, UserUpd):
             return True
         return all([self.contamensagem_set.filter(user__isnull=False).count() < 1,
                     self.user_add.conta == user.conta])
+
+    def get_file_name(self):
+        if self.filename:
+            return self.filename.file.name.split('/')[-1]
+        return ''
 
 
 

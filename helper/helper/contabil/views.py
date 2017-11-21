@@ -338,7 +338,7 @@ def mensagem_form(request, conta_pk, mensagem_pk=None):
     if mensagem_pk:
         mensagem = get_object_or_404(Mensagem, pk=mensagem_pk)
         can_edit = mensagem.can_edit(user)
-    form = MensagemForm(request.POST or None, instance=mensagem, conta=conta, user=user)
+    form = MensagemForm(request.POST or None, request.FILES or None, instance=mensagem, conta=conta, user=user)
 
     if request.method == 'POST':
         if form.is_valid():
