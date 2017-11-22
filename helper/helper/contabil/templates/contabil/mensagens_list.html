@@ -60,7 +60,13 @@
             <a href="{{ object.filename.url }}">{{ object.get_file_name|default:'--' }}</a>
           {% endif %}
         </td>
-        <td>{{ object.contamensagem_set.first.user|default:'' }} {{ object.contamensagem_set.first.data|date:'d/m/Y H:H'|default:'' }}</td>
+        <td>
+        {% for conta_msg in object.contamensagem_set.all %}
+          {% if conta_msg.user %}
+            <span class="glyphicon glyphicon-user" style="color:green" title="{{ object.contamensagem_set.first.user|default:'' }} {{ object.contamensagem_set.first.data|date:'d/m/Y H:H'|default:'' }}"></span>
+          {% endif %}
+        {% endfor %}
+        </td>
       </tr>
     {% empty %}
       <tr><td colspan="100%">Nenhum item disponível</td></tr>

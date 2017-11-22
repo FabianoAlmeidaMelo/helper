@@ -42,14 +42,27 @@
     <div class="form-group center_div" >
       <div class="row">
         <!-- {# Celular, Tablet, Computador #} -->
-        <div class="col-xs-9 col-sm-6 col-md-3">
-          <b>Texto: </b>{{ form.instance.texto }}<br>
-          <b>Setor: </b>{{ form.instance.setor }}
-        </div>
+        <p><b>Data de criação: </b> {{ form.instance.date_add }}</p>
+        <p><b>Texto: </b>{{ form.instance.texto }}</p>
+        <p><b>Setor: </b>{{ form.instance.setor }}</p>
+
+        {% if form.instance.filename %}
+         <p><b>Anexo: </b><a href="{{ object.filename.url }}">{{ form.instance.get_file_name }}</a></p>
+        {% endif %}
       </div>
-    <div class="form-group center_div">
+    <div class="form-group ">
       <a href="{% url 'mensagens_list' conta.id %}" class="btn btn-default">Voltar</a>
     </div>
+
+    {% for conta_msg in form.instance.contamensagem_set.all %}
+    <p>Lida por:</p>
+      <ul>
+      {% if conta_msg.user %}
+        <li>{{ conta_msg.user|default:'' }} {{ conta_msg.data|date:'d/m/Y H:H'|default:'' }}</li>
+      {% endif %}
+      </ul>
+    {% endfor %}
+
   </div>
 </form>
 {% endif %}
