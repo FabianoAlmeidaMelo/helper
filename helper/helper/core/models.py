@@ -22,7 +22,6 @@ TIPO = ( # conta
     (3, u'Outra'),
 )
 
-
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         now = timezone.now()
@@ -70,13 +69,17 @@ class Conta(models.Model):
         verbose_name_plural = u'Contas'
 
     def __unicode__(self):
-        return self.get_dono().nome or ''
+        return self.get_dono()
+
 
     def get_dono(self):
         """
         Dono é o 1º user vinculado à conta
         """
-        return self.user_set.first()
+        dono = self.user_set.first()
+        if dono:
+            return dono.nome 
+        return 'sem dono'
 
     def can_acess(self, user):
         """
@@ -84,7 +87,10 @@ class Conta(models.Model):
         Se user está em self.user_set.all():
             True
         """
-        return user in self.user_set.all()
+        if user.conta.tipo in [2, 3]:
+            return user in self.user_set.all()
+        else:
+            return user.conta.contador == self.contador
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -151,6 +157,23 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def is_admin(self):
         return self == self.conta.user_set.filter(is_active=True).first()
+
+
+class UserAdd(models.Model):
+    user_add = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="%(app_label)s_%(class)s_created_by")
+    date_add = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        abstract = True
+
+
+class UserUpd(models.Model):
+    user_upd = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="%(app_label)s_%(class)s_modified_by")
+    date_upd = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True
+
 
 class Endereco(models.Model):
     '''

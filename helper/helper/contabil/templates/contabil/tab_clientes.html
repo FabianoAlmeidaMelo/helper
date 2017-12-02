@@ -1,10 +1,10 @@
 <div class="form-group center_div">
   <ul class="nav nav-tabs">
-    <li role="presentation" class="{{ tab_cliente_cadastro }}"><a href="">Cadastro</a></li>
+    <li role="presentation" class="{{ tab_cliente_cadastro }}"><a href="{% url 'cliente_user_edit' conta.dono.id %}">Cadastro</a></li>
     <li role="presentation"><a href="#">Perfil</a></li>
     <li role="presentation"><a href="#">Empresa</a></li>
     <li role="presentation"><a href="#">Endereço</a></li>
     <li role="presentation"><a href="#">Funcionários</a></li>
-    <li role="presentation"><a href="#">Mensagens</a></li>
+    <li role="presentation" class="{{ tab_mensagens }}" ><a href="{% url 'mensagens_list' conta.id %}">Mensagens</a></li>
   </ul>
 </div>

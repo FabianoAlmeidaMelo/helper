@@ -3,12 +3,13 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.utils import timezone
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
 
 from helper.core.models import Conta, User
 
-from helper.contabil.models import Setor
+from helper.contabil.models import ContaMensagem, Mensagem, Setor
 
 from helper.contabil.forms import (
     ClienteUserForm,
@@ -16,6 +17,8 @@ from helper.contabil.forms import (
     ContadorForm,
     ContadorUserForm,
     ContadorUserSearchForm,
+    MensagemForm,
+    MensagensSearchForm,
     SetorForm,
     SetorListSearchForm,
 )
@@ -273,7 +276,93 @@ def cliente_user_form(request, user_pk=None):
     context = {}
     context['form'] = form
     context['contador'] = contador
-    context['conta'] = conta_contador
+    if usuario_cliente:
+        context['conta'] = usuario_cliente.conta
     context['menu_clientes'] = "active"
     context['tab_cliente_cadastro'] = "active"
     return render(request, 'contabil/usuario_cliente_form.html', context)
+
+
+@login_required
+def mensagens_list(request, conta_pk):
+    """
+    Lista as menmsagens enviadas e recebidas de um Contador
+    para um cliente específico
+    """
+    conta = get_object_or_404(Conta, id=conta_pk)
+    page = request.GET.get('page', 1)
+    if not conta.can_acess(request.user):
+        raise Http404
+
+    form = MensagensSearchForm(request.GET or None, conta=conta)
+    object_list = form.get_queryset()
+   
+    paginator = Paginator(object_list, 15)
+    try:
+        mensagens = paginator.page(page)
+    except PageNotAnInteger:
+        mensagens = paginator.page(1)
+    except EmptyPage:
+        mensagens = paginator.page(paginator.num_pages)
+
+    context = {}
+    context['conta'] = conta
+    context['object_list'] = mensagens
+    context['form'] = form
+    context['menu_clientes'] = "active"  # usado no acesso do contador
+    context['tab_mensagens'] = "active"
+
+    return render(request, 'contabil/mensagens_list.html', context)
+
+
+@login_required
+def mensagem_form(request, conta_pk, mensagem_pk=None):
+    """
+    #51
+    cadastro e edição de mensagem
+    """
+    conta_redirect = get_object_or_404(Conta, pk=conta_pk)
+    contador = conta_redirect.contador
+    user = request.user
+
+    if user.conta.tipo == 1:
+        conta = conta_redirect # conta do user 'Cliente'
+        contador = conta.contador
+        conta_mensagem_conta = user.conta
+    else:
+        conta_mensagem_conta = conta_redirect
+        conta = user.conta.contador.conta_core.filter(tipo=1).first()  # conta do 'contador'
+
+    can_edit = True
+    mensagem = None
+    if mensagem_pk:
+        mensagem = get_object_or_404(Mensagem, pk=mensagem_pk)
+        can_edit = mensagem.can_edit(user)
+    form = MensagemForm(request.POST or None, request.FILES or None, instance=mensagem, conta=conta, user=user)
+
+    if request.method == 'POST':
+        if form.is_valid():
+            mensagem = form.save()
+            msg = u'Mensagem salva com sucesso.'
+            messages.success(request, msg)
+        else:
+            msg = u'Falha na edição da mensagem: %s ' % form.errors
+            messages.warning(request, msg)
+        return redirect(reverse('mensagens_list', kwargs={'conta_pk': conta_redirect.pk}))
+
+    elif request.method == 'GET' and not can_edit and mensagem and mensagem.user_add.conta != user.conta:
+        conta_mensagem = ContaMensagem.objects.get(mensagem=mensagem, conta=conta_mensagem_conta) #, conta=conta_redirect.pk)
+        # TODO: transformar em método do model
+        if conta_mensagem.can_edit():
+            conta_mensagem.data = timezone.now()
+            conta_mensagem.user = user
+            conta_mensagem.save()
+
+    context = {}
+    context['form'] = form
+    context['can_edit'] = can_edit
+    context['contador'] = contador
+    context['conta'] = conta_redirect
+    context['menu_clientes'] = "active"  # usado no acesso do contador
+    context['tab_mensagens'] = "active"
+    return render(request, 'contabil/mensagem_form.html', context)

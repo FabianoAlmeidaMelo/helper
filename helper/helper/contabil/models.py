@@ -2,7 +2,7 @@
 from django.conf import settings
 from django.db import models
 from helper.core.models import Endereco
-
+from helper.core.models import UserAdd, UserUpd, Conta
 
 class Contador(models.Model):
     """
@@ -54,3 +54,73 @@ class SetorUser(models.Model):
 
     def __unicode__(self):
         return '%s - %s' % (self.usuario.nome, self.setor.nome) 
+
+
+def user_directory_path(instance, filename):
+    '''
+    conta que fez o upload do arquivo
+    file will be uploaded to MEDIA_ROOT/conta_<id>/<filename>
+    '''
+    return 'conta_{0}/{1}'.format(instance.user_add.conta.id, filename)
+
+
+class Mensagem(UserAdd, UserUpd):
+    '''
+    #51
+    Mensagem de Usuário Contador -> para 1 ou mais Clientes
+    Mensagem Interna de Usuário Contador -> para todos os Seus Users
+    mensagem de usuário cliente -> para setor do contador
+    Origem é a conta do user que criou
+    # do "Lado" do cliente, só users com acesso à agenda PJ podem ver as msg
+    # do "Lado" do contador, só users do setor podem ver as msg, ou user com permissão p vert todas msg
+    '''
+    texto = models.TextField(verbose_name=u'Texto')
+    setor = models.ForeignKey(Setor) # Origem ou Destino
+    contas = models.ManyToManyField(Conta, through='ContaMensagem') # 1 msg pode ir para 1 ou 'n' contas
+    filename = models.FileField(u'Anexo', upload_to=user_directory_path, max_length=300, null=True, blank=True)
+
+    class Meta:
+        ordering = ('-date_upd',)
+
+    def __unicode__(self):
+        return 'MSG de :%s ; em: %s' % (self.user_add.nome, self.date_add.date()) 
+
+    def can_edit(self, user):
+        '''
+        Se ainda não foi 'lida'
+        pode editar
+        '''
+        if not self.pk:
+            return True
+        return all([self.contamensagem_set.filter(user__isnull=False).count() < 1,
+                    self.user_add.conta == user.conta])
+
+    def get_file_name(self):
+        if self.filename:
+            return self.filename.file.name.split('/')[-1]
+        return ''
+
+
+
+class ContaMensagem(models.Model):
+    '''
+    #51
+    registra:
+        as contas destinatárias das Mensagens
+        a data hora que o destinatário abriu a mensagem
+    '''
+    mensagem = models.ForeignKey(Mensagem)
+    conta = models.ForeignKey(Conta)
+    # data que o destinatário 'Leu':
+    data = models.DateTimeField(null=True, blank=True)
+    # user que 'Leu': abriu a msg:
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True)
+
+    def can_edit(self):
+        '''
+        Se Não tem user,
+        pode editar
+        '''
+        if not self.pk:
+            return True
+        return self.user is None

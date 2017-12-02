@@ -1,0 +1,75 @@
+
+{% extends "base.html" %}
+{% load bootstrap3 %}
+
+{% block page_title %}
+  <div class="page-header center_div">
+    <!-- TODO erver esse br -->
+    <br>
+    {% if form.instance.pk %}
+      <h3><small>Mensagem: </small>edição</h3>
+    {% else %}
+      <h3>Cadastro<small> de Mensagens</small></h3>
+    {% endif%}
+
+  </div>
+{% endblock page_title %}
+
+{% block content %}
+{% if request.user.conta.tipo == 1 %}
+  {% include "contabil/tab_clientes.html" %}
+{% endif %}
+{% if can_edit %}
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="form-group center_div">
+      <div class="row">
+        <!-- {# Celular, Tablet, Computador #} -->
+        <div class="col-xs-9 col-sm-6 col-md-3">
+          {% bootstrap_field form.texto %}
+          {% bootstrap_field form.setor %}
+          {% bootstrap_field form.filename %}
+        </div>
+      </div>
+    </div>
+    <div class="form-group center_div">
+      <input type="submit" value="Salvar" class="btn btn-primary ">
+      <a href="{% url 'mensagens_list' conta.id %}" class="btn btn-default">Voltar</a>
+    </div>
+  </form>
+{% else %}
+  <form method="GET" >
+    <div class="form-group center_div" >
+      <div class="row">
+        <!-- {# Celular, Tablet, Computador #} -->
+        <p><b>Data de criação: </b> {{ form.instance.date_add }}</p>
+        <p><b>Texto: </b>{{ form.instance.texto }}</p>
+        <p><b>Setor: </b>{{ form.instance.setor }}</p>
+
+        {% if form.instance.filename %}
+         <p><b>Anexo: </b><a href="{{ object.filename.url }}">{{ form.instance.get_file_name }}</a></p>
+        {% endif %}
+      </div>
+    <div class="form-group ">
+      <a href="{% url 'mensagens_list' conta.id %}" class="btn btn-default">Voltar</a>
+    </div>
+
+    {% for conta_msg in form.instance.contamensagem_set.all %}
+    <p>Lida por:</p>
+      <ul>
+      {% if conta_msg.user %}
+        <li>{{ conta_msg.user|default:'' }} {{ conta_msg.data|date:'d/m/Y H:H'|default:'' }}</li>
+      {% endif %}
+      </ul>
+    {% endfor %}
+
+  </div>
+</form>
+{% endif %}
+
+{% endblock content %}
+{% block extra_js %}
+    {{ form.media }}
+{% endblock extra_js %}
+        
+        {% bootstrap_field form.contas %}
