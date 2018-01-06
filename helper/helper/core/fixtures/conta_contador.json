@@ -1,0 +1,38 @@
+[
+
+    {
+        "fields": {
+            "conta": 7,
+            "nome": "User Contador",
+            "nascimento": "1967-01-01",
+            "is_active": true,
+            "profissao": "Contador",
+            "sexo": 1,
+            "is_superuser": false,
+            "is_staff": false,
+            "last_login": "2017-11-21T01:45:29.427Z",
+            "groups": [
+                1
+            ],
+            "user_permissions": [],
+            "password": "pbkdf2_sha256$20000$yL51z4FpocjL$9OI3qXspVqzJgoyD7MEBfSjqdL9Wc7aZ6nq6fpUGJtM=",
+            "email": "contabil@net.com",
+            "date_joined": "2017-06-18T23:23:38.604Z"
+        },
+        "model": "core.user",
+        "pk": 4
+    },
+
+    {
+        "fields": {
+            "validade": "2018-01-01T02:00:00Z",
+            "contador": 2,
+            "tipo": 1,
+            "dono": 4,
+            "valor": null
+        },
+        "model": "core.conta",
+        "pk": 7
+    }
+
+]
