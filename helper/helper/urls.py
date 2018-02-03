@@ -33,8 +33,9 @@ urlpatterns = patterns(
         {'post_reset_redirect': '/user/password/done/'}),
     url(r'^user/password/done/$',
         'django.contrib.auth.views.password_reset_complete'),
+    url(r'^admin/', include(admin.site.urls)),
     url(r'^municipios_app/', include('municipios.urls')),
-    url(r'^admin/', include(admin.site.urls)),)
+)
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

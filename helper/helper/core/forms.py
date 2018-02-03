@@ -7,6 +7,8 @@ from django.db.models import Q
 from django.db.models.query import QuerySet
 from django.utils.text import smart_split
 from django.utils.translation import ugettext_lazy as _
+from helper.core.models import Endereco
+from municipios.widgets import SelectMunicipioWidget
 
 
 if settings.DATABASES:
@@ -182,3 +184,16 @@ class BaseSearchForm(forms.Form):
 
     def get_result_queryset_by_user(self, user):
         return self.get_result_queryset().by_user(user)
+
+
+class EnderecoForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        self.escola = kwargs.pop('escola', None)
+        super(EnderecoForm, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = Endereco
+        widgets = {'municipio': SelectMunicipioWidget}
+        fields = ['cep', 'logradouro', 'numero', 'complemento', 'bairro', 'municipio']

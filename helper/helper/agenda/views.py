@@ -327,6 +327,7 @@ def set_tarefa_status(request, tarefa_pk):
         tarefa.pago = False
     else:
         tarefa.pago = True
+        tarefa.confirmado = True
     tarefa.save()
 
     return HttpResponse('Ok')

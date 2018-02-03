@@ -8,6 +8,7 @@ from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
 
 from helper.core.models import Conta, User
+from helper.core.forms import EnderecoForm
 
 from helper.contabil.models import ContaMensagem, Mensagem, Setor
 
@@ -48,25 +49,32 @@ def contador_form(request):
     """
     conta = request.user.conta
     contador = conta.contador
+    endereco = None
+    if contador:
+        endereco = contador.endereco
     if not contador.can_acess(request.user):
         raise Http404
     form = ContadorForm(request.POST or None, instance=contador, conta=conta)
-
-    if request.method == 'POST':
-        if form.is_valid():
-            form.save()
-            msg = u'cadastro alterado com sucesso.'
-            messages.success(request, msg)
-        else:
-            msg = u'Falha na edição do cadastro: %s ' % form.errors
-            messages.warning(request, msg)
-        return redirect(reverse('contador_read'))
+    endereco_form = EnderecoForm(request.POST or None, instance=endereco)
 
     context = {}
     context['form'] = form
+    context['endereco_form'] = endereco_form
     context['contador'] = contador
     context['conta'] = conta
     context['menu_administracao'] = "active"
+ 
+    if request.method == 'POST':
+        if form.is_valid() and endereco_form.is_valid():
+            form.save()
+            endereco_form.save()
+            msg = u'cadastro alterado com sucesso.'
+            messages.success(request, msg)
+        else:
+            msg = u'Falha na edição do cadastro: %s - %s' % (form.errors, endereco_form.errors)
+            messages.warning(request, msg)
+            return render(request, 'contabil/contador_form.html', context)
+        return redirect(reverse('contador_read'))
     return render(request, 'contabil/contador_form.html', context)
 
 

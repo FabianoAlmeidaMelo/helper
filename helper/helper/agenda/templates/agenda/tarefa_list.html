@@ -73,75 +73,60 @@
     <thead>
       <tr>
         <th>Titulo</th>
-        {% if not agenda %}
-          <th>Agenda</th>
-        {% endif %}
-        <th>Serviço</th>
-        <th>Nr Doc.</th>
+        <th>Confirmado /<br>Pago</th>
+        <th>{% if not agenda %}Agenda / <br>{% endif %} Serviço</th>
+        <th>Nr Doc./ <br> Valor</th>
         <th>Data</th>
-        <th>Hora</th>
-        <th>Valor</th>
-        <th>Confirmado</th>
-        <th>Pago</th>
       </tr>
     </thead>
     <tfoot>
       <tr>
-      {% if not agenda %}
-        <td></td>
-      {% endif %}
-        <td></td>
-        <td></td>
         <td></td>
         <td></td>
         <td></td>
         {% if total > 0 %}
-          <td span="4" align="right"><font color="blue">$ {{ total }}</font></td>
+          <td span="4" ><font color="blue">$ {{ total }}</font></td>
         {% else %}
-          <td span="4" align="right"><font color="red">$ {{ total }}</font></td>
+          <td span="4" ><font color="red">$ {{ total }}</font></td>
         {% endif %}
         <td></td>
         <td></td>
+
       </tr>
   </tfoot>
     <tbody>
     {% for object in object_list %}
     <tr class="{{ object.get_context_alert }}">
-      <td>
+      <td >
         {% if agenda %}
-          <a href="{% url 'agenda_tarefa_edit' conta.id agenda.id object.pk %}">{{ object.titulo }}</a>
+          <a title="{{ object.descricao }}" href="{% url 'agenda_tarefa_edit' conta.id agenda.id object.pk %}" >{{ object.titulo }}</a>
         {% else %}
-          <a href="{% url 'tarefa_edit' conta.id object.pk %}">{{ object.titulo }}</a>
+          <a title="{{ object.descricao }}" href="{% url 'tarefa_edit' conta.id object.pk %}" >{{ object.titulo }}</a>
+        {% endif %}
+      <td>{{ object.confirmado|yesno:"Confirmado,Não" }} /<br>
+        {% if object.pago %}
+          Pago: <span class="glyphicon glyphicon-ok-circle" style="color:green"></span>
+        {% else %}
+          <label>
+            <input type="checkbox"
+                   id="{{ object.id }}"
+                   value="tarefa_{{ object.id }}"
+                   name="set_status"
+                   onchange="set_tarefa_status(this)" 
+                   > Pagar
+          </label>
         {% endif %}
       </td>
-      {% if not agenda %}
-        <td>{{ object.servico.agenda|default:"--" }}</td>
-      {% endif %}
-        <td>{{ object.servico.nome|default:'--' }}</td>
-        <td>{{ object.nr_documento|default:'--' }}</td>
-        <td>{{ object.data_ini|date:"d/m/Y" }}</td>
-        <td>{{ object.hora_ini }}</td>
-        {% if object.tipo == 1 %}
-          <td align="right"><font color="blue">$ {{ object.valor|default:'--'  }} {{ object.get_tipo_display|default:"" }}</font></td>
-        {% else %}
-          <td align="right"><font color="red">$ {{ object.valor|default:'--'  }} {{ object.get_tipo_display|default:"" }}</font></td>
-        {% endif %}
-        <td>{{ object.confirmado|yesno:"Sim,Não" }}</td>
-        <td>
-          {% if object.pago %}
-            <span class="glyphicon glyphicon-ok-circle" style="color:green"></span>
-          {% else %}
-            <label>
-              <input type="checkbox"
-                     id="{{ object.id }}"
-                     value="tarefa_{{ object.id }}"
-                     name="set_status"
-                     onchange="set_tarefa_status(this)" 
-                     > Pagar
-            </label>
-          {% endif %}
+      </td>
+        <td>{% if not agenda %}{{ object.servico.agenda|default:"--" }} /<br>{% endif %} {{ object.servico.nome|default:'--' }}</td>
 
-        </td>
+        {% if object.tipo == 1 %}
+          <td ><small>{{ object.nr_documento|default:'' }}<br></small><font color="blue"> $ {{ object.valor|default:'--'  }} {{ object.get_tipo_display|default:"" }}</font></td>
+        {% else %}
+          <td ><small>{{ object.nr_documento|default:'' }}<br></small><font color="red">$ {{ object.valor|default:'--'  }} {{ object.get_tipo_display|default:"" }}</font></td>
+        {% endif %}
+
+        <td>{{ object.data_ini|date:"d/m/Y" }}<br>{{ object.hora_ini }}</td>
     </tr>
     {% empty %}
       <tr><td colspan="100%">Nenhuma tarefa no período</td></tr>

@@ -24,6 +24,15 @@
           {% bootstrap_field form.email %}
           {% bootstrap_field form.nome_contato %}
         </div>
+        <div class="col-xs-9 col-sm-6 col-md-3">
+            {% bootstrap_field endereco_form.logradouro %}
+            {% bootstrap_field endereco_form.numero %}
+            {% bootstrap_field endereco_form.bairro %}
+          </div>
+          <div class="col-xs-9 col-sm-6 col-md-3">
+            {% bootstrap_field endereco_form.cep %}
+            {{ endereco_form.municipio }}
+          </div>
       </div>
     </div>
     <div class="form-group center_div">
@@ -34,5 +43,5 @@
 
 {% endblock content %}
 {% block extra_js %}
-    {{ form.media }}
+    {{ endereco_form.media }}
 {% endblock extra_js %}
