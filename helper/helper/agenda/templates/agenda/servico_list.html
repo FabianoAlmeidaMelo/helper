@@ -11,23 +11,6 @@
     }
   </style>
 {% endblock css %}
-{% block extra_js %}
-  <script type="text/javascript">
-    var show_filter_fields = function() {
-      $('#filtro').slideToggle('slow', function() {
-          $('#filtro').toggleClass('off');
-          if ($('#filtro').is('.off')) {
-              //$('#filtro-label').text('Ver filtro');
-              document.getElementById('filtro_button_id').innerHTML = "Ver filtro";
-          } else {
-             // $('#filtro-label').text('Esconder filtro');
-              document.getElementById('filtro_button_id').innerHTML = "Esconder filtro";
-          }
-      });
-  };
-  </script>  
-{% endblock extra_js %}
-
 
 {% block page_title %}
   <div class="page-header">
@@ -92,3 +75,19 @@
 </div>
 
 {% endblock content %}
+{% block extra_js %}
+  <script type="text/javascript">
+    var show_filter_fields = function() {
+      $('#filtro').slideToggle('slow', function() {
+          $('#filtro').toggleClass('off');
+          if ($('#filtro').is('.off')) {
+              //$('#filtro-label').text('Ver filtro');
+              document.getElementById('filtro_button_id').innerHTML = "Ver filtro";
+          } else {
+             // $('#filtro-label').text('Esconder filtro');
+              document.getElementById('filtro_button_id').innerHTML = "Esconder filtro";
+          }
+      });
+  };
+  </script>  
+{% endblock extra_js %}
