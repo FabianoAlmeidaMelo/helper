@@ -99,13 +99,17 @@ def contador_read(request):
 def setor_list(request):
     conta = request.user.conta
     contador = conta.contador
-    page = request.GET.get('page', 1)
     if not contador.can_acess(request.user):
         raise Http404
+    context = {}
 
     form = SetorListSearchForm(request.GET or None, contador=contador)
     object_list = form.get_queryset()
-   
+
+    # ### PAGINAÇÃO ####
+    get_copy = request.GET.copy()
+    context['parameters'] = get_copy.pop('page', True) and get_copy.urlencode()
+    page = request.GET.get('page', 1)
     paginator = Paginator(object_list, 15)
     try:
         setores = paginator.page(page)
@@ -113,8 +117,8 @@ def setor_list(request):
         setores = paginator.page(1)
     except EmptyPage:
         setores = paginator.page(paginator.num_pages)
+    # ### paginação ####
 
-    context = {}
     context['conta'] = conta
     context['object_list'] = setores
     context['form'] = form
@@ -162,13 +166,17 @@ def contador_users_list(request, conta_pk):
     tipo 1
     """
     conta = get_object_or_404(Conta, id=conta_pk)
-    page = request.GET.get('page', 1)
     if not conta.can_acess(request.user):
         raise Http404
+    context = {}
 
     form = ContadorUserSearchForm(request.GET or None, conta=conta)
     object_list = form.get_queryset()
-   
+    
+    # ### PAGINAÇÃO ####
+    get_copy = request.GET.copy()
+    context['parameters'] = get_copy.pop('page', True) and get_copy.urlencode()
+    page = request.GET.get('page', 1)
     paginator = Paginator(object_list, 15)
     try:
         clientes_users = paginator.page(page)
@@ -176,8 +184,8 @@ def contador_users_list(request, conta_pk):
         clientes_users = paginator.page(1)
     except EmptyPage:
         clientes_users = paginator.page(paginator.num_pages)
+    # ### paginação ####
 
-    context = {}
     context['conta'] = conta
     context['object_list'] = clientes_users
     context['form'] = form
@@ -228,22 +236,26 @@ def cliente_list(request, conta_pk):
     Lista usuários Clientes do Contador
     """
     conta = get_object_or_404(Conta, id=conta_pk)
-    page = request.GET.get('page', 1)
     if not conta.can_acess(request.user):
         raise Http404
 
+    context = {}
     form = ClienteUserSearchForm(request.GET or None, conta=conta)
     object_list = form.get_queryset()
-   
+    
+    # ### PAGINAÇÃO ####
+    get_copy = request.GET.copy()
+    context['parameters'] = get_copy.pop('page', True) and get_copy.urlencode()
     paginator = Paginator(object_list, 15)
+    page = request.GET.get('page', 1)
     try:
         clientes_users = paginator.page(page)
     except PageNotAnInteger:
         clientes_users = paginator.page(1)
     except EmptyPage:
         clientes_users = paginator.page(paginator.num_pages)
+    # ### paginação ####
 
-    context = {}
     context['conta'] = conta
     context['object_list'] = clientes_users
     context['form'] = form
@@ -298,22 +310,26 @@ def mensagens_list(request, conta_pk):
     para um cliente específico
     """
     conta = get_object_or_404(Conta, id=conta_pk)
-    page = request.GET.get('page', 1)
     if not conta.can_acess(request.user):
         raise Http404
+    context = {}
 
     form = MensagensSearchForm(request.GET or None, conta=conta)
     object_list = form.get_queryset()
-   
-    paginator = Paginator(object_list, 15)
+    
+    # ### PAGINAÇÃO ####
+    get_copy = request.GET.copy()
+    context['parameters'] = get_copy.pop('page', True) and get_copy.urlencode()
+    page = request.GET.get('page', 1)
+    paginator = Paginator(object_list, 12)
     try:
         mensagens = paginator.page(page)
     except PageNotAnInteger:
         mensagens = paginator.page(1)
     except EmptyPage:
         mensagens = paginator.page(paginator.num_pages)
+    # ### paginação ####
 
-    context = {}
     context['conta'] = conta
     context['object_list'] = mensagens
     context['form'] = form

@@ -13,7 +13,7 @@
 {% endblock css %}
 
 {% block page_title %}
-  <div class="page-header center_div">
+  <div class="page-header ">
     <br>
     <h3>Mensagens<small></small>
     <a class="btn btn-default btn-xs" id="filtro_button_id" href="#!" onclick="show_filter_fields(this)"></span>Ver filtro</a>
@@ -25,9 +25,9 @@
 {% if request.user.conta.tipo == 1 %}
   {% include "contabil/tab_clientes.html" %}
 {% endif %}
-<div class="off" id="filtro">
-  <form class="form-group center_div"" method="GET" action="#">
-      <div class="form-group">
+<div  class='off' id="filtro">
+  <form class="form-inline well" method="GET" action="#">
+    <div class="form-group">
         {% bootstrap_field form.texto %}
         {% bootstrap_field form.setor %}
       </div>
@@ -36,7 +36,8 @@
       </div>
   </form>
 </div>
-  <table class="table table-striped center_div">
+<div class="row-fluid">
+  <table class="table table-striped ">
     <thead>
       <tr>
         <th>Texto</th>
@@ -72,29 +73,9 @@
       <tr><td colspan="100%">Nenhum item disponível</td></tr>
     {% endfor %}
   </table>
-
-       {% if object_list.has_other_pages %}
-        <ul class="pagination">
-          {% if object_list.has_previous %}
-            <li><a href="?page={{ object_list.previous_page_number }}">&laquo;</a></li>
-          {% else %}
-            <li class="disabled"><span>&laquo;</span></li>
-          {% endif %}
-          {% for i in object_list.paginator.page_range %}
-            {% if object_list.number == i %}
-              <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
-            {% else %}
-              <li><a href="?page={{ i }}">{{ i }}</a></li>
-            {% endif %}
-          {% endfor %}
-          {% if object_list.has_next %}
-            <li><a href="?page={{ object_list.next_page_number }}">&raquo;</a></li>
-          {% else %}
-            <li class="disabled"><span>&raquo;</span></li>
-          {% endif %}
-        </ul>
-        {% endif %}
-
+  {% if object_list.has_other_pages %}
+   {% include 'pagination.html' %}
+  {% endif %}
 </div>
 {% endblock content %}
 

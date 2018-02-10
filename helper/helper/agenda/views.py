@@ -116,19 +116,25 @@ def servico_form(request, conta_pk, pk=None):
 @login_required
 def servico_list(request, conta_pk):
     conta = get_object_or_404(Conta, id=conta_pk)
-    page = request.GET.get('page', 1)
     if not conta.can_acess(request.user):
         raise Http404
     form = ServicoSearchForm(request.GET or None, conta=conta)
     object_list = form.get_result_queryset()
-    paginator = Paginator(object_list, 10)
+
+    context = {}
+    # ### PAGINAÇÃO ####
+    get_copy = request.GET.copy()
+    context['parameters'] = get_copy.pop('page', True) and get_copy.urlencode()
+    paginator = Paginator(object_list, 4)
+    page = request.GET.get('page', 1)
     try:
         servicos = paginator.page(page)
     except PageNotAnInteger:
         servicos = paginator.page(1)
     except EmptyPage:
         servicos = paginator.page(paginator.num_pages)
-    context = {}
+    # ### paginação ####
+
     context['conta'] = conta
     context['object_list'] = servicos
     context['form'] = form
