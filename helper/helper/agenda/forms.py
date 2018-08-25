@@ -6,6 +6,8 @@ from django import forms
 from django.db.models import Q
 from django.forms.utils import ErrorList
 
+from localbr.formfields import BRDateField
+
 from .models import (
     Agenda,
     CartaoCredito,
@@ -14,6 +16,7 @@ from .models import (
 )
 from helper.core.forms import BaseSearchForm
 from django.contrib.admin.widgets import AdminDateWidget
+from helper.core.widgets import DateTimePicker
 
 
 class AgendaForm(forms.ModelForm):
@@ -106,16 +109,13 @@ class ServicoSearchForm(forms.Form):
 class TarefaForm(forms.ModelForm):
     servico = forms.ModelChoiceField(label='Serviço', queryset=Servico)
     nr_parcela = forms.IntegerField(label='Nr de Parcelas', required=False)
-    data_ini = forms.DateField(
-                                widget=AdminDateWidget,
-                                label='Data Inicial',
-                                required=True
-                            ) 
-    data_fim = forms.DateField(
-                                widget=AdminDateWidget,
-                                label='Data Final',
-                                required=False
-                            ) 
+    data_ini = forms.DateField(label='Data Inicial',
+                               required=True,
+                               widget=DateTimePicker(options={"format": "DD/MM/YYYY", "pickTime": False}))
+
+    data_fim = forms.DateField(label='Data Final',
+                               required=False,
+                               widget=DateTimePicker(options={"format": "DD/MM/YYYY", "pickTime": False}))
 
     def __init__(self, *args, **kargs):
         self.user = kargs.pop('user', None)

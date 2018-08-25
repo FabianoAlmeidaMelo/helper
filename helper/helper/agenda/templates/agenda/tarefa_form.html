@@ -2,7 +2,7 @@
 {% load bootstrap3 %}
 
 {% bootstrap_css %}
-{% bootstrap_javascript %}
+
 
 {% block css %}
   <style type="text/css">
@@ -134,7 +134,11 @@
 {% endblock content %}
 
 {% block extra_js %}
-    {{ form.media }}
+  <script type="text/javascript" src="/static/datetimepicker/js/moment.min.js"></script>
+  <script type="text/javascript" src="/static/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+  <script type="text/javascript" src="/static/datetimepicker/js/locales/bootstrap-datetimepicker.pt-BR.js"></script>
+  {{ form.media.js }
+    
     <script type="text/javascript">
     jQuery("#id_tipo").click(function(){
          jQuery("#div_financeiro").toggle();
