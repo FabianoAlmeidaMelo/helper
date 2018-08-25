@@ -1,6 +1,7 @@
 # coding: utf-8
 from decimal import Decimal
 from datetime import date, datetime
+
 import calendar
 from django import forms
 from django.db.models import Q
@@ -116,7 +117,7 @@ class TarefaForm(forms.ModelForm):
     data_fim = forms.DateField(label='Data Final',
                                required=False,
                                widget=DateTimePicker(options={"format": "DD/MM/YYYY", "pickTime": False}))
-    hora_ini = forms.TimeField(label="Hora", required=False)
+    hora_ini = forms.TimeField(label="Hora", initial=datetime.now(), required=False)
 
     def __init__(self, *args, **kargs):
         self.user = kargs.pop('user', None)
