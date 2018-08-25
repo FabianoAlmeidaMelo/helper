@@ -116,7 +116,7 @@ class TarefaForm(forms.ModelForm):
     data_fim = forms.DateField(label='Data Final',
                                required=False,
                                widget=DateTimePicker(options={"format": "DD/MM/YYYY", "pickTime": False}))
-    hora_ini = forms.TimeField(label="Hora", widget=forms.TimeInput(format='%H:%M'), initial=datetime.now())
+    hora_ini = forms.TimeField(label="Hora", required=False)
 
     def __init__(self, *args, **kargs):
         self.user = kargs.pop('user', None)
@@ -124,6 +124,10 @@ class TarefaForm(forms.ModelForm):
         self.conta = kargs.pop('conta', None)
         super(TarefaForm, self).__init__(*args, **kargs)
         self.fields['parcela'].widget = forms.HiddenInput()
+
+        self.fields['hora_ini'].widget.attrs['type'] = 'time'
+        self.fields['hora_fim'].widget.attrs['type'] = 'time'
+
         dono = self.conta.dono
         self.fields['cartao'].queryset = CartaoCredito.objects.filter(ativo=True, usuario=dono)
         if self.agenda:
