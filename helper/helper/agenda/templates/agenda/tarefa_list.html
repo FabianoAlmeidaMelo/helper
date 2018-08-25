@@ -37,35 +37,40 @@
 
 {% block content %}
 <div  class='off' id="filtro">
-  <form class="form-inline well" method="GET" action="#">
-    <div class="form-group">
+  <div class="row-fluid span10">
+    <form class="form-inline well" method="GET" action="#">
+      <div class="form-group">
         {% bootstrap_field form.titulo %}
         {% bootstrap_field form.servico %}
         {% bootstrap_field form.descricao %}
+      </div>
+      <p></p>
+      <div class="form-group">
         {% bootstrap_field form.data_ini %}
         {% bootstrap_field form.data_fim %}
       </div>
       <br>
 
-    <legend style="font-size:12px;">
-       <a href="#" class="panel-showhide"><i class="icon-plus-sign"></i>Opções de Filtro</a></legend>
-        <div class="panel-showhide">
-          <div class="form-group">
-            {% bootstrap_field form.confirmado %}
-            {% bootstrap_field form.pago %}
-            {{ form.not_pago.label }} {{ form.not_pago }}
-            {% bootstrap_field form.tipo %}
-            {% bootstrap_field form.valor %}
+      <legend style="font-size:12px;">
+         <a href="#" class="panel-showhide"><i class="icon-plus-sign"></i>Opções de Filtro</a></legend>
+          <div class="panel-showhide">
+            <div class="form-group">
+              {% bootstrap_field form.confirmado %}
+              {% bootstrap_field form.pago %}
+              {{ form.not_pago.label }} {{ form.not_pago }}
+              {% bootstrap_field form.tipo %}
+              {% bootstrap_field form.valor %}
+            </div>
           </div>
-        </div>
 
-      <button type="submit" class="btn btn-primary" title="Filtrar"><i class="glyphicon glyphicon-search"></i></button>
-      {% if agenda %}
-        <a class="btn btn-small btn-info" href="{% url 'agenda_tarefa_list' conta.id  agenda.id%}" title="Apaga o filtro e listar todos"><i class="glyphicon glyphicon-remove-circle"></i></a>
-      {% else %}
-        <a class="btn btn-small btn-info" href="{% url 'tarefa_list' conta.id %}" title="Apaga o filtro e listar todos"><i class="glyphicon glyphicon-remove-circle"></i></a>
-      {% endif %}
-  </form>
+        <button type="submit" class="btn btn-primary" title="Filtrar"><i class="glyphicon glyphicon-search"></i></button>
+        {% if agenda %}
+          <a class="btn btn-small btn-info" href="{% url 'agenda_tarefa_list' conta.id  agenda.id%}" title="Apaga o filtro e listar todos"><i class="glyphicon glyphicon-remove-circle"></i></a>
+        {% else %}
+          <a class="btn btn-small btn-info" href="{% url 'tarefa_list' conta.id %}" title="Apaga o filtro e listar todos"><i class="glyphicon glyphicon-remove-circle"></i></a>
+        {% endif %}
+    </form>
+  </div>
 </div>
 <div class="row-fluid">
   <table class="table table-striped">
@@ -143,7 +148,10 @@
 
 {% endblock content %}
 {% block extra_js %}
-  {{ form.media.js}}
+  <script type="text/javascript" src="/static/datetimepicker/js/moment.min.js"></script>
+  <script type="text/javascript" src="/static/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+  <script type="text/javascript" src="/static/datetimepicker/js/locales/bootstrap-datetimepicker.pt-BR.js"></script>
+  {{ form.media.js }}
 <!-- pie 3D -->
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
