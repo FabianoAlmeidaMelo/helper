@@ -139,7 +139,7 @@ class TarefaForm(forms.ModelForm):
         if self.agenda:
             self.fields['servico'].queryset = Servico.objects.filter(agenda=self.agenda)
         else:
-            self.fields['servico'].queryset = Servico.objects.filter(agenda__conta=self.conta)
+            self.fields['servico'].queryset = Servico.objects.filter(agenda__in=self.user.get_agendas())
         self.fields['servico'].required = True
 
     def clean_valor(self):
