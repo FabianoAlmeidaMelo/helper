@@ -134,7 +134,8 @@ class TarefaForm(forms.ModelForm):
         self.fields['hora_fim'].widget.attrs['type'] = 'time'
 
         dono = self.conta.dono
-        self.fields['cartao'].queryset = CartaoCredito.objects.filter(ativo=True, usuario=dono)
+
+        self.fields['cartao'].queryset = CartaoCredito.objects.filter(ativo=True, usuario=self.user)
         if self.agenda:
             self.fields['servico'].queryset = Servico.objects.filter(agenda=self.agenda)
         else:
