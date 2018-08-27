@@ -355,7 +355,7 @@ def cartao_form(request, conta_pk, pk=None):
         cartao = None
         msg = u'Cartao de Crédito criado.'
 
-    form = CartaoCreditoForm(request.POST or None, instance=cartao, conta=conta)
+    form = CartaoCreditoForm(request.POST or None, instance=cartao, conta=conta, user=request.user)
     context['form'] = form
     context['menu_administracao'] = "active"
     if request.method == 'POST':
@@ -375,7 +375,7 @@ def cartao_list(request, conta_pk):
     conta = get_object_or_404(Conta, id=conta_pk)
     if not conta.can_acess(request.user):
         raise Http404
-    object_list = CartaoCredito.objects.filter(usuario=conta.dono) # não tem relação: TODO vincular a conta e ou agenda
+    object_list = CartaoCredito.objects.filter(usuario=request.user) # não tem relação: TODO vincular a conta e ou agenda
     form = CartaoCreditoBaseSearchForm(request.POST or None)
     context = {}
     context['conta'] = conta

@@ -11,7 +11,9 @@
 {% block content %}
 <div class="row-fluid">
 <!-- {# ref #34  como o user vai ter mais de 2 agendas, ainda não foi definido $$ #} -->
+{% if request.user == conta.dono %}
  <a class="btn btn-success" href="{% url 'agenda_add' conta.id %}">Nova Agenda</a>
+{% endif %}
   <table class="table table-striped">
     <thead>
       <tr>
@@ -22,7 +24,11 @@
     {% for object in object_list %}
       <tr>
         <td>
+          {% if request.user == conta.dono %}
           <a href="{% url 'agenda_edit' conta.id object.pk %}">{{ object.nome }}</a>
+          {% else %}
+          {{ object.nome }}
+          {% endif %}
         </td>
         <td>{{ object.observacao|default:'--' }}</td>
       </tr>

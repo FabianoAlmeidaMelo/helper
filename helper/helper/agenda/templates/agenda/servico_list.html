@@ -17,7 +17,9 @@
     <br>
     <h3>Serviços <small>ou categorias dos movimentos de suas Agendas.   
     <a class="btn btn-default btn-xs" id="filtro_button_id" href="#!" onclick="show_filter_fields(this)"></span>Ver filtro</a>
+    {% if request.user == conta.dono %}
     <a class="btn btn-success btn-xs" href="{% url 'servico_add' conta.id %}">Novo Serviço</a></small></h3>
+    {% endif %}
   </div>
 {% endblock page_title %}
 
@@ -43,7 +45,12 @@
       </thead>
       {% for object in object_list %}
         <tr>
-          <td><a href="{% url 'servico_edit' conta.pk object.pk %}">{{ object.nome }}</a></td>
+          <td>
+            {% if request.user == conta.dono %}
+              <a href="{% url 'servico_edit' conta.pk object.pk %}">{{ object.nome }}</a></td>
+            {% else %}
+              {{ object.nome }}
+            {% endif %}
           <td>{{ object.agenda|default:'--' }}</td>
         </tr>
       {% empty %}

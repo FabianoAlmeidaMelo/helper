@@ -44,18 +44,22 @@ class CartaoCreditoForm(forms.ModelForm):
     '''
     def __init__(self, *args, **kargs):
         self.conta = kargs.pop('conta', None)
+        self.user = kargs.pop('user', None)
         super(CartaoCreditoForm, self).__init__(*args, **kargs)
 
     class Meta:
         model = CartaoCredito
-        fields = (
-                    'usuario',  # TODO remover, é o dono da conta
-                    'bandeira',
-                    'vencimento',
-                    'fechamento',
-                    'limite',
-                    'ativo',
-                    )
+        fields = ('bandeira',
+                  'vencimento',
+                  'fechamento',
+                  'limite',
+                  'ativo',)
+
+
+    def save(self):
+        self.instance.usuario = self.user
+        self.instance.conta = self.conta
+        self.instance.save()
 
 
 class CartaoCreditoBaseSearchForm(BaseSearchForm):

@@ -192,3 +192,7 @@ class Endereco(models.Model):
     class Meta:
         verbose_name = u'Endereço'
 
+
+class UserAgenda(models.Model):
+    user = models.ForeignKey(User)
+    agenda = models.ForeignKey('agenda.Agenda')
