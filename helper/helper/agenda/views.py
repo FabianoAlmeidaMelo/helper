@@ -19,7 +19,7 @@ from .models import (
     Tarefa,
     )
 
-from helper.core.models import Conta
+from helper.core.models import Conta, UserAgenda
 
 from .forms import (
     AgendaForm,
@@ -68,10 +68,16 @@ def agenda_form(request, conta_pk, pk=None):
 
 @login_required
 def agenda_list(request, conta_pk):
+    user = request.user
     conta = get_object_or_404(Conta, id=conta_pk)
-    if not conta.can_acess(request.user):
+    if not conta.can_acess(user):
         raise Http404
-    object_list = Agenda.objects.filter(conta=conta)
+    if user != conta.dono:
+        agendas = UserAgenda.objects.filter(user=user).values_list('agenda', flat=True)
+        object_list = Agenda.objects.filter(conta=conta, id__in=agendas)
+    else:
+        object_list = Agenda.objects.filter(conta=conta)
+
 
     context = {}
     context['conta'] = conta
@@ -161,7 +167,7 @@ def tarefa_form(request, conta_pk, agenda_pk=None, pk=None):
         tarefa = None
         msg = u'Tarefa criada.'
 
-    form = TarefaForm(request.POST or None, instance=tarefa, conta=conta, agenda=agenda)
+    form = TarefaForm(request.POST or None, instance=tarefa, conta=conta, agenda=agenda, user=request.user)
     context = {}
     context['conta'] = conta
     context['agenda'] = agenda
@@ -198,8 +204,9 @@ class TarefaFormListView(SearchFormListView):
         total_pos = total_neg = total = 0
         data_ini = self.form.ini
         data_fim = self.form.fim
+        user = request.user
         if self.form.is_valid():
-            self.object_list = self.form.get_result_queryset().filter(servico__agenda__conta=conta)
+            self.object_list = self.form.get_result_queryset().filter(servico__agenda=user.get_agendas())
             total_pos = sum(self.object_list.filter(tipo=1).values_list('valor', flat=True))
             total_neg = sum(self.object_list.filter(tipo=2).values_list('valor', flat=True))
             total = total_pos - total_neg
@@ -355,7 +362,7 @@ def cartao_form(request, conta_pk, pk=None):
         cartao = None
         msg = u'Cartao de Crédito criado.'
 
-    form = CartaoCreditoForm(request.POST or None, instance=cartao, conta=conta)
+    form = CartaoCreditoForm(request.POST or None, instance=cartao, conta=conta, user=request.user)
     context['form'] = form
     context['menu_administracao'] = "active"
     if request.method == 'POST':
@@ -375,7 +382,7 @@ def cartao_list(request, conta_pk):
     conta = get_object_or_404(Conta, id=conta_pk)
     if not conta.can_acess(request.user):
         raise Http404
-    object_list = CartaoCredito.objects.filter(usuario=conta.dono) # não tem relação: TODO vincular a conta e ou agenda
+    object_list = CartaoCredito.objects.filter(usuario=request.user) # não tem relação: TODO vincular a conta e ou agenda
     form = CartaoCreditoBaseSearchForm(request.POST or None)
     context = {}
     context['conta'] = conta

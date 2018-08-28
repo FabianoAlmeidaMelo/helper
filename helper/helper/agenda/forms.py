@@ -44,18 +44,22 @@ class CartaoCreditoForm(forms.ModelForm):
     '''
     def __init__(self, *args, **kargs):
         self.conta = kargs.pop('conta', None)
+        self.user = kargs.pop('user', None)
         super(CartaoCreditoForm, self).__init__(*args, **kargs)
 
     class Meta:
         model = CartaoCredito
-        fields = (
-                    'usuario',  # TODO remover, é o dono da conta
-                    'bandeira',
-                    'vencimento',
-                    'fechamento',
-                    'limite',
-                    'ativo',
-                    )
+        fields = ('bandeira',
+                  'vencimento',
+                  'fechamento',
+                  'limite',
+                  'ativo',)
+
+
+    def save(self):
+        self.instance.usuario = self.user
+        self.instance.conta = self.conta
+        self.instance.save()
 
 
 class CartaoCreditoBaseSearchForm(BaseSearchForm):
@@ -130,11 +134,12 @@ class TarefaForm(forms.ModelForm):
         self.fields['hora_fim'].widget.attrs['type'] = 'time'
 
         dono = self.conta.dono
-        self.fields['cartao'].queryset = CartaoCredito.objects.filter(ativo=True, usuario=dono)
+
+        self.fields['cartao'].queryset = CartaoCredito.objects.filter(ativo=True, usuario=self.user)
         if self.agenda:
             self.fields['servico'].queryset = Servico.objects.filter(agenda=self.agenda)
         else:
-            self.fields['servico'].queryset = Servico.objects.filter(agenda__conta=self.conta)
+            self.fields['servico'].queryset = Servico.objects.filter(agenda__in=self.user.get_agendas())
         self.fields['servico'].required = True
 
     def clean_valor(self):

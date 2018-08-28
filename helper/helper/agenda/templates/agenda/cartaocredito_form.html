@@ -22,12 +22,7 @@
 <form method="POST">
    {% csrf_token %}
   <div class="form-group">
-    <div class="row">
-      <!-- {# Celular, Tablet, Computador #} -->
-      <div class="col-xs-9 col-sm-6 col-md-3">
-        {% bootstrap_field form.usuario %}
-      </div>
-    </div>
+    <!-- {# Celular, Tablet, Computador #} -->
     <div class="row">
       <div class="col-xs-9 col-sm-6 col-md-3">
         {% bootstrap_field form.bandeira %}

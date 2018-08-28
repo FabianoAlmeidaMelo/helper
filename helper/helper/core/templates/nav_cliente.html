@@ -28,7 +28,7 @@
             <li class="dropdown {{ menu_tarefas_agenda }}">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Agendas <span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                  {% for agenda in conta.agenda_set.all %}
+                  {% for agenda in user.get_agendas %}
                     <li><a href="{% url 'agenda_tarefa_list' conta.id agenda.id %}{{ get_ }}" title="{{ section.name }}">{{ agenda.nome }}</a></li>
                   {% endfor %}
                 </ul>

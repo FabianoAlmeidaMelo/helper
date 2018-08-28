@@ -8,7 +8,7 @@ from django.contrib.auth.models import (
     BaseUserManager,
 )
 from municipios.models import Municipio
-
+from django.apps import apps
 
 SEXO = (
     (1, "M"),
@@ -158,6 +158,16 @@ class User(AbstractBaseUser, PermissionsMixin):
     def is_admin(self):
         return self == self.conta.user_set.filter(is_active=True).first()
 
+    def get_agendas(self):
+        Agenda = apps.get_model('agenda', 'Agenda')
+        if self.is_admin():
+            conta = Conta.objects.filter(dono=self).first()
+            return Agenda.objects.filter(conta=conta)
+        else:
+            agendas = UserAgenda.objects.filter(user=self).values_list('agenda')
+            return Agenda.objects.filter(id__in=agendas)
+
+
 
 class UserAdd(models.Model):
     user_add = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="%(app_label)s_%(class)s_created_by")
@@ -191,4 +201,12 @@ class Endereco(models.Model):
 
     class Meta:
         verbose_name = u'Endereço'
+
+
+class UserAgenda(models.Model):
+    user = models.ForeignKey(User)
+    agenda = models.ForeignKey('agenda.Agenda')
+
+    def __unicode__(self):
+        return u"%s - %s" % (self.user, self.agenda)
 
