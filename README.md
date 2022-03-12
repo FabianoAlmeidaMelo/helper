@@ -1,33 +1,12 @@
 # produção
 
+Era um projeto particlar, para meu próprio controle financeiro e de um Sìtio qu eu gerenciava
+
+Esteve em produção na AWS por alguns anos nos os domínios:
+
 www.ctrlh.online ou www.controlh.online
 
 ssh ubuntu@18.220.11.41
-
-# .env
-ex:
-
-```
-SECRET_KEY==sua_chave_secreta_aqui
-#Local
-DEBUG=True
-
-ALLOWED_HOSTS=127.0.0.1, .localhost, .
-
-DATABASE_NAME=helper
-DATABASE_USER=fabiano
-DATABASE_PASS=fabiano
-DATABASE_HOST=localhost
-DATABASE_PORT=5432
-DATABASE_ENGINE=django.db.backends.postgresql_psycopg2
-
-EMAIL_BACKEND=django.core.mail.backends.console.EmailBackend
-EMAIL_HOST=localhost
-EMAIL_PORT=25
-EMAIL_USE_TLS=False
-EMAIL_HOST_USER=
-EMAIL_HOST_PASSWORD=
-```
 
 
 # Helper
@@ -88,42 +67,4 @@ Sistema para gerenciamento de eventos (compromissos, consultas, atendimentos, ..
     - o default deve ser Não;
     - isso é só uma hipótese, devemos pensar melhor se é útil e gera valor
 
-### Potenciais fontes de remuneração do sistema:
 
-* tipo bitbucket, só que o bitbuquet cobra US$ / mês, ex:
-    - até 5 usuários free
-    - até 10 usuários U$ 10
-    - até 25 usuários U$ 25
-    - até 50 usuários U$ 50
-    - até 100 usuários U$ 100
-    - então, a definir, prioridade é fazer um piloto.
-
-* pagamentos de eventos (consulta, aluguel, ....) via sistema (%) cartão de crédito;
-
-* contas free tem propagandas (); contas pagas podem optar em não ver as propagandas
-
-#Concorrência:
-
-- http://www.infomoney.com.br/conteudo-patrocinado/noticia/4554710/startup-ajuda-empreendedor-gerir-empresa-forma-eficiente
-
-- Conta Azul
-
-```
-Ao comprar algo, você registra a compra no sistema e automaticamente ele atualiza o estoque,
-atualiza o contas a pagar e por consequência o fluxo de caixa.
-Quando você vende é a mesma coisa, o sistema emite a nota fiscal, baixa o estoque,
-alimenta o contas a receber e o fluxo de caixa, automaticamente.
-O fluxo para prestação de serviços também é muito bem atendido pelo 
-
-O sistema chama atenção pela excelente relação custo-benefício:
-a assinatura começa por R$ 29. Além disso, 
-utiliza o mesmo sistema de segurança que os bancos,
-garantindo o tráfego e armazenamento seguro de todos dados.
-Constantes atualizações são feitas para que o sistema esteja sempre
-atendendo bem tanto aos requisitos de mercado quanto a aspectos legais e tributários.
-
-
-```
-
-
-Fabiano Almeida / José Thomazini
